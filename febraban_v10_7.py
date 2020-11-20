@@ -11,10 +11,18 @@
 # Trailer (última linha)
 
 
+MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
+    "01.0": {
+        "nome": "",
+        "field_na_planilha_de_entrada": "",
+    }
+}
+
+
 FEBRABAN_V10_7 = {
     "trailer": {
         "opcional": False,
-        "campos": [
+        "campos": {
             "01.9": {
                 "nome": "Código do Banco na Compensação",
                 "posicao_inicio": 1,
@@ -78,12 +86,12 @@ FEBRABAN_V10_7 = {
                 "formato": "alfa",
                 "default": None,
                 "code": "G004",
-            }
-        ]
+            },
+        }
     },
     "trailer_lote": {
         "opcional": False,
-        "campos": [
+        "campos": {
             "01.5": {
                 "nome": "Código do Banco na Compensação",
                 "posicao_inicio": 1,
@@ -166,11 +174,11 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "G059",
             },
-        ]
+        }
     },
     "lote_detalhe_segmento_c": {
         "opcional": True,
-        "campos": [
+        "campos": {
             "01.3C": {
                 "nome": "Código do Banco na Compensação",
                 "posicao_inicio": 1,
@@ -330,11 +338,11 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "G004",
             },
-        ]
+        }
     },
     "lote_detalhe_segmento_b": {
         "opcional": False,
-        "campos": [
+        "campos": {
             "01.3B": {
                 "nome": "Código do Banco na Compensação",
                 "posicao_inicio": 1,
@@ -439,11 +447,11 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "P015",
             },
-        ]
+        }
     },
     "lote_detalhe_segmento_a": {
         "opcional": False,
-        "campos": [
+        "campos": {
             "01.3A": {
                 "nome": "Código do Banco na Compensação",
                 "posicao_inicio": 1,
@@ -686,12 +694,12 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "G059",
             },
-        ]
+        }
     },
     "header_lote": {
         "opcional": False,
-        "campos": [
-            "01.0": {
+        "campos": {
+            "01.1": {
                 "nome": "Código do Banco na Compensação",
                 "posicao_inicio": 1,
                 "posicao_fim": 3,
@@ -699,7 +707,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G001",
             },
-            "02.0": {
+            "02.1": {
                 "nome": "Lote de Serviço",
                 "posicao_inicio": 4,
                 "posicao_fim": 7,
@@ -707,7 +715,7 @@ FEBRABAN_V10_7 = {
                 "default": "0000",
                 "descricao": "G002",
             },
-            "03.0": {
+            "03.1": {
                 "nome": "Tipo de Registro",
                 "posicao_inicio": 8,
                 "posicao_fim": 8,
@@ -715,7 +723,7 @@ FEBRABAN_V10_7 = {
                 "default": "1",
                 "descricao": "G003",
             },
-            "04.0": {
+            "04.1": {
                 "nome": "Tipo da Operação",
                 "posicao_inicio": 9,
                 "posicao_fim": 9,
@@ -723,7 +731,7 @@ FEBRABAN_V10_7 = {
                 "default": "C",
                 "descricao": "G004",
             },
-            "05.0": {
+            "05.1": {
                 "nome": "Tipo do Serviço",
                 "posicao_inicio": 10,
                 "posicao_fim": 11,
@@ -731,7 +739,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G005",
             },
-            "06.0": {
+            "06.1": {
                 "nome": "Forma de Lançamento",
                 "posicao_inicio": 12,
                 "posicao_fim": 13,
@@ -739,7 +747,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G006",
             },
-            "07.0": {
+            "07.1": {
                 "nome": "Nº da Versão do Layout do Lote",
                 "posicao_inicio": 14,
                 "posicao_fim": 16,
@@ -747,7 +755,7 @@ FEBRABAN_V10_7 = {
                 "default": "046",
                 "descricao": "G007",
             },
-            "08.0": {
+            "08.1": {
                 "nome": "Uso Exclusivo da FEBRABAN/CNAB",
                 "posicao_inicio": 17,
                 "posicao_fim": 17,
@@ -755,7 +763,7 @@ FEBRABAN_V10_7 = {
                 "default": "Brancos",
                 "descricao": "G008",
             },
-            "09.0": {
+            "09.1": {
                 "nome": "Tipo de Inscrição da Empresa",
                 "posicao_inicio": 18,
                 "posicao_fim": 18,
@@ -763,7 +771,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G009",
             },
-            "10.0": {
+            "10.1": {
                 "nome": "Número de Inscrição da Empresa",
                 "posicao_inicio": 19,
                 "posicao_fim": 32,
@@ -771,7 +779,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G010",
             },
-            "11.0": {
+            "11.1": {
                 "nome": "Código do Convênio no Banco",
                 "posicao_inicio": 33,
                 "posicao_fim": 52,
@@ -779,7 +787,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G011",
             },
-            "12.0": {
+            "12.1": {
                 "nome": "Agência Mantenedora da Conta",
                 "posicao_inicio": 53,
                 "posicao_fim": 57,
@@ -787,7 +795,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G012",
             },
-            "13.0": {
+            "13.1": {
                 "nome": "Dígito Verificador da Agência",
                 "posicao_inicio": 58,
                 "posicao_fim": 58,
@@ -795,7 +803,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G013",
             },
-            "14.0": {
+            "14.1": {
                 "nome": "Número da Conta Corrente",
                 "posicao_inicio": 59,
                 "posicao_fim": 70,
@@ -803,7 +811,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G014",
             },
-            "15.0": {
+            "15.1": {
                 "nome": "Dígito Verificador da Conta",
                 "posicao_inicio": 71,
                 "posicao_fim": 71,
@@ -811,7 +819,7 @@ FEBRABAN_V10_7 = {
                 "default": "Brancos",
                 "descricao": "G004",
             },
-            "16.0": {
+            "16.1": {
                 "nome": "Dígito Verificador da Ag/Conta",
                 "posicao_inicio": 72,
                 "posicao_fim": 72,
@@ -819,7 +827,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G015",
             },
-            "17.0": {
+            "17.1": {
                 "nome": "Nome da Empresa",
                 "posicao_inicio": 73,
                 "posicao_fim": 102,
@@ -827,7 +835,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G016",
             },
-            "18.0": {
+            "18.1": {
                 "nome": "Mensagem",
                 "posicao_inicio": 103,
                 "posicao_fim": 142,
@@ -835,7 +843,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G017",
             },
-            "19.0": {
+            "19.1": {
                 "nome": "Nome da Rua, Av, Pça, Etc",
                 "posicao_inicio": 143,
                 "posicao_fim": 172,
@@ -843,7 +851,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G018",
             },
-            "20.0": {
+            "20.1": {
                 "nome": "Número do Local",
                 "posicao_inicio": 173,
                 "posicao_fim": 177,
@@ -851,7 +859,7 @@ FEBRABAN_V10_7 = {
                 "default": "103",
                 "descricao": "G019",
             },
-            "21.0": {
+            "21.1": {
                 "nome": "Casa, Apto, Sala, Etc",
                 "posicao_inicio": 178,
                 "posicao_fim": 192,
@@ -859,7 +867,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G020",
             },
-            "22.0": {
+            "22.1": {
                 "nome": "Nome da Cidade",
                 "posicao_inicio": 193,
                 "posicao_fim": 212,
@@ -867,7 +875,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G021",
             },
-            "23.0": {
+            "23.1": {
                 "nome": "CEP",
                 "posicao_inicio": 213,
                 "posicao_fim": 217,
@@ -875,7 +883,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G022",
             },
-            "24.0": {
+            "24.1": {
                 "nome": "Complemento do CEP",
                 "posicao_inicio": 218,
                 "posicao_fim": 220,
@@ -883,7 +891,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G004",
             },
-            "25.0": {
+            "25.1": {
                 "nome": "Sigla do Estado",
                 "posicao_inicio": 221,
                 "posicao_fim": 222,
@@ -891,7 +899,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G004",
             },
-            "26.0": {
+            "26.1": {
                 "nome": "Indicativo da Forma de Pagamento do Serviço",
                 "posicao_inicio": 223,
                 "posicao_fim": 224,
@@ -899,7 +907,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G004",
             },
-            "27.0": {
+            "27.1": {
                 "nome": "Uso Exclusivo FEBRABAN/CNAB",
                 "posicao_inicio": 225,
                 "posicao_fim": 230,
@@ -907,7 +915,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G004",
             },
-            "28.0": {
+            "28.1": {
                 "nome": "Códigos das Ocorrências p/ Retorno",
                 "posicao_inicio": 231,
                 "posicao_fim": 240,
@@ -915,11 +923,11 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G004",
             },
-        ]
+        }
     },
     "header": {
         "opcional": False,
-        "campos": [
+        "campos": {
             "01.0": {
                 "nome": "Código do Banco na Compensação",
                 "posicao_inicio": 1,
@@ -1112,6 +1120,8 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G004",
             },
-        ]
+        }
     },
 }
+
+
