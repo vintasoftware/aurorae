@@ -1,109 +1,136 @@
 from febraban_v10_7 import FEBRABAN_V10_7, MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7
 
-dados_arquivo = {
-    "[Empresa] Nome da Empresa": "Vinta",
-    "[Funcionarios] Nome funcionario": "Test",
-    "[Pagamentos] Valor do Pagamento": "10000",
-}
+
+class Campo:
+
+    def __init__(self, dados_campo):
+        self.valor_entrada = dados_campo["valor_entrada"]
+        self.valor_default = campo_config["valor_default"]
+        self.posicao_inicio = campo_config["posicao_inicio"]
+        self.posicao_fim = campo_config["posicao_fim"]
+        self.formato = campo_config["formato"]
+        self.total_posicoes = self.posicao_fim - self.posicao_inicio + 1
+
+    def __str__(self):
+        return self.formatar_campo()
+
+    def formatar_campo(self):
+        self.e_valido(raise_exception=True)
+
+        if self.formato == "num":
+          campo_formatado = valor.zfill(self.total_posicoes)
+        elif self.formato == "alfa"
+          campo_formatado = valor.ljust(self.total_posicoes, ' ')
+
+        assert(len(campo_formatado) == self.total_posicoes)
+
+        return campo_formatado
+
+    def e_valido(self):
+        if self.formato not in ["num", "alfa"]:
+            raise Exception("Formato não permitido")
 
 
-class WriterCNAB_v10_7:
+class Linha:
+    total_posicoes = 240
+    campos = []
 
-    """
-        qtd de lotes (?)
-    """
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, valores_entrada_mapeado, linha_config):
+        """
+        Ex. valores_entrada_mapeado:
+            {
+                "01.0": 123,
+                "02.0": "testing"
+            }
+        """
+        self.valores_entrada_mapeado = valores_entrada_mapeado
+        self.linha_config = linha_config
 
-    def montar_arquivo(self):
-        # Header (primeira linha)
-        # 	[
-        # 		Lote Header de Lote
-        # 		Lote Registros iniciais do lote (opcional)
-        # 		Lote Detalhe Segmento A (Obrigatório - Remessa / Retorno)
-        # 		Lote Detalhe Segmento B (Obrigatório - Remessa / Retorno)
-        # 		Lote Detalhe Segmento C (Opcional - Remessa / Retorno)
-        # 		Lote Registros finais do lote (opcional)
-        # 		Lote Trailer de Lote
-        # 	] * X
-        # Trailer (última linha)
+    def __str__(self):
+        return self.formatar_linha()
 
-        info_funcionarios = self.data["info_funcionarios"]
-        info_empresa = self.data["info_empresa"]
+    def formatar_linha():
+        self.gerar_campos()
 
-        # HEADER TXT
-        campos = FEBRABAN_V10_7["header"]["campos"]
-        montar_linha_header(campos, info_empresa)
-
-        # LOTES
-        campos = FEBRABAN_V10_7["header_lote"]["campos"]
-        montar_linha_header_lote(campos, info_empresa)
-
-        for info_usuario in info_funcionarios:
-            campos = FEBRABAN_V10_7["lote_detalhe_segmento_a"]["campos"]
-            montar_linha_registro_detalhe(campos, info_usuario)
-
-            campos = FEBRABAN_V10_7["lote_detalhe_segmento_b"]["campos"]
-            montar_linha_registro_detalhe(campos, info_usuario)
-
-            campos = FEBRABAN_V10_7["lote_detalhe_segmento_c"]["campos"]
-            montar_linha_registro_detalhe(campos, info_usuario)
-
-        campos = FEBRABAN_V10_7["trailer_lote"]["campos"]
-        montar_linha_trailer_lote(campos)
-
-        # TRAILER TXT
-        campos = FEBRABAN_V10_7["trailer"]["campos"]
-        montar_linha_trailer(campos)
-    
-    def montar_linha_header(self, campos_febraban, info_empresa):
         linha = ""
+        for campo in self.campos:
+            linha =+ str(campo)
+        else:
+            linha =+ "\n"
 
-        nome_campo_ordernados_lista = sorted(list(campos.keys()))
-        for nome_campo in nome_campo_ordernados_lista:            
-            entrada_campo = MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7[nome_campo]
-            nome_campo_valor = info_empresa[pagamento_campo]
-            nome_campo_valor_formato = formatar_campo(nome_campo_valor, campos[nome_campo])
-
-            linha += nome_campo_valor_formato
-
-    def montar_linha_header_lote(self):
-      pass
-
-    def montar_linha_registro_detalhe(self, campos, info_usuario):
-        pass
-
-    def montar_linha(self, campos_febraban, campos_entrada):
-        linha = ""
-
-        nome_campos_febraban_ordenados = sorted(list(campos_febraban.keys()))
-
-        for nome_campo_febraban in nome_campos_febraban_ordenados:            
-            nome_campo_entrada = MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7[nome_campo_febraban]
-
-            valor_entrada = campos_entrada[nome_campo_entrada]
-            campo_febraban_config = campos_febraban[nome_campo_febraban]
-
-            campo_formatado = formatar_campo(valor_entrada, campo_febraban_config)
-
-            linha += campo_formatado
+        assert(len(linha) == self.total_posicoes + 1)
 
         return linha
 
-    def formatar_campo(valor, campo_config):
-        posicao_inicio = campos[nome_campo]["posicao_inicio"]
-        posicao_fim = campos[nome_campo]["posicao_fim"]
-        formato = campos[nome_campo]["formato"]
-        
-        total_posicoes = posicao_fim - posicao_inicio + 1
+    def gerar_campos():
+        campos_febraban = self.linha_config["campos"]
 
-        if formato == "num":
-          campo_formatado = valor.zfill(total_posicoes)
-        elif formato == "alfa"
-          campo_formatado = valor.ljust(total_posicoes, ' ')
-        else:
-          raise Exception("Formato não permitido")
-        
-        assert(len(campo_formatado == total_posicoes))
+        for campo_id, campo_config in campos_febraban.items():
+            campo = Campo(
+                valor=self.valores_entrada_mapeado[campo_id],
+                campo_config=campo_config
+            )
+            self.campos.append(campo)
 
-        return campo_formatado
+        self.campos.sort(key=lambda campo: campo.posicao_inicio)
+
+        return None
+
+
+class GerarArquivoCNAB240_V10_7:
+    self.febraban_arquivo_config = FEBRABAN_V10_7
+
+    def __init__(self, dados_entrada_mapeados):
+        self.dados_entrada_mapeados = dados_entrada_mapeados
+
+    def gerar_arquivo():
+        arquivo = open("cnab240.txt", "w")
+
+        arquivo.write(self.gerar_header())
+        arquivo.write(self.gerar_lote_header())
+        for lote_detalhe_segmento in self.gerar_lote_detalhes_segmentos():
+            arquivo.write(lote_detalhe_segmento)
+        arquivo.write(self.gerar_lote_trailer())
+        arquivo.write(self.gerar_trailer())
+
+        arquivo.close()
+        return None
+
+    def gerar_header():
+        linha = Linha(
+            valores_entrada_mapeado=self.dados_entrada_mapeados,
+            linha_config=self.febraban_arquivo_config
+        )
+        return linha
+
+    def gerar_lote_header():
+        pass
+
+    def gerar_lote_registros_iniciais():
+        # opcional
+        pass
+
+    def gerar_lote_detalhes_segmentos():
+        for dados_funcionario_mapeado in self.dados_entrada_mapeados["funcionarios"]:
+            yield gerar_lote_detalhe_segmento_a(dados_funcionario_mapeado)
+            yield gerar_lote_detalhe_segmento_b(dados_funcionario_mapeado)
+
+    def gerar_lote_detalhe_segmento_a():
+        pass
+
+    def gerar_lote_detalhe_segmento_b():
+        pass
+
+    def gerar_lote_detalhe_segmento_c():
+        # opcional
+        pass
+
+    def gerar_lote_registros_finais():
+        # opcional
+        pass
+
+    def gerar_lote_trailer():
+        pass
+
+    def gerar_trailer():
+        pass
