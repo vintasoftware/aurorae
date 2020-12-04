@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Header (primeira linha)
 # 	[
 # 		Lote Header de Lote
@@ -18,7 +21,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         "field_na_planilha_de_entrada": "* Código do Convênio no Banco",
     },
     "02.9": {
-        "nome": "Lote de Serviço",
+        "nome": "Lote de Serviço",  # default
     },
     "03.9": {
         "nome": "Tipo de Registro",
@@ -68,7 +71,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         "nome": "Uso Exclusivo FEBRABAN/CNAB",
     },
     "10.5": {
-        "nome": "Códigos das Ocorrências para Retorno",
+        "nome": "Códigos das Ocorrências para Retorno",  # campo febraban
     },
     "01.0": {
         "nome": "Código do Banco na Compensação",
@@ -92,7 +95,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     "06.0": {
         "nome": "Número de Inscrição da Empresa",
         "tipo": "Empresa",
-        "field_na_planilha_de_entrada": "* Tipo de Inscrição da Empresa",
+        "field_na_planilha_de_entrada": "* Número de Inscrição da Empresa",
     },
     "07.0": {
         "nome": "Código do Convênio no Banco",
@@ -136,8 +139,6 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     },
     "15.0": {
         "nome": "Uso Exclusivo FEBRABAN / CNAB",
-        "tipo": "Empresa",
-        "field_na_planilha_de_entrada": "",
     },
     "16.0": {
         "nome": "Código Remessa / Retorno",
@@ -282,7 +283,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         "nome": "Uso Exclusivo FEBRABAN/CNAB",
     },
     "28.1": {
-        "nome": "Códigos das Ocorrências p/ Retorno",
+        "nome": "Códigos das Ocorrências p/ Retorno",  # exclusivo banco
     },
     "01.3A": {
         "nome": "Código do Banco na Compensação",
@@ -302,10 +303,10 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         "nome": "Código de Segmento do Reg. Detalhe",
     },
     "06.3A": {
-        "nome": "Código de Segmento do Reg. Detalhe",
+        "nome": "Tipo de Movimento",
     },
     "07.3A": {
-        "nome": "Código de Segmento do Reg. Detalhe",
+        "nome": "Código da Instrução p/ Movimento ",
     },
     "08.3A": {
         "nome": "Código da Câmara Centralizadora",
@@ -354,6 +355,8 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     },
     "17.3A": {
         "nome": "Data do Pagamento",
+        "tipo": "Pagamentos",
+        "field_na_planilha_de_entrada": "Data do Pagamento",
     },
     "18.3A": {
         "nome": "Tipo da Moeda",
@@ -376,12 +379,10 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         "field_na_planilha_de_entrada": "* Nº do Docum. Atribuído pelo Banco", # TALVEZ ISSO SEJA GERADO
     },
     "22.3A": {
-        "nome": "Data Real da Efetivação Pagto",
+        "nome": "Data Real da Efetivação Pagto",   # A ser preenchido quando arquivo for de retorno
     },
     "23.3A": {
-        "nome": "Valor Real da Efetivação do Pagto",
-        "tipo": "Pagamentos",
-        "field_na_planilha_de_entrada": "Valor Real da Efetivação do Pagto",
+        "nome": "Valor Real da Efetivação do Pagto", # A ser preenchido quando arquivo for de retorno
     },
     "24.3A": {
         "nome": "Outras Informações",
@@ -402,7 +403,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         "nome": "Aviso ao Favorecido",
     },
     "30.3A": {
-        "nome": "Códigos das Ocorrências para Retorno",
+        "nome": "Códigos das Ocorrências para Retorno",   # exclusivo banco
     },
     "01.3B": {
         "nome": "Código do Banco na Compensação",
@@ -424,7 +425,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     "06.3B": {
         "nome": "Forma de Iniciação",
         "tipo": "Funcionários",
-        "field_na_planilha_de_entrada": "", # Confuso
+        "field_na_planilha_de_entrada": "", # Confuso # TODO check with bank
     },
     "07.3B": {
         "nome": "Tipo de Inscrição do Favorecido",
@@ -444,7 +445,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     "10.3B": {
         "nome": "Informação 11",
         "tipo": "Funcionários",
-        "field_na_planilha_de_entrada": [
+        "field_na_planilha_de_entrada": [   # TODO missing parse for this
             ("Número (Nº do Local)", [68,72]),
             ("Complemento (Casa, Apto, Etc)", [73, 87]),
             ("Bairro", [88, 102]),
@@ -457,7 +458,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     "11.3B": {
         "nome": "Informação 12",
         "tipo": "Pagamentos",
-        "field_na_planilha_de_entrada": [
+        "field_na_planilha_de_entrada": [       # TODO missing parse for this
             ("Data do Vencimento (Nominal)", [128,135]),
             ("Valor do Documento (Nominal)", [136, 150]),
             ("Valor do Abatimento", [151, 165]),
@@ -469,10 +470,12 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         ]
     },
     "12.3B": {
-        "nome": "Uso Exclusivo para o SIAPE",
+        "nome": "Uso Exclusivo para o SIAPE",    # exclusivo
     },
     "13.3B": {
-        "nome": "Uso Exclusivo para o SIAPE",
+        "nome": "Código ISPB",
+        "tipo": "Pagamentos",
+        "field_na_planilha_de_entrada": "Código ISPB",
     },
     "01.3C": {
         "nome": "Código do Banco na Compensação",
@@ -548,11 +551,6 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         "nome": "Dígito Verificador Agência/Conta",
         "tipo": "Funcionários",
         "field_na_planilha_de_entrada": "* Dígito Verificador da AG/Conta",
-    },
-    "17.3C": {
-        "nome": "Valor do INSS",
-        "tipo": "Funcionários",
-        "field_na_planilha_de_entrada": "Valor do INSS",
     },
     "17.3C": {
         "nome": "Valor do INSS",
@@ -1264,7 +1262,7 @@ FEBRABAN_V10_7 = {
                 "posicao_inicio": 4,
                 "posicao_fim": 7,
                 "formato": "num",
-                "default": "0000",
+                "default": None,
                 "descricao": "G002",
             },
             "03.1": {
@@ -1668,8 +1666,8 @@ FEBRABAN_V10_7 = {
                 "nome": "Uso Exclusivo FEBRABAN / CNAB",
                 "posicao_inicio": 212,
                 "posicao_fim": 240,
-                "formato": "Brancos",
-                "default": None,
+                "formato": "alfa",
+                "default": "Brancos",
                 "descricao": "G004",
             },
         }
