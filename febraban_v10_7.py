@@ -13,6 +13,8 @@
 # 	] * X
 # Trailer (última linha)
 
+## TODO confirm
+# G066
 
 MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     "01.9": {
@@ -52,7 +54,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     "03.5": {
         "nome": "Tipo de Registro",
     },
-    "04.9": {
+    "04.5": {
         "nome": "Uso Exclusivo FEBRABAN/CNAB",
     },
     "05.5": {
@@ -360,8 +362,6 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     },
     "18.3A": {
         "nome": "Tipo da Moeda",
-        "tipo": "Pagamentos",
-        "field_na_planilha_de_entrada": "* Tipo da Moeda",
     },
     "19.3A": {
         "nome": "Quantidade da Moeda",
@@ -394,7 +394,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
         "nome": "Codigo finalidade da TED",
     },
     "27.3A": {
-        "nome": "Complemento de finalidade pagto.",
+        "nome": "Complemento de finalidade pagto.",   # depende do banco
     },
     "28.3A": {
         "nome": "Uso Exclusivo FEBRABAN/CNAB",
@@ -445,28 +445,28 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     "10.3B": {
         "nome": "Informação 11",
         "tipo": "Funcionários",
-        "field_na_planilha_de_entrada": [   # TODO missing parse for this
-            ("Número (Nº do Local)", [68,72]),
-            ("Complemento (Casa, Apto, Etc)", [73, 87]),
-            ("Bairro", [88, 102]),
-            ("Nome da Cidade", [103, 117]),
-            ("CEP", [118, 122]),
-            ("Complemento CEP", [123, 125]),
-            ("Sigla do Estado", [126, 127]),
+        "field_na_planilha_de_entrada": [
+            ["Número (Nº do Local)", [68,72, "num"]],
+            ["Complemento (Casa, Apto, Etc)", [73, 87, "alfa"]],
+            ["Bairro", [88, 102, "alfa"]],
+            ["Nome da Cidade", [103, 117, "alfa"]],
+            ["CEP", [118, 122, "num"]],
+            ["Complemento do CEP", [123, 125, "alfa"]],
+            ["Sigla do Estado", [126, 127, "alfa"]],
         ]
     },
     "11.3B": {
         "nome": "Informação 12",
         "tipo": "Pagamentos",
-        "field_na_planilha_de_entrada": [       # TODO missing parse for this
-            ("Data do Vencimento (Nominal)", [128,135]),
-            ("Valor do Documento (Nominal)", [136, 150]),
-            ("Valor do Abatimento", [151, 165]),
-            ("Valor do Desconto", [166, 180]),
-            ("Valor da Mora", [181, 195]),
-            ("Valor da Multa", [196, 210]),
-            ("Código/Documento do Favorecido", [211, 225]),
-            ("P006", [226, 127]),
+        "field_na_planilha_de_entrada": [
+            ["Data do Vencimento (Nominal)", [128, 135, "num"]],
+            ["Valor do Documento (Nominal)", [136, 150, "num"]],
+            ["Valor do Abatimento", [151, 165, "num"]],
+            ["Valor do Desconto", [166, 180, "num"]],
+            ["Valor da Mora", [181, 195, "num"]],
+            ["Valor da Multa", [196, 210, "num"]],
+            ["Código/Documento do Favorecido", [211, 225, "alfa"]],
+            ["Aviso ao Favorecido", [226, 226, "num"]],
         ]
     },
     "12.3B": {
@@ -545,7 +545,7 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     "15.3C": {
         "nome": "Dígito Verificador da Conta",
         "tipo": "Funcionários",
-        "field_na_planilha_de_entrada": "Dígito Verificador da Conta",
+        "field_na_planilha_de_entrada": "* Dígito Verificador da Conta",
     },
     "16.3C": {
         "nome": "Dígito Verificador Agência/Conta",
@@ -554,12 +554,12 @@ MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7 = {
     },
     "17.3C": {
         "nome": "Valor do INSS",
-        "tipo": "Funcionários",
+        "tipo": "Pagamentos",
         "field_na_planilha_de_entrada": "Valor do INSS",
     },
     "18.3C": {
-        "nome": "Valor do INSS",
-        "tipo": "Funcionários",
+        "nome": "Número Conta Pagamento Creditada",
+        "tipo": "Pagamentos",
         "field_na_planilha_de_entrada": "Número Conta Pagamento Creditada",
     },
     "19.3C": {

@@ -1,8 +1,35 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import os
 
 from febraban_v10_7 import FEBRABAN_V10_7, MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7
 
+def get_numero_aviso_debito():
+    # @rsarai TODO validate this
+    return " "
+
+def get_num_sequencial_registro_lote():
+    # TODO double check what is this
+    return ""
+
+def get_num_sequencial_do_arquivo():
+    return str(len(os.listdir("generated_files")) + 1)
+
+def get_tipo_inscrição_favorecido(name):
+    if name == "Isento / Não Informado":
+        return '0'
+
+    if name == "CPF":
+        return '1'
+
+    if name == "CGC / CNPJ":
+        return '2'
+
+    if name == "PIS / PASEP":
+        return '3'
+
+    if name == "Outros":
+        return '9'
 
 def get_codigo_remessa_retorno(chave):
     if chave != "16.0":
@@ -67,6 +94,29 @@ def get_codigo_finalidade_complementar():
 
 def get_aviso_ao_favorecido():
     return "2"  # Emite Aviso Somente para o Remetente
+
+
+def get_tipo_de_moeda():
+    """
+        'BTN' = Bônus do Tesouro Nacional + TR
+        'BRL' = Real
+        'USD' = Dólar Americano
+        'PTE' = Escudo Português
+        'FRF' = Franco Francês
+        'CHF' = Franco Suíço
+        'JPY' = Ien Japonês
+        'IGP' = Índice Geral de Preços
+        'IGM' = Índice Geral de Preços de Mercado
+        'GBP' = Libra Esterlina
+        'ITL' = Lira Italiana
+        'DEM' = Marco Alemão
+        'TRD' = Taxa Referencial Diária
+        'UPC' = Unidade Padrão de Capital
+        'UPF' = Unidade Padrão de Financiamento
+        'UFR' = Unidade Fiscal de Referência
+        'XEU' = Unidade Monetária Européia
+    """
+    return "BRL"
 
 
 class Campo:
@@ -167,17 +217,18 @@ class GerarArquivoCNAB240_V10_7:
         arquivo.close()
         return None
 
-    def gerar_header(self, index):
+    def gerar_header(self):
         campos_do_header = FEBRABAN_V10_7["header"]["campos"]
         linha = self.gerar_linha(campos_do_header)
         return linha
 
-    def gerar_linha(self, campos_do_segmento):
+    def gerar_linha(self, campos_do_segmento, index=None):
         fields = list(campos_do_segmento.keys())
         fields.sort()
 
         line = ""
         for key in fields:
+            valor = None
             field_config = campos_do_segmento[key]
             real_data_location = MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7[key]
 
@@ -221,12 +272,51 @@ class GerarArquivoCNAB240_V10_7:
                 if key == "26.1":
                     valor = get_indicativo_da_forma_de_pagamento_do_servico()
 
+                if key == "05.5":
+                    valor = "1"
+
+                if key == "06.5":
+                    somatoria_dos_valores = 0
+                    for pg in self.dados_entrada_mapeados["Pagamentos"]:
+                        somatoria_dos_valores += int(pg["Valor do Pagamento"])
+                    valor = somatoria_dos_valores
+
+                if key == "07.5":
+                    somatoria_dos_valores = 0
+                    for pg in self.dados_entrada_mapeados["Pagamentos"]:
+                        somatoria_dos_valores += int(pg["Quantidade da Moeda"])
+                    valor = somatoria_dos_valores
+
+                if key == "08.5":
+                    valor = get_numero_aviso_debito()
+
+                if key in ["18.1", "27.1", "28.1", "04.5", "09.5", "10.5", "22.0", "23.0", "24.0"]:
+                    valor = " "
+
+                if key == "17.0":
+                    valor = get_data_geracao_do_arquivo()
+
+                if key == "18.0":
+                    valor = get_hora_geracao_do_arquivo()
+
+                if key == "19.0":
+                    valor = get_num_sequencial_do_arquivo()
+
+                if key == "21.0":
+                    valor = get_densidade_de_gravacao_do_arquivo()
+
+                assert valor, f"Campo {key} não pode ser None"
                 campo = Campo(valor, campo_config=field_config)
                 line += str(campo)
                 continue
         return line
 
     def gerar_linha_detalhamento(self, index, campos_do_segmento, dados_pagamento, dados_funcionario):
+        local_dados_entrada_mapeados = {
+            "Empresa": self.dados_entrada_mapeados["Empresa"],
+            "Funcionários": dados_funcionario,
+            "Pagamentos": dados_pagamento,
+        }
         fields = list(campos_do_segmento.keys())
         fields.sort()
 
@@ -241,10 +331,59 @@ class GerarArquivoCNAB240_V10_7:
                 """
                 planilha = real_data_location["tipo"]
                 name = real_data_location["field_na_planilha_de_entrada"]
-                valor = self.dados_entrada_mapeados[planilha][name]
+                if key == "06.3B":
+                    # @rsarai TODO remove this when get an answer from bank
+                    line += "  "
+                    continue
+
+                if key == "07.3B":
+                    valor = local_dados_entrada_mapeados[planilha][name]
+                    line += get_tipo_inscrição_favorecido(valor)
+                    continue
+                
+                if key == "10.3B":
+                    custom_fields_config = real_data_location["field_na_planilha_de_entrada"]
+                    for field_name, specs in custom_fields_config:
+                        valor = local_dados_entrada_mapeados[planilha][field_name]
+                        campo_config = {
+                            "valor_default": None,
+                            "posicao_inicio": specs[0],
+                            "posicao_fim": specs[1],
+                            "formato": specs[2],
+                            "nome": field_name,
+                        }
+                        campo = Campo(valor, campo_config=campo_config)
+                        line += str(campo)
+                    continue
+
+                if key == "11.3B":
+                    custom_fields_config = real_data_location["field_na_planilha_de_entrada"]
+                    for field_name, specs in custom_fields_config:
+                        if field_name == "Aviso ao Favorecido":
+                            line += get_aviso_ao_favorecido()
+                        else:
+                            valor = local_dados_entrada_mapeados[planilha][field_name]
+                            campo_config = {
+                                "valor_default": None,
+                                "posicao_inicio": specs[0],
+                                "posicao_fim": specs[1],
+                                "formato": specs[2],
+                                "nome": field_name,
+                            }
+                            campo = Campo(valor, campo_config=campo_config)
+                            line += str(campo)
+                    continue
+
+                valor = local_dados_entrada_mapeados[planilha][name]
                 campo = Campo(valor, campo_config=field_config)
                 line += str(campo)
             else:
+                has_default_value = field_config["default"]
+                if has_default_value:
+                    has_default_value = " " if has_default_value == "Brancos" else has_default_value
+                    campo = Campo(has_default_value, campo_config=field_config)
+                    line += str(campo)
+                    continue
 
                 if key in self.LOTES_DE_SERVICO_CAMPOS:
                     valor = index
@@ -252,9 +391,43 @@ class GerarArquivoCNAB240_V10_7:
                     line += str(campo)
                     continue
 
-    def gerar_lote_header(self):
+                if key == "18.3A":
+                    line += get_tipo_de_moeda()
+                    continue
+
+                if key == "04.3C":
+                    line += get_num_sequencial_registro_lote()
+                    continue
+
+                if key == "06.3A":
+                    line += get_tipo_de_movimento()
+                    continue
+
+                if key == "07.3A":
+                    line += get_codigo_instrucao_movimento()
+                    continue
+
+                if key == "26.3A":
+                    line += get_codigo_finalidade_da_ted()
+                    continue
+
+                if key == "25.3A":
+                    line += get_tipo_de_servico()
+                    continue
+
+                if key in ["22.3A", "23.3A", "24.3A", "30.3A", "29.3A", "28.3A", "27.3A"]:
+                    valor = " "
+                    campo = Campo(valor, campo_config=field_config)
+                    line += str(campo)
+                    continue
+
+                print(f"Could not map {key}")
+                # assert key, f"Could not map {key} "
+        return line
+
+    def gerar_lote_header(self, index):
         campos_do_header = FEBRABAN_V10_7["header_lote"]["campos"]
-        linha = self.gerar_linha(campos_do_header)
+        linha = self.gerar_linha(campos_do_header, index)
         return linha
 
     def gerar_lote_registros_iniciais():
@@ -268,25 +441,32 @@ class GerarArquivoCNAB240_V10_7:
 
     def gerar_lote_detalhe_segmento_a(self, index, dados_pagamento, dados_funcionario):
         campos_do_header = FEBRABAN_V10_7["lote_detalhe_segmento_a"]["campos"]
-        linha = gerar_linha_detalhamento(index, campos_do_header, dados_funcionario, dados_pagamento)
+        linha = self.gerar_linha_detalhamento(index, campos_do_header, dados_pagamento, dados_funcionario)
         return linha
 
-    def gerar_lote_detalhe_segmento_b():
-        pass
+    def gerar_lote_detalhe_segmento_b(self, index, dados_pagamento, dados_funcionario):
+        campos_do_header = FEBRABAN_V10_7["lote_detalhe_segmento_b"]["campos"]
+        linha = self.gerar_linha_detalhamento(index, campos_do_header, dados_pagamento, dados_funcionario)
+        return linha
 
-    def gerar_lote_detalhe_segmento_c():
-        # opcional
-        pass
+    def gerar_lote_detalhe_segmento_c(self, index, dados_pagamento, dados_funcionario):
+        campos_do_header = FEBRABAN_V10_7["lote_detalhe_segmento_c"]["campos"]
+        linha = self.gerar_linha_detalhamento(index, campos_do_header, dados_pagamento, dados_funcionario)
+        return linha
 
     def gerar_lote_registros_finais():
         # opcional
         pass
 
-    def gerar_lote_trailer():
-        pass
+    def gerar_lote_trailer(self, index):
+        campos_do_header = FEBRABAN_V10_7["trailer_lote"]["campos"]
+        linha = self.gerar_linha(campos_do_header, index)
+        return linha
 
     def gerar_trailer():
-        pass
+        campos_do_header = FEBRABAN_V10_7["trailer"]["campos"]
+        linha = self.gerar_linha(campos_do_header)
+        return linha
 
 
 
@@ -294,15 +474,87 @@ class GerarArquivoCNAB240_V10_7:
 
 if __name__ == "__main__":
     x = {
-        "Empresa": {'Nome da Empresa': 'Vinta', '* Tipo de Inscrição da Empresa': '1', '* Número de Inscrição da Empresa': '3232312', '* Código do Convênio no Banco': '231', '* Agência Mantenedora da Conta ': '123', '* Dígito Verificador da Agência': '2', '* Número da Conta Corrente': '123341', '* Dígito Verificador da Conta': '2', '* Dígito Verificador da Ag/Conta': '1', 'Logradouro (Nome da Rua, Av, Pça, Etc)': 'asdfasdf', 'Número (Número do Local)': '23', 'Complemento (Casa, Apto, Sala, Etc)': 'dfasfdasdf', 'Nome da Cidade': 'asfdasf', 'CEP': '212', 'Complemento do CEP': '231', 'Sigla do Estado': 'df', "Nome do Banco": "banco inter"}
-        "Funcionários": []
-        "Pagamentos": []
+        "Empresa": {'Nome da Empresa': 'Vinta', '* Tipo de Inscrição da Empresa': '1', '* Número de Inscrição da Empresa': '3232312', '* Código do Convênio no Banco': '231', '* Agência Mantenedora da Conta ': '123', '* Dígito Verificador da Agência': '2', '* Número da Conta Corrente': '123341', '* Dígito Verificador da Conta': '2', '* Dígito Verificador da Ag/Conta': '1', 'Logradouro (Nome da Rua, Av, Pça, Etc)': 'asdfasdf', 'Número (Número do Local)': '23', 'Complemento (Casa, Apto, Sala, Etc)': 'dfasfdasdf', 'Nome da Cidade': 'asfdasf', 'CEP': '212', 'Complemento do CEP': '231', 'Sigla do Estado': 'df', "Nome do Banco": "banco inter"},
+        "Funcionários": [{
+            "Nome do Favorecido": "Marcos Felipe",
+            "* Tipo de Inscrição do Favorecido": "CPF",
+            "* Nº de Inscrição do Favorecido": "04077152151",
+            "* Código da Câmara Centralizadora": "123",
+            "Código do Banco do Favorecido": "123",
+            "* Ag. Mantenedora da Cta do Favor.": "123",
+            "* Dígito Verificador da Agência": "1",
+            "* Número da Conta Corrente": "33333",
+            "* Dígito Verificador da Conta": "3",
+            "* Dígito Verificador da AG/Conta": "1",
+            "Logradouro (Nome da Rua, Av, Pça, Etc)": "asdfasdf",
+            "Número (Nº do Local)": "23",
+            "Complemento (Casa, Apto, Etc)": "asdfasdf",
+            "Bairro": "asdffd",
+            "Nome da Cidade": "ffffffff",
+            "Sigla do Estado": "as",
+            "CEP": "23123",
+            "Complemento do CEP": "asf",
+        }],
+        "Pagamentos": [{
+            "Funcionário": "Marcos Felipe",
+            "Nº do Docum. Atribuído p/ Empresa": "33333",
+            "* Nº do Docum. Atribuído pelo Banco": "33333",
+            "* Tipo da Moeda": "R$",
+            "Código ISPB": "1231",
+            "Quantidade da Moeda": "123123",
+            "Valor do Pagamento": "33333",
+            "Data do Pagamento": "12122020",
+            "Valor Real da Efetivação do Pagto": "123123",
+            "Data do Vencimento (Nominal)": "12122020",
+            "Valor do Documento (Nominal)": "123",
+            "Valor do Abatimento": "123",
+            "Valor do Desconto": "123",
+            "Valor da Mora": "123",
+            "Valor da Multa": "123",
+            "Código/Documento do Favorecido": "123",
+            "Valor do IR": "123",
+            "Valor do ISS": "333",
+            "Valor do IOF": "123",
+            "Valor Outras Deduções": "123",
+            "Valor Outros Acréscimos": "123",
+            "Agência do Favorecido": "123",
+            "Dígito Verificador da Agência": "123",
+            "Número Conta Corrente": "123",
+            "Dígito Verificador da Conta": "123",
+            "Dígito Verificador Agência/Conta": "123",
+            "Valor do INSS": "123",
+            "Número Conta Pagamento Creditada": "123",
+        }],
     }
+    pagamentos = x["Pagamentos"]
+    funcionarios = x["Funcionários"]
+
     cnab = GerarArquivoCNAB240_V10_7(x)
     print(cnab.gerar_header())
+
     for i, _ in enumerate(pagamentos):
         dados_pagamento = pagamentos[i]
         dados_funcionario = funcionarios[i]
-
         print(cnab.gerar_lote_header(i + 1))
         print(cnab.gerar_lote_detalhe_segmento_a(i + 1, dados_pagamento, dados_funcionario))
+        print(cnab.gerar_lote_detalhe_segmento_b(i + 1, dados_pagamento, dados_funcionario))
+        print(cnab.gerar_lote_detalhe_segmento_c(i + 1, dados_pagamento, dados_funcionario))
+        print(cnab.gerar_lote_trailer(i + 1))
+
+# Header (primeira linha)
+# 	[
+# 		Lote Header de Lote
+# 		Lote Registros iniciais do lote (opcional)
+# 		Lote Detalhe Segmento A (Obrigatório - Remessa / Retorno)
+# 		Lote Detalhe Segmento B (Obrigatório - Remessa / Retorno)
+# 		Lote Detalhe Segmento C (Opcional - Remessa / Retorno)
+# 		Lote Registros finais do lote (opcional)
+# 		Lote Trailer de Lote
+# 	] * X
+# Trailer (última linha)
+
+# TODO: 
+# - Implement file trailer
+# - Fix fields that are being generated: 04.3A, 12.3B, 06.3C, 19.3C
+# - Double check mapping fields
+# - Parse data 
