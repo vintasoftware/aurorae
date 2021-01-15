@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+from data_handler import get_spreadsheet_data
 from febraban_v10_7 import FEBRABAN_V10_7, MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7
 
 def get_numero_aviso_debito():
@@ -135,20 +136,27 @@ class Campo:
         return self.formatar_campo()
 
     def formatar_campo(self):
-        self.e_valido()
+        self.validate()
 
+        campo_formatado = ""
         if self.formato == "num":
-          campo_formatado = self.valor_entrada.zfill(self.total_posicoes)
+            campo_formatado = self.valor_entrada.zfill(self.total_posicoes)
         elif self.formato == "alfa":
-          campo_formatado = self.valor_entrada.ljust(self.total_posicoes, ' ')
-
-        assert (len(campo_formatado) == self.total_posicoes), f"{self.nome} = {len(campo_formatado)} != {self.total_posicoes})"
+            campo_formatado = self.valor_entrada.ljust(self.total_posicoes, ' ')
 
         return campo_formatado
 
-    def e_valido(self):
+    def validate(self):
         if self.formato not in ["num", "alfa"]:
-            raise Exception(f"Formato não permitido: {self.nome}")
+            raise Exception(f"Formato invalido: {self.nome}")
+
+        if len(self.valor_entrada) > self.total_posicoes:
+            raise Exception(
+                f"A quantidade total de caracteres do valor '{self.valor_entrada}' da coluna '{self.nome}' "
+                f"é invalida: Total permitido '{self.total_posicoes}'."
+            )
+
+        return None
 
 
 class Linha:
@@ -169,7 +177,7 @@ class Linha:
     def __str__(self):
         return self.formatar_linha()
 
-    def formatar_linha():
+    def formatar_linha(self):
         self.gerar_campos()
 
         linha = ""
@@ -182,7 +190,7 @@ class Linha:
 
         return linha
 
-    def gerar_campos():
+    def gerar_campos(self):
         campos_febraban = self.linha_config["campos"]
 
         for campo_id, campo_config in campos_febraban.items():
@@ -526,8 +534,10 @@ if __name__ == "__main__":
             "Número Conta Pagamento Creditada": "123",
         }],
     }
-    pagamentos = x["Pagamentos"]
-    funcionarios = x["Funcionários"]
+
+    # x = get_spreadsheet_data()
+    # pagamentos = x["Pagamentos"]
+    # funcionarios = x["Funcionários"]
 
     cnab = GerarArquivoCNAB240_V10_7(x)
     print(cnab.gerar_header())
