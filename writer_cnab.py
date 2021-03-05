@@ -3,11 +3,11 @@
 import os
 
 from data_handler import get_spreadsheet_data
-from febraban_v10_7 import FEBRABAN_V10_7, MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7
+from febraban_v10_7 import FEBRABAN_V10_7, MAPPED_FEBRABAN_V10_7_WITH_SPREADSHEET
 
 
 def get_numero_aviso_debito():
-    # @rsarai TODO validate this
+    # @rsarai TODO is_valid this
     return " "
 
 
@@ -128,89 +128,6 @@ def get_tipo_de_moeda():
     return "BRL"
 
 
-class Campo:
-    def __init__(self, valor, campo_config):
-        self.valor_default = campo_config.get("valor_default", None)
-        self.valor_entrada = self.valor_default or valor
-        self.valor_entrada = str(self.valor_entrada)
-        self.posicao_inicio = campo_config["posicao_inicio"]
-        self.posicao_fim = campo_config["posicao_fim"]
-        self.formato = campo_config["formato"]
-        self.nome = campo_config["nome"]
-        self.total_posicoes = self.posicao_fim - self.posicao_inicio + 1
-
-    def __str__(self):
-        return self.formatar_campo()
-
-    def formatar_campo(self):
-        self.validate()
-
-        campo_formatado = ""
-        if self.formato == "num":
-            campo_formatado = self.valor_entrada.zfill(self.total_posicoes)
-        elif self.formato == "alfa":
-            campo_formatado = self.valor_entrada.ljust(self.total_posicoes, " ")
-
-        return campo_formatado
-
-    def validate(self):
-        if self.formato not in ["num", "alfa"]:
-            raise Exception(f"Formato invalido: {self.nome}")
-
-        if len(self.valor_entrada) > self.total_posicoes:
-            raise Exception(
-                f"A quantidade total de caracteres do valor '{self.valor_entrada}' da coluna '{self.nome}' "
-                f"é invalida: Total permitido '{self.total_posicoes}'."
-            )
-
-        return None
-
-
-class Linha:
-    total_posicoes = 240
-    campos = []
-
-    def __init__(self, valores_entrada_mapeado, linha_config):
-        """
-        Ex. valores_entrada_mapeado:
-            {
-                "01.0": 123,
-                "02.0": "testing"
-            }
-        """
-        self.valores_entrada_mapeado = valores_entrada_mapeado
-        self.linha_config = linha_config
-
-    def __str__(self):
-        return self.formatar_linha()
-
-    def formatar_linha(self):
-        self.gerar_campos()
-
-        linha = ""
-        for campo in self.campos:
-            linha = + str(campo)
-        else:
-            linha = + "\n"
-
-        assert len(linha) == self.total_posicoes + 1
-
-        return linha
-
-    def gerar_campos(self):
-        campos_febraban = self.linha_config["campos"]
-
-        for campo_id, campo_config in campos_febraban.items():
-            campo = Campo(
-                valor=self.valores_entrada_mapeado[campo_id], campo_config=campo_config
-            )
-            self.campos.append(campo)
-
-        self.campos.sort(key=lambda campo: campo.posicao_inicio)
-
-        return None
-
-
 class GerarArquivoCNAB240_V10_7:
     LOTES_DE_SERVICO_CAMPOS = [
         "02.1",
@@ -251,9 +168,9 @@ class GerarArquivoCNAB240_V10_7:
 
         line = ""
         for key in fields:
-            valor = None
+            value = None
             field_config = campos_do_segmento[key]
-            real_data_location = MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7[key]
+            real_data_location = MAPPED_FEBRABAN_V10_7_WITH_SPREADSHEET[key]
 
             if real_data_location.get("tipo", None):
                 """
@@ -261,8 +178,8 @@ class GerarArquivoCNAB240_V10_7:
                 """
                 planilha = real_data_location["tipo"]
                 name = real_data_location["field_na_planilha_de_entrada"]
-                valor = self.dados_entrada_mapeados[planilha][name]
-                campo = Campo(valor, campo_config=field_config)
+                value = self.dados_entrada_mapeados[planilha][name]
+                campo = Field(value, campo_config=field_config)
                 line += str(campo)
             else:
                 """
@@ -274,7 +191,7 @@ class GerarArquivoCNAB240_V10_7:
                     has_default_value = (
                         " " if has_default_value == "Brancos" else has_default_value
                     )
-                    campo = Campo(has_default_value, campo_config=field_config)
+                    campo = Field(has_default_value, campo_config=field_config)
                     line += str(campo)
                     continue
 
@@ -282,40 +199,40 @@ class GerarArquivoCNAB240_V10_7:
                 Não tem default e precisa ser gerado
                 """
                 if key in self.LOTES_DE_SERVICO_CAMPOS:
-                    valor = index
-                    campo = Campo(valor, campo_config=field_config)
+                    value = index
+                    campo = Field(value, campo_config=field_config)
                     line += str(campo)
                     continue
 
                 if key == "16.0":
-                    valor = get_codigo_remessa_retorno(key)
+                    value = get_codigo_remessa_retorno(key)
 
                 if key == "05.1":
-                    valor = get_tipo_de_servico()
+                    value = get_tipo_de_servico()
 
                 if key == "06.1":
-                    valor = get_forma_de_lancamento()
+                    value = get_forma_de_lancamento()
 
                 if key == "26.1":
-                    valor = get_indicativo_da_forma_de_pagamento_do_servico()
+                    value = get_indicativo_da_forma_de_pagamento_do_servico()
 
                 if key == "05.5":
-                    valor = "1"
+                    value = "1"
 
                 if key == "06.5":
-                    somatoria_dos_valores = 0
+                    somatoria_dos_valuees = 0
                     for pg in self.dados_entrada_mapeados["Pagamentos"]:
-                        somatoria_dos_valores += int(pg["Valor do Pagamento"])
-                    valor = somatoria_dos_valores
+                        somatoria_dos_valuees += int(pg["Valor do Pagamento"])
+                    value = somatoria_dos_valuees
 
                 if key == "07.5":
-                    somatoria_dos_valores = 0
+                    somatoria_dos_valuees = 0
                     for pg in self.dados_entrada_mapeados["Pagamentos"]:
-                        somatoria_dos_valores += int(pg["Quantidade da Moeda"])
-                    valor = somatoria_dos_valores
+                        somatoria_dos_valuees += int(pg["Quantidade da Moeda"])
+                    value = somatoria_dos_valuees
 
                 if key == "08.5":
-                    valor = get_numero_aviso_debito()
+                    value = get_numero_aviso_debito()
 
                 if key in [
                     "18.1",
@@ -328,22 +245,22 @@ class GerarArquivoCNAB240_V10_7:
                     "23.0",
                     "24.0",
                 ]:
-                    valor = " "
+                    value = " "
 
                 if key == "17.0":
-                    valor = get_data_geracao_do_arquivo()
+                    value = get_data_geracao_do_arquivo()
 
                 if key == "18.0":
-                    valor = get_hora_geracao_do_arquivo()
+                    value = get_hora_geracao_do_arquivo()
 
                 if key == "19.0":
-                    valor = get_num_sequencial_do_arquivo()
+                    value = get_num_sequencial_do_arquivo()
 
                 if key == "21.0":
-                    valor = get_densidade_de_gravacao_do_arquivo()
+                    value = get_densidade_de_gravacao_do_arquivo()
 
-                assert valor, f"Campo {key} não pode ser None"
-                campo = Campo(valor, campo_config=field_config)
+                assert value, f"Campo {key} não pode ser None"
+                campo = Field(value, campo_config=field_config)
                 line += str(campo)
                 continue
         return line
@@ -362,7 +279,7 @@ class GerarArquivoCNAB240_V10_7:
         line = ""
         for key in fields:
             field_config = campos_do_segmento[key]
-            real_data_location = MAPEAMENTO_CAMPOS_ENTRADA_FEBRABAN_V10_7[key]
+            real_data_location = MAPPED_FEBRABAN_V10_7_WITH_SPREADSHEET[key]
 
             if real_data_location.get("tipo", None):
                 """
@@ -376,8 +293,8 @@ class GerarArquivoCNAB240_V10_7:
                     continue
 
                 if key == "07.3B":
-                    valor = local_dados_entrada_mapeados[planilha][name]
-                    line += get_tipo_inscricao_favorecido(valor)
+                    value = local_dados_entrada_mapeados[planilha][name]
+                    line += get_tipo_inscricao_favorecido(value)
                     continue
 
                 if key == "10.3B":
@@ -385,15 +302,15 @@ class GerarArquivoCNAB240_V10_7:
                         "field_na_planilha_de_entrada"
                     ]
                     for field_name, specs in custom_fields_config:
-                        valor = local_dados_entrada_mapeados[planilha][field_name]
+                        value = local_dados_entrada_mapeados[planilha][field_name]
                         campo_config = {
-                            "valor_default": None,
-                            "posicao_inicio": specs[0],
-                            "posicao_fim": specs[1],
-                            "formato": specs[2],
-                            "nome": field_name,
+                            "value_default": None,
+                            "pos_initial": specs[0],
+                            "pos_end": specs[1],
+                            "data_type": specs[2],
+                            "name": field_name,
                         }
-                        campo = Campo(valor, campo_config=campo_config)
+                        campo = Field(value, campo_config=campo_config)
                         line += str(campo)
                     continue
 
@@ -405,20 +322,20 @@ class GerarArquivoCNAB240_V10_7:
                         if field_name == "Aviso ao Favorecido":
                             line += get_aviso_ao_favorecido()
                         else:
-                            valor = local_dados_entrada_mapeados[planilha][field_name]
+                            value = local_dados_entrada_mapeados[planilha][field_name]
                             campo_config = {
-                                "valor_default": None,
-                                "posicao_inicio": specs[0],
-                                "posicao_fim": specs[1],
-                                "formato": specs[2],
-                                "nome": field_name,
+                                "value_default": None,
+                                "pos_initial": specs[0],
+                                "pos_end": specs[1],
+                                "data_type": specs[2],
+                                "name": field_name,
                             }
-                            campo = Campo(valor, campo_config=campo_config)
+                            campo = Field(value, campo_config=campo_config)
                             line += str(campo)
                     continue
 
-                valor = local_dados_entrada_mapeados[planilha][name]
-                campo = Campo(valor, campo_config=field_config)
+                value = local_dados_entrada_mapeados[planilha][name]
+                campo = Field(value, campo_config=field_config)
                 line += str(campo)
             else:
                 has_default_value = field_config["default"]
@@ -426,13 +343,13 @@ class GerarArquivoCNAB240_V10_7:
                     has_default_value = (
                         " " if has_default_value == "Brancos" else has_default_value
                     )
-                    campo = Campo(has_default_value, campo_config=field_config)
+                    campo = Field(has_default_value, campo_config=field_config)
                     line += str(campo)
                     continue
 
                 if key in self.LOTES_DE_SERVICO_CAMPOS:
-                    valor = index
-                    campo = Campo(valor, campo_config=field_config)
+                    value = index
+                    campo = Field(value, campo_config=field_config)
                     line += str(campo)
                     continue
 
@@ -469,8 +386,8 @@ class GerarArquivoCNAB240_V10_7:
                     "28.3A",
                     "27.3A",
                 ]:
-                    valor = " "
-                    campo = Campo(valor, campo_config=field_config)
+                    value = " "
+                    campo = Field(value, campo_config=field_config)
                     line += str(campo)
                     continue
 
@@ -534,6 +451,7 @@ if __name__ == "__main__":
             "Nome da Empresa": "Vinta",
             "* Tipo de Inscrição da Empresa": "1",
             "* Número de Inscrição da Empresa": "3232312",
+            "* Nome do Banco": "banco inter",
             "* Código do Convênio no Banco": "231",
             "* Agência Mantenedora da Conta ": "123",
             "* Dígito Verificador da Agência": "2",
@@ -547,7 +465,6 @@ if __name__ == "__main__":
             "CEP": "212",
             "Complemento do CEP": "231",
             "Sigla do Estado": "df",
-            "Nome do Banco": "banco inter",
         },
         "Funcionários": [
             {
