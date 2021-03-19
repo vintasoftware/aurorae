@@ -1,3 +1,5 @@
+import os
+
 def get_numero_aviso_debito():
     # @rsarai TODO is_valid this
     return " "
@@ -116,4 +118,8 @@ def get_somatorio_dos_valores():
 
 
 def get_somatorio_quantidade_de_moedas():
+    pass
+
+
+def get_codigo_finalidade_complementar():
     pass

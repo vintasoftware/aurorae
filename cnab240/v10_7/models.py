@@ -73,7 +73,7 @@ class Field113B(Field):
     }
     """
     custom_columns = [
-        ("Chave Pix", (128, 226, "alfa")),
+        # ("Chave Pix", (128, 226, "alfa")),
         ("Data do Vencimento (Nominal)", (128, 135, "num")),
         ("Valor do Documento (Nominal)", (136, 150, "num")),
         ("Valor do Abatimento", (151, 165, "num")),

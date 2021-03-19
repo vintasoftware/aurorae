@@ -349,143 +349,143 @@ MODELS_SPREADSHEET_MAP = {
 CUSTOM_FIELDS_MAPPING = {
     "header": {
         "field_02_0": {
-            "name": "",
+            "name": "Lote de Serviço",
             "lambda": "default",
         },
         "field_03_0": {
-            "name": "",
+            "name": "Tipo de Registro",
             "lambda": "default",
         },
         "field_04_0": {
-            "name": "",
+            "name": "Uso Exclusivo FEBRABAN / CNAB",
             "lambda": "default",
         },
         "field_15_0": {
-            "name": "",
+            "name": "Uso Exclusivo FEBRABAN / CNAB",
             "lambda": "default",
         },
         "field_16_0": {
-            "name": "",
+            "name": "Código Remessa / Retorno",
             "lambda": "get_codigo_remessa_retorno",
         },
         "field_17_0": {
-            "name": "",
+            "name": "Data de Geração do Arquivo",
             "lambda": "get_data_geracao_do_arquivo",
         },
         "field_18_0": {
-            "name": "",
+            "name": "Hora de Geração do Arquivo",
             "lambda": "get_hora_geracao_do_arquivo",
         },
         "field_19_0": {
-            "name": "",
+            "name": "Número Seqüencial do Arquivo",
             "lambda": "get_num_sequencial_do_arquivo",
         },
         "field_20_0": {
-            "name": "",
+            "name": "Número da Versão do Layout do Arquivo",
             "lambda": "default",
         },
         "field_21_0": {
-            "name": "",
+            "name": "Densidade de Gravação do Arquivo",
             "lambda": "get_densidade_de_gravacao_do_arquivo",
         },
         "field_22_0": {
-            "name": "",
+            "name": "Para Uso Reservado do Banco",
             "lambda": "default",
         },
         "field_23_0": {
-            "name": "",
+            "name": "Para Uso Reservado da Empresa",
             "lambda": "default",
         },
         "field_24_0": {
-            "name": "",
+            "name": "Uso Exclusivo FEBRABAN / CNAB",
             "lambda": "default",
         }
     },
     "lote_header": {
         "field_02_1": {
-            "name": "",
+            "name": "Lote de Serviço",
             "lambda": "get_sequencial_lote_de_servico",
         },
         "field_03_1": {
-            "name": "",
+            "name": "Tipo de Registro",
             "lambda": "default",
         },
         "field_04_1": {
-            "name": "",
+            "name": "Tipo da Operação",
             "lambda": "default",
         },
         "field_05_1": {
-            "name": "",
+            "name": "Tipo do Serviço",
             "lambda": "get_tipo_de_servico",
         },
         "field_06_1": {
-            "name": "",
+            "name": "Forma de Lançamento",
             "lambda": "get_forma_de_lancamento",
         },
         "field_07_1": {
-            "name": "",
+            "name": "Nº da Versão do Layout do Lote",
             "lambda": "default",
         },
         "field_08_1": {
-            "name": "",
+            "name": "Uso Exclusivo da FEBRABAN/CNAB",
             "lambda": "default",
         },
         "field_26_1": {
-            "name": "",
+            "name": "Indicativo da Forma de Pagamento do Serviço",
             "lambda": "get_indicativo_da_forma_de_pagamento_do_servico",
         },
         "field_27_1": {
-            "name": "",
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
             "lambda": "default",
         },
         "field_28_1": {
-            "name": "",
+            "name": "Códigos das Ocorrências p/ Retorno",
             "lambda": "default",
         }
     },
     "lote_detalhe_segmento_a": {
         "field_02_3A": {
-            "name": "",
+            "name": "Lote de Serviço",
             "lambda": "get_sequencial_lote_de_servico",
         },
         "field_03_3A": {
-            "name": "",
+            "name": "Tipo de Registro",
             "lambda": "default",
         },
         "field_04_3A": {
-            "name": "",
+            "name": "Nº Seqüencial do Registro no Lote",
             "lambda": "get_sequencial_registro_no_lote",
         },
         "field_05_3A": {
-            "name": "",
+            "name": "Código de Segmento do Reg. Detalhe",
             "lambda": "default",
         },
         "field_06_3A": {
-            "name": "",
+            "name": "Tipo de Movimento",
             "lambda": "get_tipo_de_movimento",
         },
         "field_07_3A": {
-            "name": "",
+            "name": "Código da Instrução p/ Movimento",
             "lambda": "get_codigo_instrucao_movimento",
         },
         "field_18_3A": {
-            "name": "",
+            "name":"Tipo da Moeda",
             "lambda": "get_tipo_de_moeda",
         },
         "field_22_3A": {
-            "name": "",
+            "name": "Data Real da Efetivação Pagto",
             "lambda": "get_data_real_da_efetivacao",
         },
         "field_23_3A": {
-            "name": "",
+            "name": "Valor Real da Efetivação do Pagto",
             "lambda": "get_valor_real_efetivacao",
         },
         "field_24_3A": {
-            "name": "",
-            "lambda": "",
+            "name": "Outras Informações",
+            "lambda": "default",
         },
         "field_25_3A": {
-            "name": "",
+            "name": "Compl. Tipo Serviço",
             "lambda": "get_tipo_de_servico",
         },
         "field_26_3A": {
@@ -494,7 +494,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_27_3A": {
             "name": "Complemento de finalidade pagto.",
-            "lambda": "",
+            "lambda": "get_codigo_finalidade_complementar",
         },
         "field_28_3A": {
             "name": "Uso Exclusivo FEBRABAN/CNAB",
@@ -587,7 +587,7 @@ CUSTOM_FIELDS_MAPPING = {
             "lambda": "get_numero_aviso_debito",
         },
         "field_09_5": {
-            "name": "Uso Exclusivo FEBRABAN/CNAB"
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
             "lambda": "default",
         },
         "field_10_5": {

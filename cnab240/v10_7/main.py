@@ -1,10 +1,7 @@
-import models
+import data_handler
 
-for seg in segments
-    for key in keys:
-        
-        if MODELS_SPREADSHEET_MAP.get(seq)
-            get_from_spreadsheet
+from v10_7 import models
+
 
 header_data = {
     "field_01_0": "123"
@@ -28,32 +25,17 @@ header_data = {
     "field_21_0": "12331"
 }
 
-with open("generated_files/test_1.txt", 'w') as f:
-    header = models.HeaderLine(initial_data=header_data)
-    f.write(header.to_cnab240_representation())
-    f.write('\n')
 
-    for i in person:
-        lote_header = models.LoteHeader(initial_data=lote_data)
-        f.write(lote_header.to_cnab240_representation())
-        f.write('\n')
 
-        lote_seg_a = models.LoteDetalheSegmentoA(initial_data=segmento_a_data)
-        f.write(lote_seg_a.to_cnab240_representation())
-        f.write('\n')
+spreadsheet_data = data_handler.get_spreadsheet_data()
+fields_data = data_handler.get_initial_data(spreadsheet_data)
 
-        lote_seg_b = models.LoteDetalheSegmentoB(initial_data=segmento_b_data)
-        f.write(lote_seg_b.to_cnab240_representation())
-        f.write('\n')
-
-        lote_seg_c = models.LoteDetalheSegmentoC(initial_data=segmento_c_data)
-        f.write(lote_seg_c.to_cnab240_representation())
-        f.write('\n')
-
-        lote_trailer = models.LoteTrailer(initial_data=lote_trailer_data)
-        f.write(lote_trailer.to_cnab240_representation())
-        f.write('\n')
-
-    trailer = models.TrailerLine(initial_data=trailer_data)
-    f.write(trailer.to_cnab240_representation())
-    f.write('\n')
+header = models.HeaderLine(initial_data=header_data)
+print(header.to_cnab240_representation())
+for lote in lotes:
+    lote_header = models.LoteHeader(initial_data=lote_data)
+    lote_seg_a = models.LoteDetalheSegmentoA(initial_data=segmento_a_data)
+    lote_seg_b = models.LoteDetalheSegmentoB(initial_data=segmento_b_data)
+    lote_seg_c = models.LoteDetalheSegmentoC(initial_data=segmento_c_data)
+    lote_trailer = models.LoteTrailer(initial_data=lote_trailer_data)
+trailer = models.TrailerLine(initial_data=trailer_data)

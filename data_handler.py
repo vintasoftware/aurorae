@@ -1,6 +1,7 @@
 from openpyxl import load_workbook
 
-from cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP
+from cnab240.v10_7 import lambdas
+from cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP, CUSTOM_FIELDS_MAPPING
 
 
 def worksheet_dict_reader(worksheet):
@@ -14,7 +15,7 @@ def worksheet_dict_reader(worksheet):
 
 
 def get_spreadsheet_data():
-    workbook = load_workbook(filename="/Users/marcosfelipe/Marcos Felipe/Professional/Companies/vinta/projects/vinta-pagamentos/dados-pagamentos.xlsx", read_only=True, data_only=True)
+    workbook = load_workbook(filename="./dados-pagamentos.xlsx", read_only=True, data_only=True)
     dados_empresa = worksheet_dict_reader(workbook["Empresa"])
     dados_funcionarios = worksheet_dict_reader(workbook["Funcionários"])
     dados_pagamentos = worksheet_dict_reader(workbook["Pagamentos"])
@@ -27,22 +28,28 @@ def get_spreadsheet_data():
 
 
 def get_initial_data(spreadsheet_data):
-    initial_data = {}
+    initial_data = {
+        'lote_header': [],
+        'lote_trailer': [], 
+        'lote_detalhe_segmento_c': [], 
+        'lote_detalhe_segmento_b': [],
+        'lote_detalhe_segmento_a': [], 
+    }
     invalid_field_maps = []
 
     # Models
-    for model_name, fields in MODELS_SPREADSHEET_MAP.items():
+    for segment_name, fields in MODELS_SPREADSHEET_MAP.items():
         model_initial_data = {}
-
         # Fields
-        for field_name, mapped_data in fields.items():
+        for field_name, field_specs in fields.items():
             # Sheet Rows
-            sheet_rows = spreadsheet_data[mapped_data["sheet_name"]]
+            registers = []
+            sheet_rows = spreadsheet_data[field_specs["sheet_name"]]
             for row in sheet_rows:
                 try:
-                    if isinstance(mapped_data["column_name"], list):
+                    if isinstance(field_specs["column_name"], list):
                         # Multiple fields mapped as one column
-                        for mapped_column in mapped_data["column_name"]:
+                        for mapped_column in field_specs["column_name"]:
                             custom_column_name = mapped_column[0]
                             try:
                                 model_initial_data[field_name] = {
@@ -51,20 +58,26 @@ def get_initial_data(spreadsheet_data):
                             except KeyError:
                                 error_msg = (
                                     f"The column '{custom_column_name}' doesn't "
-                                    f"exists on the '{mapped_data['sheet_name']}' sheet."
+                                    f"exists on the '{field_specs['sheet_name']}' sheet."
                                 )
                                 invalid_field_maps.append({field_name: error_msg})
                     else:
-                        data = row[mapped_data["column_name"]]
-                        model_initial_data[field_name] = data
+                        data = row[field_specs["column_name"]]
+                        model_initial_data[field_name] = str(data)
+
+                    if 'lote' in segment_name:
+                        registers += [model_initial_data]
                 except KeyError:
                     error_msg = (
-                        f"The column '{mapped_data['column_name']}' doesn't "
-                        f"exists on the '{mapped_data['sheet_name']}' sheet."
+                        f"The column '{field_specs['column_name']}' doesn't "
+                        f"exists on the '{field_specs['sheet_name']}' sheet."
                     )
                     invalid_field_maps.append({field_name: error_msg})
-
-        initial_data[model_name] = model_initial_data
+        
+        if registers:
+            initial_data[segment_name] = registers
+        else:
+            initial_data[segment_name] = model_initial_data
 
     if invalid_field_maps:
         raise Exception(invalid_field_maps)
@@ -98,3 +111,46 @@ def get_trailer_initial_data(spreadsheet_data):
 
 def get_test():
     pass
+
+
+def get_custom_fields_data(initial_data):
+    initial_data = {
+        'lote_header': [],
+        'lote_trailer': [], 
+        'lote_detalhe_segmento_c': [], 
+        'lote_detalhe_segmento_b': [],
+        'lote_detalhe_segmento_a': [], 
+    }
+    invalid_field_maps = []
+
+    for segment_name, fields in CUSTOM_FIELDS_MAPPING.items():
+        model_initial_data = {}
+
+        for field_name, field_specs in fields.items():
+            lambda_func_name = field_specs["lambda"]
+            try:
+                if lambda_func_name == 'default':
+                    model_initial_data[field_name] = None
+                else:
+                    method_to_call = getattr(lambdas, lambda_func_name)
+                    model_initial_data[field_name] = method_to_call()
+            except KeyError:
+                error_msg = (
+                    f"The column '{field_specs['lambda']}' doesn't "
+                    f"exists on the '{lambdas.__file__}' sheet."
+                )
+                invalid_field_maps.append({field_name: error_msg})
+
+        initial_data[segment_name] = model_initial_data
+
+    if invalid_field_maps:
+        raise Exception(invalid_field_maps)
+
+    return initial_data
+
+if __name__ == "__main__":
+    import data_handler
+    spreadsheet_data = data_handler.get_spreadsheet_data()
+    fields_initial_data = data_handler.get_initial_data(spreadsheet_data)
+    print(fields_initial_data)
+    custom_fields_data = data_handler.get_custom_fields_data(fields_initial_data)
