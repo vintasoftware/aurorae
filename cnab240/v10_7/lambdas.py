@@ -83,43 +83,52 @@ def get_tipo_de_moeda():
 
 
 def get_sequencial_lote_de_servico():
-    pass
+    return '0001'
 
-
+COUNT = 0
 def get_sequencial_registro_no_lote():
-    pass
-
-
-def get_data_real_da_efetivacao():
-    pass
-
-
-def get_valor_real_efetivacao():
-    pass
-
-
-def get_qtde_contas_por_conc_lotes():
-    pass
+    global COUNT
+    COUNT = COUNT + 1
+    return COUNT
 
 
 def get_qtde_registros_do_arquivo():
-    pass
+    """
+        Somatório dos tipos de registro
+        No nosso caso, número de registros do lote + loteheader + lotetrailer + header + trailer
+        Qtd de linhas do arquivo
+    """
+    return COUNT + 2 + 2 
 
 
 def get_qtde_de_lotes_do_arquivo():
-    pass
+    return '1'
 
 
 def get_qtde_registros_do_lote():
-    pass
+    """
+        Somatório dos tipos de registro
+        No nosso caso, número de registros do lote + loteheader + lotetrailer
+    """
+    return COUNT + 2
 
 
-def get_somatorio_dos_valores():
-    pass
+def get_somatorio_dos_valores(spreadsheet_data):
+    somatorio = 0
+    for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
+        str_pagamento = str(data_pagamento["field_20_3A"])
+        str_float_pagamento = str_pagamento[-2:] + "." + str_pagamento[:-2]
+        somatorio += float(str_float_pagamento)
+    return str(somatorio).replace('.', '')
 
 
-def get_somatorio_quantidade_de_moedas():
-    pass
+def get_somatorio_quantidade_de_moedas(spreadsheet_data):
+    somatorio = 0
+    for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
+        str_pagamento = str(data_pagamento["field_19_3A"])
+        str_float_pagamento = str_pagamento[-2:] + "." + str_pagamento[:-2]
+        somatorio += float(str_float_pagamento)
+    return str(somatorio).replace('.', '')
 
 
 def get_codigo_finalidade_complementar():

@@ -474,11 +474,11 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_22_3A": {
             "name": "Data Real da Efetivação Pagto",
-            "lambda": "get_data_real_da_efetivacao",
+            "lambda": "default",
         },
         "field_23_3A": {
             "name": "Valor Real da Efetivação do Pagto",
-            "lambda": "get_valor_real_efetivacao",
+            "lambda": "default",
         },
         "field_24_3A": {
             "name": "Outras Informações",
@@ -494,7 +494,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_27_3A": {
             "name": "Complemento de finalidade pagto.",
-            "lambda": "get_codigo_finalidade_complementar",
+            "lambda": "default",
         },
         "field_28_3A": {
             "name": "Uso Exclusivo FEBRABAN/CNAB",
@@ -576,10 +576,12 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_06_5": {
             "name": "Somatória dos Valores",
+            "params": True,
             "lambda": "get_somatorio_dos_valores",
         },
         "field_07_5": {
             "name": "Somatória de Quantidade de Moedas",
+            "params": True,
             "lambda": "get_somatorio_quantidade_de_moedas",
         },
         "field_08_5": {
@@ -598,7 +600,7 @@ CUSTOM_FIELDS_MAPPING = {
     "trailer": {
         "field_02_9": {
             "name": "Lote de Serviço",
-            "lambda": "get_sequencial_lote_de_servico",
+            "lambda": "default",
         },
         "field_03_9": {
             "name": "Tipo de Registro",
@@ -618,7 +620,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_07_9": {
             "name": "Qtde de Contas p/ Conc. (Lotes)",
-            "lambda": "get_qtde_contas_por_conc_lotes",
+            "lambda": "default",
         },
         "field_08_9": {
             "name": "Uso Exclusivo FEBRABAN/CNAB",
