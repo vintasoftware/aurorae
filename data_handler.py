@@ -113,7 +113,33 @@ def get_test():
     pass
 
 
-def get_custom_fields_data(initial_data):
+def _generate_line(fields, spreadsheet_data):
+    model_initial_data = {}
+    for field_name, field_specs in fields.items():
+        lambda_func_name = field_specs["lambda"]
+        try:
+            if lambda_func_name == 'default':
+                # For the fields to get the default value this values must be none or ''
+                # doing this to ease development
+                model_initial_data[field_name] = 'default'
+            else:
+                has_params = field_specs.get("params", False)
+                method_to_call = getattr(lambdas, lambda_func_name)
+
+                if has_params:
+                    model_initial_data[field_name] = method_to_call(spreadsheet_data)
+                else:
+                    model_initial_data[field_name] = method_to_call()
+        except KeyError:
+            error_msg = (
+                f"The column '{field_specs['lambda']}' doesn't "
+                f"exists on the '{lambdas.__file__}' sheet."
+            )
+            invalid_field_maps.append({field_name: error_msg})
+    return model_initial_data
+
+
+def get_custom_fields_data(initial_data, spreadsheet_data):
     initial_data = {
         'lote_header': [],
         'lote_trailer': [], 
@@ -126,22 +152,15 @@ def get_custom_fields_data(initial_data):
     for segment_name, fields in CUSTOM_FIELDS_MAPPING.items():
         model_initial_data = {}
 
-        for field_name, field_specs in fields.items():
-            lambda_func_name = field_specs["lambda"]
-            try:
-                if lambda_func_name == 'default':
-                    model_initial_data[field_name] = None
-                else:
-                    method_to_call = getattr(lambdas, lambda_func_name)
-                    model_initial_data[field_name] = method_to_call()
-            except KeyError:
-                error_msg = (
-                    f"The column '{field_specs['lambda']}' doesn't "
-                    f"exists on the '{lambdas.__file__}' sheet."
-                )
-                invalid_field_maps.append({field_name: error_msg})
+        if segment_name in ["header", "trailer", "lote_header", "lote_trailer"]:
+            model_initial_data = _generate_line(fields, spreadsheet_data)
+            initial_data[segment_name] = model_initial_data
+            continue
 
-        initial_data[segment_name] = model_initial_data
+        for i, _ in enumerate(spreadsheet_data['lote_detalhe_segmento_c']):
+            model_initial_data = _generate_line(fields, spreadsheet_data)
+
+            initial_data[segment_name] += [model_initial_data]
 
     if invalid_field_maps:
         raise Exception(invalid_field_maps)
@@ -152,5 +171,6 @@ if __name__ == "__main__":
     import data_handler
     spreadsheet_data = data_handler.get_spreadsheet_data()
     fields_initial_data = data_handler.get_initial_data(spreadsheet_data)
-    print(fields_initial_data)
-    custom_fields_data = data_handler.get_custom_fields_data(fields_initial_data)
+    # print(fields_initial_data)
+    custom_fields_data = data_handler.get_custom_fields_data(None, fields_initial_data)
+    print(custom_fields_data)
