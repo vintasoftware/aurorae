@@ -93,6 +93,7 @@ def get_sequencial_registro_no_lote():
 def get_data_real_da_efetivacao():
     pass
 
+
 def get_valor_real_efetivacao():
     pass
 

@@ -117,9 +117,9 @@ def get_custom_fields_data(initial_data):
     initial_data = {
         'lote_header': [],
         'lote_trailer': [], 
-        'lote_detalhe_segmento_c': [], 
+        'lote_detalhe_segmento_a': [],
         'lote_detalhe_segmento_b': [],
-        'lote_detalhe_segmento_a': [], 
+        'lote_detalhe_segmento_c': [],
     }
     invalid_field_maps = []
 
@@ -147,6 +147,7 @@ def get_custom_fields_data(initial_data):
         raise Exception(invalid_field_maps)
 
     return initial_data
+
 
 if __name__ == "__main__":
     import data_handler
