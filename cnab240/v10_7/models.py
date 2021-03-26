@@ -154,7 +154,7 @@ class HeaderLine(BaseLine):
         pos_initial=9,
         pos_end=17,
         data_type="alfa",
-        default_value="Brancos",
+        default_value="",
         description="G004",
         code="04.0"
     )
@@ -253,7 +253,7 @@ class HeaderLine(BaseLine):
         pos_initial=133,
         pos_end=142,
         data_type="alfa",
-        default_value="Brancos",
+        default_value="",
         description="G004",
         code="15.0"
     )
@@ -334,7 +334,7 @@ class HeaderLine(BaseLine):
         pos_initial=212,
         pos_end=240,
         data_type="alfa",
-        default_value="Brancos",
+        default_value="",
         description="G004",
         code="24.0"
     )
@@ -409,7 +409,7 @@ class LoteHeader(BaseLine):
         pos_initial=17,
         pos_end=17,
         data_type="alfa",
-        default_value="Brancos",
+        default_value="",
         description="G004",
         code="08.1"
     )
@@ -472,7 +472,7 @@ class LoteHeader(BaseLine):
         pos_initial=71,
         pos_end=71,
         data_type="alfa",
-        default_value="Brancos",
+        default_value="",
         description="G011",
         code="15.1"
     )
