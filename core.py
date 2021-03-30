@@ -20,7 +20,7 @@ class BaseLine:
             raise Exception(f"The `initial_data` is not valid {self.errors}")
 
         for field in self.get_fields():
-            self.formatted_value = f"{self.formatted_value}{field.to_cnab240_representation()}"
+            self.formatted_value = f"{self.formatted_value}{field.to_cnab240_representation()}\n"
 
         assert len(self.formatted_value) == self.total_positions
 
