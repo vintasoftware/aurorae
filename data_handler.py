@@ -85,34 +85,6 @@ def get_initial_data(spreadsheet_data):
     return initial_data
 
 
-def get_lote_header_initial_data(spreadsheet_data):
-    pass
-
-
-def get_lote_detalhe_segmento_a_initial_data(spreadsheet_data):
-    pass
-
-
-def get_lote_detalhe_segmento_b_initial_data(spreadsheet_data):
-    pass
-
-
-def get_lote_detalhe_segmento_c_initial_data(spreadsheet_data):
-    pass
-
-
-def get_lote_trailer_initial_data(spreadsheet_data):
-    pass
-
-
-def get_trailer_initial_data(spreadsheet_data):
-    pass
-
-
-def get_test():
-    pass
-
-
 def _generate_line(fields, spreadsheet_data):
     model_initial_data = {}
     for field_name, field_specs in fields.items():
@@ -167,10 +139,10 @@ def get_custom_fields_data(initial_data, spreadsheet_data):
 
     return initial_data
 
+
 if __name__ == "__main__":
-    import data_handler
-    spreadsheet_data = data_handler.get_spreadsheet_data()
-    fields_initial_data = data_handler.get_initial_data(spreadsheet_data)
+    spreadsheet_data = get_spreadsheet_data()
+    fields_initial_data = get_initial_data(spreadsheet_data)
     # print(fields_initial_data)
-    custom_fields_data = data_handler.get_custom_fields_data(None, fields_initial_data)
+    custom_fields_data = get_custom_fields_data(None, fields_initial_data)
     print(custom_fields_data)
