@@ -17,7 +17,7 @@ class BaseLine:
         are instantiated after calling `.is_valid()`.
         """
         if not self.is_valid():
-            raise Exception("The `initial_data` is not valid.")
+            raise Exception(f"The `initial_data` is not valid {self.errors}")
 
         for field in self.get_fields():
             self.formatted_value = f"{self.formatted_value}{field.to_cnab240_representation()}"

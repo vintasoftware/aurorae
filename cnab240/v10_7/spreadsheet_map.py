@@ -346,4 +346,290 @@ MODELS_SPREADSHEET_MAP = {
 
 
 # Try to handle fields "field_11_3B"-like in a different way
-CUSTOM_FIELDS_MAPPING = {}
+CUSTOM_FIELDS_MAPPING = {
+    "header": {
+        "field_02_0": {
+            "name": "Lote de Serviço",
+            "lambda": "default",
+        },
+        "field_03_0": {
+            "name": "Tipo de Registro",
+            "lambda": "default",
+        },
+        "field_04_0": {
+            "name": "Uso Exclusivo FEBRABAN / CNAB",
+            "lambda": "default",
+        },
+        "field_15_0": {
+            "name": "Uso Exclusivo FEBRABAN / CNAB",
+            "lambda": "default",
+        },
+        "field_16_0": {
+            "name": "Código Remessa / Retorno",
+            "lambda": "get_codigo_remessa_retorno",
+        },
+        "field_17_0": {
+            "name": "Data de Geração do Arquivo",
+            "lambda": "get_data_geracao_do_arquivo",
+        },
+        "field_18_0": {
+            "name": "Hora de Geração do Arquivo",
+            "lambda": "get_hora_geracao_do_arquivo",
+        },
+        "field_19_0": {
+            "name": "Número Seqüencial do Arquivo",
+            "lambda": "get_num_sequencial_do_arquivo",
+        },
+        "field_20_0": {
+            "name": "Número da Versão do Layout do Arquivo",
+            "lambda": "default",
+        },
+        "field_21_0": {
+            "name": "Densidade de Gravação do Arquivo",
+            "lambda": "get_densidade_de_gravacao_do_arquivo",
+        },
+        "field_22_0": {
+            "name": "Para Uso Reservado do Banco",
+            "lambda": "default",
+        },
+        "field_23_0": {
+            "name": "Para Uso Reservado da Empresa",
+            "lambda": "default",
+        },
+        "field_24_0": {
+            "name": "Uso Exclusivo FEBRABAN / CNAB",
+            "lambda": "default",
+        }
+    },
+    "lote_header": {
+        "field_02_1": {
+            "name": "Lote de Serviço",
+            "lambda": "get_sequencial_lote_de_servico",
+        },
+        "field_03_1": {
+            "name": "Tipo de Registro",
+            "lambda": "default",
+        },
+        "field_04_1": {
+            "name": "Tipo da Operação",
+            "lambda": "default",
+        },
+        "field_05_1": {
+            "name": "Tipo do Serviço",
+            "lambda": "get_tipo_de_servico",
+        },
+        "field_06_1": {
+            "name": "Forma de Lançamento",
+            "lambda": "get_forma_de_lancamento",
+        },
+        "field_07_1": {
+            "name": "Nº da Versão do Layout do Lote",
+            "lambda": "default",
+        },
+        "field_08_1": {
+            "name": "Uso Exclusivo da FEBRABAN/CNAB",
+            "lambda": "default",
+        },
+        "field_26_1": {
+            "name": "Indicativo da Forma de Pagamento do Serviço",
+            "lambda": "get_indicativo_da_forma_de_pagamento_do_servico",
+        },
+        "field_27_1": {
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
+            "lambda": "default",
+        },
+        "field_28_1": {
+            "name": "Códigos das Ocorrências p/ Retorno",
+            "lambda": "default",
+        }
+    },
+    "lote_detalhe_segmento_a": {
+        "field_02_3A": {
+            "name": "Lote de Serviço",
+            "lambda": "get_sequencial_lote_de_servico",
+        },
+        "field_03_3A": {
+            "name": "Tipo de Registro",
+            "lambda": "default",
+        },
+        "field_04_3A": {
+            "name": "Nº Seqüencial do Registro no Lote",
+            "lambda": "get_sequencial_registro_no_lote",
+        },
+        "field_05_3A": {
+            "name": "Código de Segmento do Reg. Detalhe",
+            "lambda": "default",
+        },
+        "field_06_3A": {
+            "name": "Tipo de Movimento",
+            "lambda": "get_tipo_de_movimento",
+        },
+        "field_07_3A": {
+            "name": "Código da Instrução p/ Movimento",
+            "lambda": "get_codigo_instrucao_movimento",
+        },
+        "field_18_3A": {
+            "name":"Tipo da Moeda",
+            "lambda": "get_tipo_de_moeda",
+        },
+        "field_22_3A": {
+            "name": "Data Real da Efetivação Pagto",
+            "lambda": "default",
+        },
+        "field_23_3A": {
+            "name": "Valor Real da Efetivação do Pagto",
+            "lambda": "default",
+        },
+        "field_24_3A": {
+            "name": "Outras Informações",
+            "lambda": "default",
+        },
+        "field_25_3A": {
+            "name": "Compl. Tipo Serviço",
+            "lambda": "get_tipo_de_servico",
+        },
+        "field_26_3A": {
+            "name": "Codigo finalidade da TED",
+            "lambda": "get_codigo_finalidade_da_ted",
+        },
+        "field_27_3A": {
+            "name": "Complemento de finalidade pagto.",
+            "lambda": "default",
+        },
+        "field_28_3A": {
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
+            "lambda": "default",
+        },
+        "field_29_3A": {
+            "name": "Aviso ao Favorecido",
+            "lambda": "default",
+        },
+        "field_30_3A": {
+            "name": "Códigos das Ocorrências para Retorno",
+            "lambda": "default",
+        }
+    },
+    "lote_detalhe_segmento_b": {
+        "field_02_3B": {
+            "name": "Lote de Serviço",
+            "lambda": "get_sequencial_lote_de_servico",
+        },
+        "field_03_3B": {
+            "name": "Tipo de Registro",
+            "lambda": "default",
+        },
+        "field_04_3B": {
+            "name": "Nº Seqüencial do Registro no Lote",
+            "lambda": "get_sequencial_registro_no_lote",
+        },
+        "field_05_3B": {
+            "name": "Código de Segmento do Reg. Detalhe",
+            "lambda": "default",
+        },
+        "field_12_3B": {
+            "name": "Uso Exclusivo para o SIAPE",
+            "lambda": "default",
+        }
+    },
+    "lote_detalhe_segmento_c": {
+        "field_02_3C": {
+            "name": "Lote de Serviço",
+            "lambda": "get_sequencial_lote_de_servico",
+        },
+        "field_03_3C": {
+            "name": "Tipo de Registro",
+            "lambda": "default",
+        },
+        "field_04_3C": {
+            "name": "Nº Seqüencial do Registro no Lote",
+            "lambda": "get_sequencial_registro_no_lote",
+        },
+        "field_05_3C": {
+            "name": "Código de Segmento do Reg. Detalhe",
+            "lambda": "default",
+        },
+        "field_06_3C": {
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
+            "lambda": "default",
+        },
+        "field_19_3C": {
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
+            "lambda": "default",
+        }
+    },
+    "lote_trailer": {
+        "field_02_5": {
+            "name": "Lote de Serviço",
+            "lambda": "get_sequencial_lote_de_servico",
+        },
+        "field_03_5": {
+            "name": "Tipo de Registro",
+            "lambda": "default",
+        },
+        "field_04_5": {
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
+            "lambda": "default",
+        },
+        "field_05_5": {
+            "name": "Quantidade de Registros do Lote",
+            "lambda": "get_qtde_registros_do_lote",
+        },
+        "field_06_5": {
+            "name": "Somatória dos Valores",
+            "params": True,
+            "lambda": "get_somatorio_dos_valores",
+        },
+        "field_07_5": {
+            "name": "Somatória de Quantidade de Moedas",
+            "params": True,
+            "lambda": "get_somatorio_quantidade_de_moedas",
+        },
+        "field_08_5": {
+            "name": "Número Aviso de Débito ",
+            "lambda": "get_numero_aviso_debito",
+        },
+        "field_09_5": {
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
+            "lambda": "default",
+        },
+        "field_10_5": {
+            "name": "Códigos das Ocorrências para Retorno",
+            "lambda": "default",
+        }
+    },
+    "trailer": {
+        "field_02_9": {
+            "name": "Lote de Serviço",
+            "lambda": "default",
+        },
+        "field_03_9": {
+            "name": "Tipo de Registro",
+            "lambda": "default",
+        },
+        "field_04_9": {
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
+            "lambda": "default",
+        },
+        "field_05_9": {
+            "name": "Quantidade de Lotes do Arquivo",
+            "lambda": "get_qtde_de_lotes_do_arquivo",
+        },
+        "field_06_9": {
+            "name": "Quantidade de Registros do Arquivo",
+            "lambda": "get_qtde_registros_do_arquivo",
+        },
+        "field_07_9": {
+            "name": "Qtde de Contas p/ Conc. (Lotes)",
+            "lambda": "default",
+        },
+        "field_08_9": {
+            "name": "Uso Exclusivo FEBRABAN/CNAB",
+            "lambda": "default",
+        }
+    }
+}
+
+
+
+
+        

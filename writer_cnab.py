@@ -20,6 +20,7 @@ def get_num_sequencial_do_arquivo():
     return str(len(os.listdir("generated_files")) + 1)
 
 
+# @TODO Check this
 def get_tipo_inscricao_favorecido(name):
     if name == "Isento / Não Informado":
         return "0"
