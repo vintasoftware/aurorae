@@ -10,7 +10,6 @@ def worksheet_dict_reader(worksheet):
     for row in rows:
         if not any(row):
             return
-
         yield dict(zip(header, row))
 
 
@@ -27,7 +26,7 @@ def get_spreadsheet_data():
     }
 
 
-def get_initial_data(spreadsheet_data):
+def get_initial_data_from(spreadsheet_data):
     initial_data = {
         'lote_header': [],
         'lote_trailer': [], 
@@ -141,8 +140,8 @@ def get_custom_fields_data(initial_data, spreadsheet_data):
 
 
 if __name__ == "__main__":
-    spreadsheet_data = get_spreadsheet_data()
-    fields_initial_data = get_initial_data(spreadsheet_data)
+    data = get_spreadsheet_data()
+    fields_initial_data = get_initial_data_from(spreadsheet_data=data)
     # print(fields_initial_data)
     custom_fields_data = get_custom_fields_data(None, fields_initial_data)
     print(custom_fields_data)

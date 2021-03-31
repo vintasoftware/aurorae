@@ -628,8 +628,3 @@ CUSTOM_FIELDS_MAPPING = {
         }
     }
 }
-
-
-
-
-        

@@ -1,5 +1,6 @@
 import os
 
+
 def get_numero_aviso_debito():
     # @rsarai TODO is_valid this
     return " "
@@ -85,7 +86,10 @@ def get_tipo_de_moeda():
 def get_sequencial_lote_de_servico():
     return '0001'
 
+
 COUNT = 0
+
+
 def get_sequencial_registro_no_lote():
     global COUNT
     COUNT = COUNT + 1
@@ -94,11 +98,11 @@ def get_sequencial_registro_no_lote():
 
 def get_qtde_registros_do_arquivo():
     """
-        Somatório dos tipos de registro
-        No nosso caso, número de registros do lote + loteheader + lotetrailer + header + trailer
-        Qtd de linhas do arquivo
+    Somatório dos tipos de registro
+    No nosso caso, número de registros do lote + loteheader + lotetrailer + header + trailer
+    Qtd de linhas do arquivo
     """
-    return COUNT + 2 + 2 
+    return COUNT + 2 + 2
 
 
 def get_qtde_de_lotes_do_arquivo():
@@ -107,8 +111,8 @@ def get_qtde_de_lotes_do_arquivo():
 
 def get_qtde_registros_do_lote():
     """
-        Somatório dos tipos de registro
-        No nosso caso, número de registros do lote + loteheader + lotetrailer
+    Somatório dos tipos de registro
+    No nosso caso, número de registros do lote + loteheader + lotetrailer
     """
     return COUNT + 2
 

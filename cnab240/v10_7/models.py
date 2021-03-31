@@ -1,4 +1,4 @@
-from core import BaseLine, Field
+from cnab240.base import BaseLine, Field
 
 
 class Field103B(Field):

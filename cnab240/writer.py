@@ -44,11 +44,9 @@ class Lote:
 
 
 if __name__ == "__main__":
-    import data_handler
-    spreadsheet_data = data_handler.get_spreadsheet_data()
-    fields_initial_data = data_handler.get_initial_data(spreadsheet_data)
-
-    # pprint(fields_initial_data)
+    import spreadsheet_handler
+    spreadsheet_data = spreadsheet_handler.get_spreadsheet_data()
+    fields_initial_data = spreadsheet_handler.get_initial_data(spreadsheet_data)
 
     cnab = CNAB240File(fields_initial_data)
     cnab.generate_file()

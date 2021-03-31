@@ -1,6 +1,6 @@
-import data_handler
+import spreadsheet_handler
 
-from v10_7 import models
+from cnab240.v10_7 import models
 
 
 header_data = {
@@ -25,17 +25,15 @@ header_data = {
     "field_21_0": "12331",
 }
 
-
-
-spreadsheet_data = data_handler.get_spreadsheet_data()
-fields_data = data_handler.get_initial_data(spreadsheet_data)
+spreadsheet_data = spreadsheet_handler.get_spreadsheet_data()
+fields_data = spreadsheet_handler.get_initial_data(spreadsheet_data)
 
 header = models.HeaderLine(initial_data=header_data)
 print(header.to_cnab240_representation())
-for lote in lotes:
-    lote_header = models.LoteHeader(initial_data=lote_data)
-    lote_seg_a = models.LoteDetalheSegmentoA(initial_data=segmento_a_data)
-    lote_seg_b = models.LoteDetalheSegmentoB(initial_data=segmento_b_data)
-    lote_seg_c = models.LoteDetalheSegmentoC(initial_data=segmento_c_data)
-    lote_trailer = models.LoteTrailer(initial_data=lote_trailer_data)
-trailer = models.TrailerLine(initial_data=trailer_data)
+# for lote in lotes:
+#     lote_header = models.LoteHeader(initial_data=lote_data)
+#     lote_seg_a = models.LoteDetalheSegmentoA(initial_data=segmento_a_data)
+#     lote_seg_b = models.LoteDetalheSegmentoB(initial_data=segmento_b_data)
+#     lote_seg_c = models.LoteDetalheSegmentoC(initial_data=segmento_c_data)
+#     lote_trailer = models.LoteTrailer(initial_data=lote_trailer_data)
+# trailer = models.TrailerLine(initial_data=trailer_data)

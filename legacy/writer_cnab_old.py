@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from data_handler import get_spreadsheet_data
-from febraban_v10_7 import FEBRABAN_V10_7, MAPPED_FEBRABAN_V10_7_WITH_SPREADSHEET
+from legacy.febraban_v10_7 import FEBRABAN_V10_7
 
 
 def get_numero_aviso_debito():
@@ -17,7 +16,7 @@ def get_num_sequencial_registro_lote():
 
 
 def get_num_sequencial_do_arquivo():
-    return str(len(os.listdir("generated_files")) + 1)
+    return str(len(os.listdir("../generated_files")) + 1)
 
 
 # @TODO Check this
