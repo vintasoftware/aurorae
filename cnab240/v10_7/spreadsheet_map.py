@@ -230,11 +230,6 @@ MODELS_SPREADSHEET_MAP = {
             "sheet_name": "Funcionários",
             "column_name": "* Forma de Iniciação",  # Confuso # TODO check with bank
         },
-        "field_07_3B": {
-            "name": "Tipo de Inscrição do Favorecido",
-            "sheet_name": "Funcionários",
-            "column_name": "* Tipo de Inscrição do Favorecido",
-        },
         "field_08_3B": {
             "name": "Nº de Inscrição do Favorecido",
             "sheet_name": "Funcionários",
@@ -525,6 +520,10 @@ CUSTOM_FIELDS_MAPPING = {
         "field_05_3B": {
             "name": "Código de Segmento do Reg. Detalhe",
             "lambda": "default",
+        },
+        "field_07_3B": {
+            "name": "Tipo de Inscrição do Favorecido",
+            "lambda": "get_tipo_inscricao_favorecido",
         },
         "field_12_3B": {
             "name": "Uso Exclusivo para o SIAPE",

@@ -137,3 +137,14 @@ def get_somatorio_quantidade_de_moedas(spreadsheet_data):
 
 def get_codigo_finalidade_complementar():
     pass
+
+
+def get_tipo_inscricao_favorecido():
+    """
+        '0' = Isento / Não Informado
+        '1' = CPF
+        '2' = CGC / CNPJ
+        '3' = PIS / PASEP
+        '9' = Outros
+    """
+    return '1'
