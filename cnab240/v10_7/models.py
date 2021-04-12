@@ -19,7 +19,7 @@ class Field103B(Field):
     }
     """
     custom_columns = [
-        ("Chave Pix", (68, 127, "alfa")),
+        # ("Chave Pix", (68, 127, "alfa")),
         ("Número (Nº do Local)", (68, 72, "num")),
         ("Complemento (Casa, Apto, Etc)", (73, 87, "alfa")),
         ("Bairro", (88, 102, "alfa")),
@@ -29,29 +29,11 @@ class Field103B(Field):
         ("Sigla do Estado", (126, 127, "alfa")),
     ]
 
-    def validate(self, initial_value=None):
-        super(Field103B, self).validate(initial_value)
-
-        if initial_value not in ["01", "02", "03", "04", "05"]:
-            raise Exception(f"Valor inválido: {initial_value}")
-
-        return None
-
-    def to_cnab240_representation(self):
-        initial_value = self.get_initial_value()
-
-        if initial_value in ["01", "02", "04"]:
-            return initial_value["Chave Pix"]
-
-        if initial_value == "05":
-            for custom_field in self.get_custom_fields():
-                self.formatted_value = f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
-
-        return self.formatted_value
-
-    def get_custom_fields(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.custom_fields = []
         for custom_column in self.custom_columns:
-            yield Field(
+            custom_field = Field(
                 name=custom_column[0],
                 pos_initial=custom_column[1][0],
                 pos_end=custom_column[1][1],
@@ -61,6 +43,22 @@ class Field103B(Field):
                 code="",
                 required=True,
             )
+            self.custom_fields.append(custom_field)
+
+    def validate(self, initial_value=None):
+        super().validate(initial_value)
+        for custom_field, custom_column in zip(self.custom_fields, self.custom_columns):
+            custom_field.validate(initial_value[custom_column[0]])
+
+        return None
+
+    def to_cnab240_representation(self):
+        self.formatted_value = ""
+        for custom_field in self.custom_fields:
+            # print(custom_field.name, "->", custom_field.to_cnab240_representation())
+            self.formatted_value = f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
+            # print(self.formatted_value)
+        return self.formatted_value
 
 
 class Field113B(Field):
@@ -88,29 +86,11 @@ class Field113B(Field):
         ("Aviso ao Favorecido", (226, 226, "num")),
     ]
 
-    def validate(self, initial_value=None):
-        super(Field113B, self).validate(initial_value)
-
-        if initial_value not in ["01", "02", "03", "04", "05"]:
-            raise Exception(f"Valor inválido: {initial_value}")
-
-        return None
-
-    def to_cnab240_representation(self):
-        initial_value = self.get_initial_value()
-
-        if initial_value in ["01", "02", "04"]:
-            return initial_value["Chave Pix"]
-
-        if initial_value == "05":
-            for custom_field in self.get_custom_fields():
-                self.formatted_value = f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
-
-        return self.formatted_value
-
-    def get_custom_fields(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.custom_fields = []
         for custom_column in self.custom_columns:
-            yield Field(
+            custom_field = Field(
                 name=custom_column[0],
                 pos_initial=custom_column[1][0],
                 pos_end=custom_column[1][1],
@@ -120,6 +100,21 @@ class Field113B(Field):
                 code="",
                 required=True,
             )
+            self.custom_fields.append(custom_field)
+
+    def validate(self, initial_value=None):
+        super().validate(initial_value)
+        for custom_field, custom_column in zip(self.custom_fields, self.custom_columns):
+            custom_field.validate(initial_value[custom_column[0]])
+
+        return None
+
+    def to_cnab240_representation(self):
+        self.formatted_value = ""
+        for custom_field in self.custom_fields:
+            self.formatted_value = f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
+
+        return self.formatted_value
 
 
 class HeaderLine(BaseLine):

@@ -37,24 +37,24 @@ class Lote:
     def formatted_data(self):
         lote_content = []
         header = self.header(self.initial_data["lote_header"][0])
-        lote_content += f"{header.formatted_data()}"
+        lote_content = f"{header.formatted_data()}\n"
 
         for i, _ in enumerate(self.initial_data["lote_detalhe_segmento_a"]):
             segmento_a = self.segmento_a(self.initial_data["lote_detalhe_segmento_a"][i])
-            lote_content += f"{lote_content}{segmento_a.formatted_data()}"
+            lote_content = f"{lote_content}{segmento_a.formatted_data()}\n"
 
             segmento_b = self.segmento_b(
                 self.initial_data["lote_detalhe_segmento_b"][i])
-            lote_content += f"{lote_content}{segmento_b.formatted_data()}"
+            lote_content = f"{lote_content}{segmento_b.formatted_data()}\n"
 
             segmento_c = self.segmento_c(
                 self.initial_data["lote_detalhe_segmento_c"][i])
-            lote_content += f"{lote_content}{segmento_c.formatted_data()}"
+            lote_content = f"{lote_content}{segmento_c.formatted_data()}\n"
 
-        trailer = self.header(self.initial_data["lote_trailer"[0]])
-        lote_content += f"{lote_content}{trailer.formatted_data()}"
+        trailer = self.header(self.initial_data["lote_trailer"][0])
+        lote_content = f"{lote_content}{trailer.formatted_data()}\n"
 
-        return "\n".join(lote_content)
+        return lote_content
 
 
 if __name__ == "__main__":

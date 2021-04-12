@@ -61,7 +61,7 @@ class Field:
     """
     This class is only responsible to know on how to format the initial value to be written on the file.
     """
-    formatted_value = None
+    formatted_value = ""
     field_name = None
     initial_value = None
 
