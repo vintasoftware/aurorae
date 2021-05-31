@@ -6,6 +6,19 @@ def get_numero_aviso_debito():
     return " "
 
 
+def get_camara_centralizadora():
+    """
+    '018' = TED (STR,CIP)
+    '700' = DOC (COMPE)
+    “988”- TED (STR/CIP) – Utilizado quando for necessário o envio de TED utilizando
+    o código ISPB da Instituição Financeira Destinatária. Neste caso é obrigatório o
+    preenchimento do campo “Código ISPB” – Campo 26.3B, do Segmento de Pagamento,
+    conforme descrito na Nota P015.
+    “009” – PIX (SPI)
+    """
+    return '018'
+
+
 def get_num_sequencial_registro_lote():
     # TODO double check what is this
     return ""
@@ -38,6 +51,40 @@ def get_hora_geracao_do_arquivo():
 
 def get_tipo_de_servico():
     return "30"  # Pagamento Salários
+
+
+def get_forma_iniciacao():
+    """
+    “01” – Chave Pix – tipo Telefone
+    “02” – Chave Pix – tipo Email
+    “03” – Chave Pix – tipo CPF/CNPJ
+    “04” – Chave Aleatória
+    “05” – Dados bancários
+    """
+    return '05'
+
+
+def get_complemento_tipo_de_servico():
+    """
+    '01' = Crédito em Conta
+    '02' = Pagamento de Aluguel/Condomínio
+    '03' = Pagamento de Duplicata/Títulos
+    '04' = Pagamento de Dividendos
+    '05' = Pagamento de Mensalidade Escolar
+    '06' = Pagamento de Salários
+    '07' = Pagamento a Fornecedores
+    '08' = Operações de Câmbios/Fundos/Bolsa de Valores
+    '09' = Repasse de Arrecadação/Pagamento de Tributos
+    '10' = Transferência Internacional em Real
+    '11' = DOC para Poupança
+    '12' = DOC para Depósito Judicial
+    '13' = Outros
+    ‘16’ = Pagamento de bolsa auxílio
+    ‘17’ = Remuneração à cooperado
+    ‘18’ = Pagamento de honorários
+    ‘19’ = Pagamento de prebenda (Remuneração a padres e sacerdotes)
+    """
+    return "01"  # Pagamento Salários
 
 
 def get_forma_de_lancamento():
@@ -93,7 +140,7 @@ COUNT = 0
 def get_sequencial_registro_no_lote():
     global COUNT
     COUNT = COUNT + 1
-    return COUNT
+    return str(COUNT)
 
 
 def get_qtde_registros_do_arquivo():
@@ -102,7 +149,7 @@ def get_qtde_registros_do_arquivo():
     No nosso caso, número de registros do lote + loteheader + lotetrailer + header + trailer
     Qtd de linhas do arquivo
     """
-    return COUNT + 2 + 2
+    return str(COUNT + 2 + 2)
 
 
 def get_qtde_de_lotes_do_arquivo():
@@ -114,25 +161,27 @@ def get_qtde_registros_do_lote():
     Somatório dos tipos de registro
     No nosso caso, número de registros do lote + loteheader + lotetrailer
     """
-    return COUNT + 2
+    return str(COUNT + 2)
 
 
 def get_somatorio_dos_valores(spreadsheet_data):
-    somatorio = 0
-    for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
-        str_pagamento = str(data_pagamento["field_20_3A"])
-        str_float_pagamento = str_pagamento[-2:] + "." + str_pagamento[:-2]
-        somatorio += float(str_float_pagamento)
-    return str(somatorio).replace('.', '')
+    # somatorio = 0
+    # for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
+    #     str_pagamento = str(data_pagamento["field_20_3A"])
+    #     str_float_pagamento = str_pagamento[-2:] + "." + str_pagamento[:-2]
+    #     somatorio += float(str_float_pagamento)
+    # return str(somatorio).replace('.', '')
+    return '1'
 
 
 def get_somatorio_quantidade_de_moedas(spreadsheet_data):
-    somatorio = 0
-    for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
-        str_pagamento = str(data_pagamento["field_19_3A"])
-        str_float_pagamento = str_pagamento[-2:] + "." + str_pagamento[:-2]
-        somatorio += float(str_float_pagamento)
-    return str(somatorio).replace('.', '')
+    # somatorio = 0
+    # for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
+    #     str_pagamento = str(data_pagamento["field_19_3A"])
+    #     str_float_pagamento = str_pagamento[-2:] + "." + str_pagamento[:-2]
+    #     somatorio += float(str_float_pagamento)
+    # return str(somatorio).replace('.', '')
+    return '1'
 
 
 def get_codigo_finalidade_complementar():

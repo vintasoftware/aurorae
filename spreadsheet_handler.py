@@ -24,7 +24,8 @@ def worksheet_dict_reader(worksheet):
 
 
 def get_spreadsheet_data():
-    workbook = load_workbook(filename="./tmp/dados-pagamentos.xlsx", read_only=True, data_only=True)
+    workbook = load_workbook(
+        filename="./tmp/test_data.xlsx", read_only=True, data_only=True)
     dados_empresa = worksheet_dict_reader(workbook["Empresa"])
     dados_funcionarios = worksheet_dict_reader(workbook["Funcionários"])
     dados_pagamentos = worksheet_dict_reader(workbook["Pagamentos"])
@@ -60,18 +61,18 @@ def get_initial_data_from(spreadsheet_data):
                 try:
                     if isinstance(field_specs["column_name"], list):
                         # Multiple fields mapped as one column
+                        custom_fields = {}
                         for mapped_column in field_specs["column_name"]:
                             custom_column_name = mapped_column[0]
                             try:
-                                model_initial_data[field_name] = {
-                                    custom_column_name: row[custom_column_name]
-                                }
+                                custom_fields[custom_column_name] = row[custom_column_name]
                             except KeyError:
                                 error_msg = (
                                     f"The column '{custom_column_name}' doesn't "
                                     f"exists on the '{field_specs['sheet_name']}' sheet."
                                 )
                                 invalid_field_maps.append({field_name: error_msg})
+                        model_initial_data[field_name] = custom_fields
                     else:
                         data = row[field_specs["column_name"]]
                         model_initial_data[field_name] = str(data)

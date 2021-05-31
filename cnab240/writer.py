@@ -19,7 +19,7 @@ class CNAB240File:
 
     def generate_file(self):
         with open("testing_cnab240.txt", "w") as f:
-            f.write(f"{self.header.formatted_data()}")
+            f.write(f"{self.header.formatted_data()}\n")
             f.write(f"{self.lote.formatted_data()}")
             f.write(f"{self.trailer.formatted_data()}")
 
@@ -47,11 +47,11 @@ class Lote:
                 self.initial_data["lote_detalhe_segmento_b"][i])
             lote_content = f"{lote_content}{segmento_b.formatted_data()}\n"
 
-            segmento_c = self.segmento_c(
-                self.initial_data["lote_detalhe_segmento_c"][i])
-            lote_content = f"{lote_content}{segmento_c.formatted_data()}\n"
+            # segmento_c = self.segmento_c(
+            #     self.initial_data["lote_detalhe_segmento_c"][i])
+            # lote_content = f"{lote_content}{segmento_c.formatted_data()}\n"
 
-        trailer = self.header(self.initial_data["lote_trailer"][0])
+        trailer = self.trailer(self.initial_data["lote_trailer"][0])
         lote_content = f"{lote_content}{trailer.formatted_data()}\n"
 
         return lote_content
@@ -61,8 +61,8 @@ if __name__ == "__main__":
     import json
     from spreadsheet_handler import generate_initial_data
 
-    # fields_initial_data = generate_initial_data()
-    with open("/home/sarai/Documents/vinta/vinta-pagamentos/tmp/all_input_fields.json") as json_file:
-        fields_initial_data = json.load(json_file)
+    fields_initial_data = generate_initial_data()
+    # with open("/home/sarai/Documents/vinta/vinta-pagamentos/tmp/all_input_fields.json") as json_file:
+    #     fields_initial_data = json.load(json_file)
     cnab = CNAB240File(fields_initial_data)
     cnab.generate_file()
