@@ -1,15 +1,25 @@
-from cnab240.v10_7 import models
+import sys
+
+sys.path.append("/home/sarai/Documents/vinta/vinta-pagamentos")
+
+
+from v10_7 import models
 
 
 class CNAB240File:
     def __init__(self, initial_data):
-        self.header = models.HeaderLine(initial_data["header"])
+        assert len(initial_data["header"]) == 1
+        assert len(initial_data["trailer"]) == 1
+        assert len(initial_data["lote_detalhe_segmento_c"]) == len(
+            initial_data["lote_detalhe_segmento_b"]) == len(initial_data["lote_detalhe_segmento_a"])
+
+        self.header = models.HeaderLine(initial_data["header"][0])
         self.lote = Lote(initial_data)
-        self.trailer = models.TrailerLine(initial_data["trailer"])
+        self.trailer = models.TrailerLine(initial_data["trailer"][0])
 
     def generate_file(self):
-        with open("testing_cnab240.txt", "w") as f:
-            f.write(f"{self.header.formatted_data()}")
+        with open("testing_cnab240_v3.txt", "w") as f:
+            f.write(f"{self.header.formatted_data()}\n")
             f.write(f"{self.lote.formatted_data()}")
             f.write(f"{self.trailer.formatted_data()}")
 
@@ -25,28 +35,31 @@ class Lote:
         self.initial_data = initial_data
 
     def formatted_data(self):
-        header = self.header(self.initial_data["lote_header"])
-        lote_content = f"{header.formatted_data()}"
+        lote_content = []
+        header = self.header(self.initial_data["lote_header"][0])
+        lote_content = f"{header.formatted_data()}\n"
 
-        segmento_a = self.segmento_a(self.initial_data["lote_detalhe_segmento_a"])
-        lote_content = f"{lote_content}{segmento_a.formatted_data()}"
+        for i, _ in enumerate(self.initial_data["lote_detalhe_segmento_a"]):
+            segmento_a = self.segmento_a(self.initial_data["lote_detalhe_segmento_a"][i])
+            lote_content = f"{lote_content}{segmento_a.formatted_data()}\n"
 
-        segmento_b = self.segmento_b(self.initial_data["lote_detalhe_segmento_b"])
-        lote_content = f"{lote_content}{segmento_b.formatted_data()}"
+            segmento_b = self.segmento_b(
+                self.initial_data["lote_detalhe_segmento_b"][i])
+            lote_content = f"{lote_content}{segmento_b.formatted_data()}\n"
 
-        segmento_c = self.segmento_c(self.initial_data["lote_detalhe_segmento_c"])
-        lote_content = f"{lote_content}{segmento_c.formatted_data()}"
+            # segmento_c = self.segmento_c(
+            #     self.initial_data["lote_detalhe_segmento_c"][i])
+            # lote_content = f"{lote_content}{segmento_c.formatted_data()}\n"
 
-        trailer = self.header(self.initial_data["lote_trailer"])
-        lote_content = f"{lote_content}{trailer.formatted_data()}"
+        trailer = self.trailer(self.initial_data["lote_trailer"][0])
+        lote_content = f"{lote_content}{trailer.formatted_data()}\n"
 
         return lote_content
 
 
 if __name__ == "__main__":
-    import spreadsheet_handler
-    spreadsheet_data = spreadsheet_handler.get_spreadsheet_data()
-    fields_initial_data = spreadsheet_handler.get_initial_data(spreadsheet_data)
+    from spreadsheet_handler import generate_initial_data
 
+    fields_initial_data = generate_initial_data()
     cnab = CNAB240File(fields_initial_data)
     cnab.generate_file()

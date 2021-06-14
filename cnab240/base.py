@@ -20,7 +20,7 @@ class BaseLine:
             raise Exception(f"The `initial_data` is not valid {self.errors}")
 
         for field in self.get_fields():
-            self.formatted_value = f"{self.formatted_value}{field.to_cnab240_representation()}\n"
+            self.formatted_value = f"{self.formatted_value}{field.to_cnab240_representation()}"
 
         assert len(self.formatted_value) == self.total_positions
 
@@ -49,7 +49,7 @@ class BaseLine:
             try:
                 field.validate(initial_value=initial_value)
             except Exception as field_error:
-                self.errors.append(field_error)
+                self.errors.append(f"{field.field_name}: {field_error}")
 
         if self.errors and raise_exception:
             raise Exception(self.errors)
@@ -61,7 +61,7 @@ class Field:
     """
     This class is only responsible to know on how to format the initial value to be written on the file.
     """
-    formatted_value = None
+    formatted_value = ""
     field_name = None
     initial_value = None
 

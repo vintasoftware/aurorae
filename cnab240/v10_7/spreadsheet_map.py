@@ -1,5 +1,3 @@
-# TODO confirm
-# G066
 from cnab240.v10_7.models import Field103B, Field113B
 
 MODELS_SPREADSHEET_MAP = {
@@ -153,11 +151,6 @@ MODELS_SPREADSHEET_MAP = {
             "sheet_name": "Empresa",
             "column_name": "* Código do Convênio no Banco",
         },
-        "field_08_3A": {
-            "name": "Código da Câmara Centralizadora",
-            "sheet_name": "Funcionários",
-            "column_name": "* Código da Câmara Centralizadora",
-        },
         "field_09_3A": {
             "name": "Código do Banco do Favorecido",
             "sheet_name": "Funcionários",
@@ -193,30 +186,20 @@ MODELS_SPREADSHEET_MAP = {
             "sheet_name": "Funcionários",
             "column_name": "Nome do Favorecido",
         },
-        "field_16_3A": {
-            "name": "Nº do Docum. Atribuído p/ Empresa",
-            "sheet_name": "Pagamentos",
-            "column_name": "Nº do Docum. Atribuído p/ Empresa",  # TALVEZ ISSO SEJA GERADO
-        },
         "field_17_3A": {
             "name": "Data do Pagamento",
             "sheet_name": "Pagamentos",
             "column_name": "Data do Pagamento",
-        },
-        "field_19_3A": {
-            "name": "Quantidade da Moeda",
-            "sheet_name": "Pagamentos",
-            "column_name": "Quantidade da Moeda",
         },
         "field_20_3A": {
             "name": "Valor do Pagamento",
             "sheet_name": "Pagamentos",
             "column_name": "Valor do Pagamento",
         },
-        "field_21_3A": {
-            "name": "Nº do Docum. Atribuído pelo Banco",
+        "field_22_3A": {
+            "name": "Data Real da Efetivação Pagto",
             "sheet_name": "Pagamentos",
-            "column_name": "* Nº do Docum. Atribuído pelo Banco",  # TALVEZ ISSO SEJA GERADO
+            "column_name": "Data Real da Efetivação Pagto",
         },
     },
     "lote_detalhe_segmento_b": {
@@ -224,16 +207,6 @@ MODELS_SPREADSHEET_MAP = {
             "name": "Código do Banco na Compensação",
             "sheet_name": "Funcionários",
             "column_name": "Código do Banco do Favorecido",
-        },
-        "field_06_3B": {
-            "name": "Forma de Iniciação",
-            "sheet_name": "Funcionários",
-            "column_name": "* Forma de Iniciação",  # Confuso # TODO check with bank
-        },
-        "field_07_3B": {
-            "name": "Tipo de Inscrição do Favorecido",
-            "sheet_name": "Funcionários",
-            "column_name": "* Tipo de Inscrição do Favorecido",
         },
         "field_08_3B": {
             "name": "Nº de Inscrição do Favorecido",
@@ -468,12 +441,24 @@ CUSTOM_FIELDS_MAPPING = {
             "name": "Código da Instrução p/ Movimento",
             "lambda": "get_codigo_instrucao_movimento",
         },
+        "field_08_3A": {
+            "name": "Código da Câmara Centralizadora",
+            "lambda": "get_camara_centralizadora",
+        },
+        "field_16_3A": {
+            "name": "Nº do Docum. Atribuído p/ Empresa",
+            "lambda": "default",
+        },
         "field_18_3A": {
-            "name":"Tipo da Moeda",
+            "name": "Tipo da Moeda",
             "lambda": "get_tipo_de_moeda",
         },
-        "field_22_3A": {
-            "name": "Data Real da Efetivação Pagto",
+        "field_19_3A": {
+            "name": "Quantidade da Moeda",
+            "lambda": "default",
+        },
+        "field_21_3A": {
+            "name": "Nº do Docum. Atribuído pelo Banco",
             "lambda": "default",
         },
         "field_23_3A": {
@@ -486,7 +471,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_25_3A": {
             "name": "Compl. Tipo Serviço",
-            "lambda": "get_tipo_de_servico",
+            "lambda": "get_complemento_tipo_de_servico",
         },
         "field_26_3A": {
             "name": "Codigo finalidade da TED",
@@ -525,6 +510,14 @@ CUSTOM_FIELDS_MAPPING = {
         "field_05_3B": {
             "name": "Código de Segmento do Reg. Detalhe",
             "lambda": "default",
+        },
+        "field_06_3B": {
+            "name": "Forma de Iniciação",
+            "lambda": "get_forma_iniciacao",
+        },
+        "field_07_3B": {
+            "name": "Tipo de Inscrição do Favorecido",
+            "lambda": "get_tipo_inscricao_favorecido",
         },
         "field_12_3B": {
             "name": "Uso Exclusivo para o SIAPE",
@@ -581,12 +574,11 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_07_5": {
             "name": "Somatória de Quantidade de Moedas",
-            "params": True,
-            "lambda": "get_somatorio_quantidade_de_moedas",
+            "lambda": "default",
         },
         "field_08_5": {
             "name": "Número Aviso de Débito ",
-            "lambda": "get_numero_aviso_debito",
+            "lambda": "default",
         },
         "field_09_5": {
             "name": "Uso Exclusivo FEBRABAN/CNAB",
