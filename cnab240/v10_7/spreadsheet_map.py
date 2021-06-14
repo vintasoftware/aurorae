@@ -1,5 +1,3 @@
-# TODO confirm
-# G066
 from cnab240.v10_7.models import Field103B, Field113B
 
 MODELS_SPREADSHEET_MAP = {
@@ -576,8 +574,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_07_5": {
             "name": "Somatória de Quantidade de Moedas",
-            "params": True,
-            "lambda": "get_somatorio_quantidade_de_moedas",
+            "lambda": "default",
         },
         "field_08_5": {
             "name": "Número Aviso de Débito ",

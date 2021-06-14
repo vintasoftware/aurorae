@@ -18,7 +18,7 @@ class CNAB240File:
         self.trailer = models.TrailerLine(initial_data["trailer"][0])
 
     def generate_file(self):
-        with open("testing_cnab240.txt", "w") as f:
+        with open("testing_cnab240_v3.txt", "w") as f:
             f.write(f"{self.header.formatted_data()}\n")
             f.write(f"{self.lote.formatted_data()}")
             f.write(f"{self.trailer.formatted_data()}")
@@ -58,11 +58,8 @@ class Lote:
 
 
 if __name__ == "__main__":
-    import json
     from spreadsheet_handler import generate_initial_data
 
     fields_initial_data = generate_initial_data()
-    # with open("/home/sarai/Documents/vinta/vinta-pagamentos/tmp/all_input_fields.json") as json_file:
-    #     fields_initial_data = json.load(json_file)
     cnab = CNAB240File(fields_initial_data)
     cnab.generate_file()

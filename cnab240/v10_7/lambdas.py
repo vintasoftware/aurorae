@@ -165,23 +165,19 @@ def get_qtde_registros_do_lote():
 
 
 def get_somatorio_dos_valores(spreadsheet_data):
-    # somatorio = 0
-    # for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
-    #     str_pagamento = str(data_pagamento["field_20_3A"])
-    #     str_float_pagamento = str_pagamento[-2:] + "." + str_pagamento[:-2]
-    #     somatorio += float(str_float_pagamento)
-    # return str(somatorio).replace('.', '')
-    return '1'
+    somatorio = 0
+    for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
+        str_pagamento = str(data_pagamento["field_20_3A"])
+        somatorio += int(str_pagamento)
+    return str(somatorio)
 
 
-def get_somatorio_quantidade_de_moedas(spreadsheet_data):
-    # somatorio = 0
-    # for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
-    #     str_pagamento = str(data_pagamento["field_19_3A"])
-    #     str_float_pagamento = str_pagamento[-2:] + "." + str_pagamento[:-2]
-    #     somatorio += float(str_float_pagamento)
-    # return str(somatorio).replace('.', '')
-    return '1'
+# def get_somatorio_quantidade_de_moedas(spreadsheet_data):
+#     somatorio = 0
+#     for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
+#         str_pagamento = str(data_pagamento["field_19_3A"])
+#         somatorio += int(str_pagamento)
+#     return str(somatorio)
 
 
 def get_codigo_finalidade_complementar():
