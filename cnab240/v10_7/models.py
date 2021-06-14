@@ -55,9 +55,7 @@ class Field103B(Field):
     def to_cnab240_representation(self):
         self.formatted_value = ""
         for custom_field in self.custom_fields:
-            # print(custom_field.name, "->", custom_field.to_cnab240_representation())
             self.formatted_value = f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
-            # print(self.formatted_value)
         return self.formatted_value
 
 
