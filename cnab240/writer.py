@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("/home/sarai/Documents/vinta/vinta-pagamentos")
+sys.path.append("/home/mary/repositories/vinta-pagamentos")
 
 
 from v10_7 import models
@@ -8,10 +8,14 @@ from v10_7 import models
 
 class CNAB240File:
     def __init__(self, initial_data):
+        print(initial_data)
         assert len(initial_data["header"]) == 1
         assert len(initial_data["trailer"]) == 1
-        assert len(initial_data["lote_detalhe_segmento_c"]) == len(
-            initial_data["lote_detalhe_segmento_b"]) == len(initial_data["lote_detalhe_segmento_a"])
+        assert (
+            len(initial_data["lote_detalhe_segmento_c"])
+            == len(initial_data["lote_detalhe_segmento_b"])
+            == len(initial_data["lote_detalhe_segmento_a"])
+        )
 
         self.header = models.HeaderLine(initial_data["header"][0])
         self.lote = Lote(initial_data)
@@ -40,11 +44,14 @@ class Lote:
         lote_content = f"{header.formatted_data()}\n"
 
         for i, _ in enumerate(self.initial_data["lote_detalhe_segmento_a"]):
-            segmento_a = self.segmento_a(self.initial_data["lote_detalhe_segmento_a"][i])
+            segmento_a = self.segmento_a(
+                self.initial_data["lote_detalhe_segmento_a"][i]
+            )
             lote_content = f"{lote_content}{segmento_a.formatted_data()}\n"
 
             segmento_b = self.segmento_b(
-                self.initial_data["lote_detalhe_segmento_b"][i])
+                self.initial_data["lote_detalhe_segmento_b"][i]
+            )
             lote_content = f"{lote_content}{segmento_b.formatted_data()}\n"
 
             # segmento_c = self.segmento_c(
@@ -58,8 +65,10 @@ class Lote:
 
 
 if __name__ == "__main__":
-    from spreadsheet_handler import generate_initial_data
+    from connectors.worksheet_handler import get_spreadsheet_data, parse_data_from
+    from cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP
 
-    fields_initial_data = generate_initial_data()
+    spreadsheet_data = get_spreadsheet_data("./tmp/test_data.xlsx")
+    fields_initial_data = parse_data_from(spreadsheet_data, MODELS_SPREADSHEET_MAP)
     cnab = CNAB240File(fields_initial_data)
     cnab.generate_file()

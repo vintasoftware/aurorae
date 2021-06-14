@@ -21,26 +21,52 @@ class Field103B(Field):
     - Refactor "custom_columns" to be "composed_fields
     - Refactor "custom_columns" to be a dictionary
     """
-    custom_columns = [
-        # ("Chave Pix", (68, 127, "alfa")),
-        ("Número (Nº do Local)", (68, 72, "num")),
-        ("Complemento (Casa, Apto, Etc)", (73, 87, "alfa")),
-        ("Bairro", (88, 102, "alfa")),
-        ("Nome da Cidade", (103, 117, "alfa")),
-        ("CEP", (118, 122, "num")),
-        ("Complemento do CEP", (123, 125, "alfa")),
-        ("Sigla do Estado", (126, 127, "alfa")),
+
+    composed_fields = [
+        # {"name": "Chave Pix", "pos_initial": 68, "pos_end": 127, "data_type": "alfa"},
+        {
+            "name": "Número (Nº do Local)",
+            "pos_initial": 68,
+            "pos_end": 72,
+            "data_type": "num",
+        },
+        {
+            "name": "Complemento (Casa, Apto, Etc)",
+            "pos_initial": 73,
+            "pos_end": 87,
+            "data_type": "alfa",
+        },
+        {"name": "Bairro", "pos_initial": 88, "pos_end": 102, "data_type": "alfa"},
+        {
+            "name": "Nome da Cidade",
+            "pos_initial": 103,
+            "pos_end": 117,
+            "data_type": "alfa",
+        },
+        {"name": "CEP", "pos_initial": 118, "pos_end": 122, "data_type": "num"},
+        {
+            "name": "Complemento do CEP",
+            "pos_initial": 123,
+            "pos_end": 125,
+            "data_type": "alfa",
+        },
+        {
+            "name": "Sigla do Estado",
+            "pos_initial": 126,
+            "pos_end": 127,
+            "data_type": "alfa",
+        },
     ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.custom_fields = []
-        for custom_column in self.custom_columns:
+        for custom_column in self.composed_fields:
             custom_field = Field(
-                name=custom_column[0],
-                pos_initial=custom_column[1][0],
-                pos_end=custom_column[1][1],
-                data_type=custom_column[1][2],
+                name=custom_column["name"],
+                pos_initial=custom_column["pos_initial"],
+                pos_end=custom_column["pos_end"],
+                data_type=custom_column["data_type"],
                 default_value="",
                 description="",
                 code="",
@@ -50,15 +76,19 @@ class Field103B(Field):
 
     def validate(self, initial_value=None):
         super().validate(initial_value)
-        for custom_field, custom_column in zip(self.custom_fields, self.custom_columns):
-            custom_field.validate(initial_value[custom_column[0]])
+        for custom_field, custom_column in zip(
+            self.custom_fields, self.composed_fields
+        ):
+            custom_field.validate(initial_value[custom_column["name"]])
 
         return None
 
     def to_cnab240_representation(self):
         self.formatted_value = ""
         for custom_field in self.custom_fields:
-            self.formatted_value = f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
+            self.formatted_value = (
+                f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
+            )
         return self.formatted_value
 
 
@@ -75,27 +105,68 @@ class Field113B(Field):
         "Aviso ao Favorecido": "PE"
     }
     """
-    custom_columns = [
-        # ("Chave Pix", (128, 226, "alfa")),
-        ("Data do Vencimento (Nominal)", (128, 135, "num")),
-        ("Valor do Documento (Nominal)", (136, 150, "num")),
-        ("Valor do Abatimento", (151, 165, "num")),
-        ("Valor do Desconto", (166, 180, "num")),
-        ("Valor da Mora", (181, 195, "num")),
-        ("Valor da Multa", (196, 210, "num")),
-        ("Código/Documento do Favorecido", (211, 225, "alfa")),
-        ("Aviso ao Favorecido", (226, 226, "num")),
+
+    composed_fields = [
+        # {"name": "Chave Pix", "pos_initial": 128, "pos_end": 226, "data_type": "alfa"},
+        {
+            "name": "Data do Vencimento (Nominal)",
+            "pos_initial": 128,
+            "pos_end": 135,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor do Documento (Nominal)",
+            "pos_initial": 136,
+            "pos_end": 150,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor do Abatimento",
+            "pos_initial": 151,
+            "pos_end": 165,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor do Desconto",
+            "pos_initial": 166,
+            "pos_end": 180,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor da Mora",
+            "pos_initial": 181,
+            "pos_end": 195,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor da Multa",
+            "pos_initial": 196,
+            "pos_end": 210,
+            "data_type": "num",
+        },
+        {
+            "name": "Código/Documento do Favorecido",
+            "pos_initial": 211,
+            "pos_end": 225,
+            "data_type": "alfa",
+        },
+        {
+            "name": "Aviso ao Favorecido",
+            "pos_initial": 226,
+            "pos_end": 226,
+            "data_type": "num",
+        },
     ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.custom_fields = []
-        for custom_column in self.custom_columns:
+        for custom_column in self.composed_fields:
             custom_field = Field(
-                name=custom_column[0],
-                pos_initial=custom_column[1][0],
-                pos_end=custom_column[1][1],
-                data_type=custom_column[1][2],
+                name=custom_column["name"],
+                pos_initial=custom_column["pos_initial"],
+                pos_end=custom_column["pos_end"],
+                data_type=custom_column["data_type"],
                 default_value="",
                 description="",
                 code="",
@@ -105,15 +176,19 @@ class Field113B(Field):
 
     def validate(self, initial_value=None):
         super().validate(initial_value)
-        for custom_field, custom_column in zip(self.custom_fields, self.custom_columns):
-            custom_field.validate(initial_value[custom_column[0]])
+        for custom_field, custom_column in zip(
+            self.custom_fields, self.composed_fields
+        ):
+            custom_field.validate(initial_value[custom_column["name"]])
 
         return None
 
     def to_cnab240_representation(self):
         self.formatted_value = ""
         for custom_field in self.custom_fields:
-            self.formatted_value = f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
+            self.formatted_value = (
+                f"{self.formatted_value}{custom_field.to_cnab240_representation()}"
+            )
 
         return self.formatted_value
 
@@ -122,6 +197,7 @@ class HeaderLine(BaseLine):
     """
     All fields must start with "field_"
     """
+
     field_01_0 = Field(
         name="Código do Banco na Compensação",
         pos_initial=1,
@@ -129,7 +205,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G001",
-        code="01.0"
+        code="01.0",
     )
     field_02_0 = Field(
         name="Lote de Serviço",
@@ -138,7 +214,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value="0000",
         description="G002",
-        code="02.0"
+        code="02.0",
     )
     field_03_0 = Field(
         name="Tipo de Registro",
@@ -147,7 +223,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value="0",
         description="G003",
-        code="03.0"
+        code="03.0",
     )
     field_04_0 = Field(
         name="Uso Exclusivo FEBRABAN / CNAB",
@@ -156,7 +232,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value="",
         description="G004",
-        code="04.0"
+        code="04.0",
     )
     field_05_0 = Field(
         name="Tipo de Inscrição da Empresa",
@@ -165,7 +241,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G005",
-        code="05.0"
+        code="05.0",
     )
     field_06_0 = Field(
         name="Número de Inscrição da Empresa",
@@ -174,7 +250,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G006",
-        code="06.0"
+        code="06.0",
     )
     field_07_0 = Field(
         name="Código do Convênio no Banco",
@@ -183,7 +259,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G007",
-        code="07.0"
+        code="07.0",
     )
     field_08_0 = Field(
         name="Agência Mantenedora da Conta",
@@ -192,7 +268,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G008",
-        code="08.0"
+        code="08.0",
     )
     field_09_0 = Field(
         name="Dígito Verificador da Agência",
@@ -201,7 +277,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G009",
-        code="09.0"
+        code="09.0",
     )
     field_10_0 = Field(
         name="Número da Conta Corrente",
@@ -210,7 +286,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G010",
-        code="10.0"
+        code="10.0",
     )
     field_11_0 = Field(
         name="Dígito Verificador da Conta",
@@ -219,7 +295,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G011",
-        code="11.0"
+        code="11.0",
     )
     field_12_0 = Field(
         name="Dígito Verificador da Ag/Conta",
@@ -228,7 +304,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G012",
-        code="12.0"
+        code="12.0",
     )
     field_13_0 = Field(
         name="Nome da Empresa",
@@ -237,7 +313,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G013",
-        code="13.0"
+        code="13.0",
     )
     field_14_0 = Field(
         name="Nome do Banco",
@@ -246,7 +322,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G014",
-        code="14.0"
+        code="14.0",
     )
     field_15_0 = Field(
         name="Uso Exclusivo FEBRABAN / CNAB",
@@ -255,7 +331,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value="",
         description="G004",
-        code="15.0"
+        code="15.0",
     )
     field_16_0 = Field(
         name="Código Remessa / Retorno",
@@ -264,7 +340,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G015",
-        code="16.0"
+        code="16.0",
     )
     field_17_0 = Field(
         name="Data de Geração do Arquivo",
@@ -273,7 +349,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G016",
-        code="17.0"
+        code="17.0",
     )
     field_18_0 = Field(
         name="Hora de Geração do Arquivo",
@@ -282,7 +358,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G017",
-        code="18.0"
+        code="18.0",
     )
     field_19_0 = Field(
         name="Número Seqüencial do Arquivo",
@@ -291,7 +367,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G018",
-        code="19.0"
+        code="19.0",
     )
     field_20_0 = Field(
         name="Número da Versão do Layout do Arquivo",
@@ -300,7 +376,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value="103",
         description="G019",
-        code="20.0"
+        code="20.0",
     )
     field_21_0 = Field(
         name="Densidade de Gravação do Arquivo",
@@ -309,7 +385,7 @@ class HeaderLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G020",
-        code="21.0"
+        code="21.0",
     )
     field_22_0 = Field(
         name="Para Uso Reservado do Banco",
@@ -318,7 +394,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G021",
-        code="22.0"
+        code="22.0",
     )
     field_23_0 = Field(
         name="Para Uso Reservado da Empresa",
@@ -327,7 +403,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G022",
-        code="23.0"
+        code="23.0",
     )
     field_24_0 = Field(
         name="Uso Exclusivo FEBRABAN / CNAB",
@@ -336,7 +412,7 @@ class HeaderLine(BaseLine):
         data_type="alfa",
         default_value="",
         description="G004",
-        code="24.0"
+        code="24.0",
     )
 
 
@@ -348,7 +424,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G001",
-        code="01.1"
+        code="01.1",
     )
     field_02_1 = Field(
         name="Lote de Serviço",
@@ -357,7 +433,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G002",
-        code="02.1"
+        code="02.1",
     )
     field_03_1 = Field(
         name="Tipo de Registro",
@@ -366,7 +442,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value="1",
         description="G003",
-        code="03.1"
+        code="03.1",
     )
     field_04_1 = Field(
         name="Tipo da Operação",
@@ -375,7 +451,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value="C",
         description="G028",
-        code="04.1"
+        code="04.1",
     )
     field_05_1 = Field(
         name="Tipo do Serviço",
@@ -384,7 +460,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G025",
-        code="05.1"
+        code="05.1",
     )
     field_06_1 = Field(
         name="Forma de Lançamento",
@@ -393,7 +469,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G029",
-        code="06.1"
+        code="06.1",
     )
     field_07_1 = Field(
         name="Nº da Versão do Layout do Lote",
@@ -402,7 +478,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value="046",
         description="G030",
-        code="07.1"
+        code="07.1",
     )
     field_08_1 = Field(
         name="Uso Exclusivo da FEBRABAN/CNAB",
@@ -411,7 +487,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value="",
         description="G004",
-        code="08.1"
+        code="08.1",
     )
     field_09_1 = Field(
         name="Tipo de Inscrição da Empresa",
@@ -420,7 +496,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G005",
-        code="09.1"
+        code="09.1",
     )
     field_10_1 = Field(
         name="Número de Inscrição da Empresa",
@@ -429,7 +505,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G006",
-        code="10.1"
+        code="10.1",
     )
     field_11_1 = Field(
         name="Código do Convênio no Banco",
@@ -438,7 +514,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G007",
-        code="11.1"
+        code="11.1",
     )
     field_12_1 = Field(
         name="Agência Mantenedora da Conta",
@@ -447,7 +523,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G008",
-        code="12.1"
+        code="12.1",
     )
     field_13_1 = Field(
         name="Dígito Verificador da Agência",
@@ -456,7 +532,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G009",
-        code="13.1"
+        code="13.1",
     )
     field_14_1 = Field(
         name="Número da Conta Corrente",
@@ -465,7 +541,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G010",
-        code="14.1"
+        code="14.1",
     )
     field_15_1 = Field(
         name="Dígito Verificador da Conta",
@@ -474,7 +550,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value="",
         description="G011",
-        code="15.1"
+        code="15.1",
     )
     field_16_1 = Field(
         name="Dígito Verificador da Ag/Conta",
@@ -483,7 +559,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G012",
-        code="16.1"
+        code="16.1",
     )
     field_17_1 = Field(
         name="Nome da Empresa",
@@ -492,7 +568,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G013",
-        code="17.1"
+        code="17.1",
     )
     field_18_1 = Field(
         name="Mensagem",
@@ -501,7 +577,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G031",
-        code="18.1"
+        code="18.1",
     )
     field_19_1 = Field(
         name="Nome da Rua, Av, Pça, Etc",
@@ -510,7 +586,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G032",
-        code="19.1"
+        code="19.1",
     )
     field_20_1 = Field(
         name="Número do Local",
@@ -519,7 +595,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value="103",
         description="G032",
-        code="20.1"
+        code="20.1",
     )
     field_21_1 = Field(
         name="Casa, Apto, Sala, Etc",
@@ -528,7 +604,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G032",
-        code="21.1"
+        code="21.1",
     )
     field_22_1 = Field(
         name="Nome da Cidade",
@@ -537,7 +613,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G033",
-        code="22.1"
+        code="22.1",
     )
     field_23_1 = Field(
         name="CEP",
@@ -546,7 +622,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="G034",
-        code="23.1"
+        code="23.1",
     )
     field_24_1 = Field(
         name="Complemento do CEP",
@@ -555,7 +631,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G035",
-        code="24.1"
+        code="24.1",
     )
     field_25_1 = Field(
         name="Sigla do Estado",
@@ -564,7 +640,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G036",
-        code="25.1"
+        code="25.1",
     )
     field_26_1 = Field(
         name="Indicativo da Forma de Pagamento do Serviço",
@@ -573,7 +649,7 @@ class LoteHeader(BaseLine):
         data_type="num",
         default_value=None,
         description="P014",
-        code="26.1"
+        code="26.1",
     )
     field_27_1 = Field(
         name="Uso Exclusivo FEBRABAN/CNAB",
@@ -582,7 +658,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G004",
-        code="27.1"
+        code="27.1",
     )
     field_28_1 = Field(
         name="Códigos das Ocorrências p/ Retorno",
@@ -591,7 +667,7 @@ class LoteHeader(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G059",
-        code="28.1"
+        code="28.1",
     )
 
 
@@ -603,7 +679,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G001",
-        code="01.3A"
+        code="01.3A",
     )
     field_02_3A = Field(
         name="Lote de Serviço",
@@ -612,7 +688,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G002",
-        code="02.3A"
+        code="02.3A",
     )
     field_03_3A = Field(
         name="Tipo de Registro",
@@ -621,7 +697,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value="3",
         description="G003",
-        code="03.3A"
+        code="03.3A",
     )
     field_04_3A = Field(
         name="Nº Seqüencial do Registro no Lote",
@@ -630,7 +706,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G038",
-        code="04.3A"
+        code="04.3A",
     )
     field_05_3A = Field(
         name="Código de Segmento do Reg. Detalhe",
@@ -639,7 +715,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value="A",
         description="G039",
-        code="05.3A"
+        code="05.3A",
     )
     field_06_3A = Field(
         name="Tipo de Movimento",
@@ -648,7 +724,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G060",
-        code="06.3A"
+        code="06.3A",
     )
     field_07_3A = Field(
         name="Código da Instrução p/ Movimento",
@@ -657,7 +733,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G061",
-        code="07.3A"
+        code="07.3A",
     )
     field_08_3A = Field(
         name="Código da Câmara Centralizadora",
@@ -666,8 +742,8 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="P001: Código adotado pela FEBRABAN, para identificar qual Câmara de Centralizadora será "
-                    "responsável pelo processamento dos pagamentos. ",
-        code="08.3A"
+        "responsável pelo processamento dos pagamentos. ",
+        code="08.3A",
     )
     field_09_3A = Field(
         name="Código do Banco do Favorecido",
@@ -676,7 +752,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="P002",
-        code="09.3A"
+        code="09.3A",
     )
     field_10_3A = Field(
         name="Ag. Mantenedora da Cta do Favor.",
@@ -685,7 +761,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G008",
-        code="10.3A"
+        code="10.3A",
     )
     field_11_3A = Field(
         name="Dígito Verificador da Agência",
@@ -694,7 +770,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G009",
-        code="11.3A"
+        code="11.3A",
     )
     field_12_3A = Field(
         name="Número da Conta Corrente",
@@ -703,7 +779,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G010",
-        code="12.3A"
+        code="12.3A",
     )
     field_13_3A = Field(
         name="Dígito Verificador da Conta",
@@ -712,7 +788,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G011",
-        code="13.3A"
+        code="13.3A",
     )
     field_14_3A = Field(
         name="Dígito Verificador da AG/Conta",
@@ -721,7 +797,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G012",
-        code="14.3A"
+        code="14.3A",
     )
     field_15_3A = Field(
         name="Nome do Favorecido",
@@ -730,7 +806,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G013",
-        code="15.3A"
+        code="15.3A",
     )
     field_16_3A = Field(
         name="Nº do Docum. Atribuído p/ Empresa",
@@ -739,7 +815,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G064",
-        code="16.3A"
+        code="16.3A",
     )
     field_17_3A = Field(
         name="Data do Pagamento",
@@ -748,7 +824,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="P009",
-        code="17.3A"
+        code="17.3A",
     )
     field_18_3A = Field(
         name="Tipo da Moeda",
@@ -757,7 +833,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G040",
-        code="18.3A"
+        code="18.3A",
     )
     field_19_3A = Field(
         name="Quantidade da Moeda",
@@ -766,7 +842,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="G041",
-        code="19.3A"
+        code="19.3A",
     )
     field_20_3A = Field(
         name="Valor do Pagamento",
@@ -775,7 +851,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description=None,
-        code="P010"
+        code="P010",
     )
     field_21_3A = Field(
         name="Nº do Docum. Atribuído pelo Banco",
@@ -784,7 +860,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G043",
-        code="21.3A"
+        code="21.3A",
     )
     field_22_3A = Field(
         name="Data Real da Efetivação Pagto",
@@ -793,7 +869,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="P003",
-        code="22.3A"
+        code="22.3A",
     )
     field_23_3A = Field(
         name="Valor Real da Efetivação do Pagto",
@@ -802,8 +878,8 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="P004: A ser preenchido quando arquivo for de retorno (Código=2 no Header de Arquivo) e "
-                    "referir-se a uma confirmação de lançamento.",
-        code="23.3A"
+        "referir-se a uma confirmação de lançamento.",
+        code="23.3A",
     )
     field_24_3A = Field(
         name="Outras Informações",
@@ -812,7 +888,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G031",
-        code="24.3A"
+        code="24.3A",
     )
     field_25_3A = Field(
         name="Compl. Tipo Serviço",
@@ -821,7 +897,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="P005",
-        code="25.3A"
+        code="25.3A",
     )
     field_26_3A = Field(
         name="Codigo finalidade da TED",
@@ -830,7 +906,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="P011",
-        code="26.3A"
+        code="26.3A",
     )
     field_27_3A = Field(
         name="Complemento de finalidade pagto.",
@@ -839,7 +915,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="P013",
-        code="27.3A"
+        code="27.3A",
     )
     field_28_3A = Field(
         name="Uso Exclusivo FEBRABAN/CNAB",
@@ -848,7 +924,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G004",
-        code="28.3A"
+        code="28.3A",
     )
     field_29_3A = Field(
         name="Aviso ao Favorecido",
@@ -857,7 +933,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="num",
         default_value=None,
         description="P006",
-        code="29.3A"
+        code="29.3A",
     )
     field_30_3A = Field(
         name="Códigos das Ocorrências para Retorno",
@@ -866,7 +942,7 @@ class LoteDetalheSegmentoA(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G059",
-        code="30.3A"
+        code="30.3A",
     )
 
 
@@ -878,7 +954,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="num",
         default_value=None,
         description="G001",
-        code="01.3B"
+        code="01.3B",
     )
     field_02_3B = Field(
         name="Lote de Serviço",
@@ -887,7 +963,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="num",
         default_value=None,
         description="G002",
-        code="02.3B"
+        code="02.3B",
     )
     field_03_3B = Field(
         name="Tipo de Registro",
@@ -896,7 +972,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="num",
         default_value="3",
         description="G003",
-        code="03.3B"
+        code="03.3B",
     )
     field_04_3B = Field(
         name="Nº Seqüencial do Registro no Lote",
@@ -905,7 +981,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="num",
         default_value="3",
         description="G038",
-        code="04.3B"
+        code="04.3B",
     )
     field_05_3B = Field(
         name="Código de Segmento do Reg. Detalhe",
@@ -914,7 +990,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="alfa",
         default_value="B",
         description="G039",
-        code="05.3B"
+        code="05.3B",
     )
     field_06_3B = Field(
         name="* Forma de Iniciação",
@@ -923,7 +999,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G100",
-        code="06.3B"
+        code="06.3B",
     )
     field_07_3B = Field(
         name="Tipo de Inscrição do Favorecido",
@@ -932,7 +1008,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="num",
         default_value=None,
         description="G005",
-        code="07.3B"
+        code="07.3B",
     )
     field_08_3B = Field(
         name="Nº de Inscrição do Favorecido",
@@ -941,7 +1017,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="num",
         default_value=None,
         description="G006",
-        code="08.3B"
+        code="08.3B",
     )
     field_09_3B = Field(
         name="Informação 10",
@@ -950,7 +1026,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G101",
-        code="09.3B"
+        code="09.3B",
     )
     field_10_3B = Field103B(
         name="Informação 11",
@@ -959,7 +1035,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G101",
-        code="10.3B"
+        code="10.3B",
     )
     field_11_3B = Field113B(
         name="Informação 12",
@@ -968,7 +1044,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G101",
-        code="11.3B"
+        code="11.3B",
     )
     field_12_3B = Field(
         name="Uso Exclusivo para o SIAPE",
@@ -977,7 +1053,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="num",
         default_value=None,
         description="P012",
-        code="12.3B"
+        code="12.3B",
     )
     field_13_3B = Field(
         name="Código ISPB",
@@ -986,7 +1062,7 @@ class LoteDetalheSegmentoB(BaseLine):
         data_type="num",
         default_value=None,
         description="P015",
-        code="13.3B"
+        code="13.3B",
     )
 
 
@@ -998,7 +1074,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G001",
-        code="01.3C"
+        code="01.3C",
     )
     field_02_3C = Field(
         name="Lote de Serviço",
@@ -1007,7 +1083,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G002",
-        code="02.3C"
+        code="02.3C",
     )
     field_03_3C = Field(
         name="Tipo de Registro",
@@ -1016,7 +1092,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value="3",
         description="G003",
-        code="03.3C"
+        code="03.3C",
     )
     field_04_3C = Field(
         name="Nº Seqüencial do Registro no Lote",
@@ -1025,7 +1101,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value="3",
         description="G038",
-        code="04.3C"
+        code="04.3C",
     )
     field_05_3C = Field(
         name="Código de Segmento do Reg. Detalhe",
@@ -1034,7 +1110,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="alfa",
         default_value="C",
         description="G039",
-        code="05.3C"
+        code="05.3C",
     )
     field_06_3C = Field(
         name="Uso Exclusivo FEBRABAN/CNAB",
@@ -1043,7 +1119,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G004",
-        code="06.3C"
+        code="06.3C",
     )
     field_07_3C = Field(
         name="Valor do IR",
@@ -1052,7 +1128,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G050",
-        code="07.3C"
+        code="07.3C",
     )
     field_08_3C = Field(
         name="Valor do ISS",
@@ -1061,7 +1137,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G051",
-        code="08.3C"
+        code="08.3C",
     )
     field_09_3C = Field(
         name="Valor do IOF",
@@ -1070,7 +1146,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G052",
-        code="09.3C"
+        code="09.3C",
     )
     field_10_3C = Field(
         name="Valor Outras Deduções",
@@ -1079,7 +1155,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G053",
-        code="10.3C"
+        code="10.3C",
     )
     field_11_3C = Field(
         name="Valor Outras Acréscimos",
@@ -1088,7 +1164,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G054",
-        code="11.3C"
+        code="11.3C",
     )
     field_12_3C = Field(
         name="Agência do Favorecido",
@@ -1097,7 +1173,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G008",
-        code="12.3C"
+        code="12.3C",
     )
     field_13_3C = Field(
         name="Dígito Verificador da Agência",
@@ -1106,7 +1182,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G009",
-        code="13.3C"
+        code="13.3C",
     )
     field_14_3C = Field(
         name="Número Conta Corrente",
@@ -1115,7 +1191,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G010",
-        code="14.3C"
+        code="14.3C",
     )
     field_15_3C = Field(
         name="Dígito Verificador da Conta",
@@ -1124,7 +1200,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G011",
-        code="15.3C"
+        code="15.3C",
     )
     field_16_3C = Field(
         name="Dígito Verificador Agência/Conta",
@@ -1133,7 +1209,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G012",
-        code="16.3C"
+        code="16.3C",
     )
     field_17_3C = Field(
         name="Valor do INSS",
@@ -1142,7 +1218,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="G055",
-        code="17.3C"
+        code="17.3C",
     )
     field_18_3C = Field(
         name="Número Conta Pagamento Creditada",
@@ -1151,7 +1227,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="num",
         default_value=None,
         description="P016",
-        code="18.3C"
+        code="18.3C",
     )
     field_19_3C = Field(
         name="Uso Exclusivo FEBRABAN/CNAB",
@@ -1160,7 +1236,7 @@ class LoteDetalheSegmentoC(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G004",
-        code="18.3C"
+        code="18.3C",
     )
 
 
@@ -1172,7 +1248,7 @@ class LoteTrailer(BaseLine):
         data_type="num",
         default_value=None,
         description="G001",
-        code="01.5"
+        code="01.5",
     )
     field_02_5 = Field(
         name="Lote de Serviço",
@@ -1181,7 +1257,7 @@ class LoteTrailer(BaseLine):
         data_type="num",
         default_value=None,
         description="G002",
-        code="02.5"
+        code="02.5",
     )
     field_03_5 = Field(
         name="Tipo de Registro",
@@ -1190,7 +1266,7 @@ class LoteTrailer(BaseLine):
         data_type="num",
         default_value="5",
         description="G003",
-        code="03.5"
+        code="03.5",
     )
     field_04_5 = Field(
         name="Uso Exclusivo FEBRABAN/CNAB",
@@ -1199,7 +1275,7 @@ class LoteTrailer(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G004",
-        code="04.5"
+        code="04.5",
     )
     field_05_5 = Field(
         name="Quantidade de Registros do Lote",
@@ -1208,7 +1284,7 @@ class LoteTrailer(BaseLine):
         data_type="num",
         default_value=None,
         description="G057",
-        code="05.5"
+        code="05.5",
     )
     field_06_5 = Field(
         name="Somatória dos Valores",
@@ -1217,7 +1293,7 @@ class LoteTrailer(BaseLine):
         data_type="num",
         default_value=None,
         description="P007",
-        code="06.5"
+        code="06.5",
     )
     field_07_5 = Field(
         name="Somatória de Quantidade de Moedas",
@@ -1226,7 +1302,7 @@ class LoteTrailer(BaseLine):
         data_type="num",
         default_value=None,
         description="G058",
-        code="07.5"
+        code="07.5",
     )
     field_08_5 = Field(
         name="Número Aviso de Débito ",
@@ -1235,7 +1311,7 @@ class LoteTrailer(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G066",
-        code="08.5"
+        code="08.5",
     )
     field_09_5 = Field(
         name="Uso Exclusivo FEBRABAN/CNAB",
@@ -1244,7 +1320,7 @@ class LoteTrailer(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G004",
-        code="09.5"
+        code="09.5",
     )
     field_10_5 = Field(
         name="Códigos das Ocorrências para Retorno",
@@ -1253,7 +1329,7 @@ class LoteTrailer(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G059",
-        code="10.5"
+        code="10.5",
     )
 
 
@@ -1261,6 +1337,7 @@ class TrailerLine(BaseLine):
     """
     All fields must start with "field_"
     """
+
     field_01_9 = Field(
         name="Código do Banco na Compensação",
         pos_initial=1,
@@ -1268,7 +1345,7 @@ class TrailerLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G001",
-        code="01.9"
+        code="01.9",
     )
     field_02_9 = Field(
         name="Lote de Serviço",
@@ -1277,7 +1354,7 @@ class TrailerLine(BaseLine):
         data_type="num",
         default_value="9999",
         description="G002",
-        code="02.9"
+        code="02.9",
     )
     field_03_9 = Field(
         name="Tipo de Registro",
@@ -1286,7 +1363,7 @@ class TrailerLine(BaseLine):
         data_type="num",
         default_value="9",
         description="G003",
-        code="03.9"
+        code="03.9",
     )
     field_04_9 = Field(
         name="Uso Exclusivo FEBRABAN/CNAB",
@@ -1295,7 +1372,7 @@ class TrailerLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G004",
-        code="04.9"
+        code="04.9",
     )
     field_05_9 = Field(
         name="Quantidade de Lotes do Arquivo",
@@ -1304,7 +1381,7 @@ class TrailerLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G049",
-        code="05.9"
+        code="05.9",
     )
     field_06_9 = Field(
         name="Quantidade de Registros do Arquivo",
@@ -1313,7 +1390,7 @@ class TrailerLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G056",
-        code="06.9"
+        code="06.9",
     )
     field_07_9 = Field(
         name="Qtde de Contas p/ Conc. (Lotes)",
@@ -1322,7 +1399,7 @@ class TrailerLine(BaseLine):
         data_type="num",
         default_value=None,
         description="G037",
-        code="07.9"
+        code="07.9",
     )
     field_08_9 = Field(
         name="Uso Exclusivo FEBRABAN/CNAB",
@@ -1331,5 +1408,5 @@ class TrailerLine(BaseLine):
         data_type="alfa",
         default_value=None,
         description="G004",
-        code="08.9"
+        code="08.9",
     )

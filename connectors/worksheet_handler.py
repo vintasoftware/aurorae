@@ -4,12 +4,13 @@ from openpyxl import load_workbook
 
 def get_fields_from_lote():
     from cnab240.v10_7 import models
+
     return (
-        models.LoteHeader.get_fields()
-        + models.LoteDetalheSegmentoA.get_fields()
-        + models.LoteDetalheSegmentoB.get_fields()
-        + models.LoteDetalheSegmentoC.get_fields()
-        + models.LoteTrailer.get_fields()
+        dir(models.LoteHeader)
+        + dir(models.LoteDetalheSegmentoA)
+        + dir(models.LoteDetalheSegmentoB)
+        + dir(models.LoteDetalheSegmentoC)
+        + dir(models.LoteTrailer)
     )
 
 
@@ -31,7 +32,7 @@ def get_spreadsheet_data(filename: Path) -> dict:
     return {
         "Empresa": list(dados_empresa),
         "Funcionários": list(dados_funcionarios),
-        "Pagamentos": list(dados_pagamentos)
+        "Pagamentos": list(dados_pagamentos),
     }
 
 
@@ -44,7 +45,9 @@ def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
             sheet_name = field_specs["sheet_name"]
             related_column_name = field_specs["column_name"]
             sheet_rows = spreadsheet_data[sheet_name]
-            data, invalid_field_maps = get_field_based_on(field_name, related_column_name, sheet_rows)
+            data, invalid_field_maps = get_field_based_on(
+                field_name, related_column_name, sheet_rows
+            )
 
             if invalid_field_maps:
                 errors += invalid_field_maps
@@ -74,9 +77,11 @@ def get_field_based_on(field_name: str, origin_spreadsheet_name: str, sheet_rows
                 composed_fields = {}
                 composed_fields_definition = origin_spreadsheet_name
                 for composed_field_def in composed_fields_definition:
-                    composed_column_name = composed_field_def[0]
+                    composed_column_name = composed_field_def["name"]
                     try:
-                        composed_fields[composed_column_name] = row[composed_column_name]
+                        composed_fields[composed_column_name] = row[
+                            composed_column_name
+                        ]
                     except KeyError:
                         error_msg = (
                             f"The column '{composed_column_name}' doesn't "

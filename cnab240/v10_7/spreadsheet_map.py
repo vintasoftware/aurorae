@@ -221,12 +221,12 @@ MODELS_SPREADSHEET_MAP = {
         "field_10_3B": {
             "name": "Informação 11",
             "sheet_name": "Funcionários",
-            "column_name": Field103B.custom_columns
+            "column_name": Field103B.composed_fields,
         },
         "field_11_3B": {
             "name": "Informação 12",
             "sheet_name": "Pagamentos",
-            "column_name": Field113B.custom_columns
+            "column_name": Field113B.composed_fields,
         },
         "field_13_3B": {
             "name": "Código ISPB",
@@ -314,7 +314,7 @@ MODELS_SPREADSHEET_MAP = {
             "sheet_name": "Empresa",
             "column_name": "* Código do Convênio no Banco",
         },
-    }
+    },
 }
 
 
@@ -372,7 +372,7 @@ CUSTOM_FIELDS_MAPPING = {
         "field_24_0": {
             "name": "Uso Exclusivo FEBRABAN / CNAB",
             "lambda": "default",
-        }
+        },
     },
     "lote_header": {
         "field_02_1": {
@@ -414,7 +414,7 @@ CUSTOM_FIELDS_MAPPING = {
         "field_28_1": {
             "name": "Códigos das Ocorrências p/ Retorno",
             "lambda": "default",
-        }
+        },
     },
     "lote_detalhe_segmento_a": {
         "field_02_3A": {
@@ -492,7 +492,7 @@ CUSTOM_FIELDS_MAPPING = {
         "field_30_3A": {
             "name": "Códigos das Ocorrências para Retorno",
             "lambda": "default",
-        }
+        },
     },
     "lote_detalhe_segmento_b": {
         "field_02_3B": {
@@ -522,7 +522,7 @@ CUSTOM_FIELDS_MAPPING = {
         "field_12_3B": {
             "name": "Uso Exclusivo para o SIAPE",
             "lambda": "default",
-        }
+        },
     },
     "lote_detalhe_segmento_c": {
         "field_02_3C": {
@@ -548,7 +548,7 @@ CUSTOM_FIELDS_MAPPING = {
         "field_19_3C": {
             "name": "Uso Exclusivo FEBRABAN/CNAB",
             "lambda": "default",
-        }
+        },
     },
     "lote_trailer": {
         "field_02_5": {
@@ -587,7 +587,7 @@ CUSTOM_FIELDS_MAPPING = {
         "field_10_5": {
             "name": "Códigos das Ocorrências para Retorno",
             "lambda": "default",
-        }
+        },
     },
     "trailer": {
         "field_02_9": {
@@ -617,6 +617,6 @@ CUSTOM_FIELDS_MAPPING = {
         "field_08_9": {
             "name": "Uso Exclusivo FEBRABAN/CNAB",
             "lambda": "default",
-        }
-    }
+        },
+    },
 }
