@@ -132,5 +132,6 @@ class Field:
             self.formatted_value = initial_value.zfill(self.length)
         elif self.data_type == "alfa":
             self.formatted_value = initial_value.ljust(self.length, " ")
+            self.formatted_value = self.formatted_value.upper()
 
         return self.formatted_value
