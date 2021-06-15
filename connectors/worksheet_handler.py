@@ -2,18 +2,6 @@ from pathlib import Path
 from openpyxl import load_workbook
 
 
-def get_fields_from_lote():
-    from cnab240.v10_7 import models
-
-    return (
-        dir(models.LoteHeader)
-        + dir(models.LoteDetalheSegmentoA)
-        + dir(models.LoteDetalheSegmentoB)
-        + dir(models.LoteDetalheSegmentoC)
-        + dir(models.LoteTrailer)
-    )
-
-
 def worksheet_dict_reader(worksheet):
     rows = worksheet.iter_rows(values_only=True)
     header = next(rows)
@@ -37,6 +25,7 @@ def get_spreadsheet_data(filename: Path) -> dict:
 
 
 def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
+    from .parser import fill_data
     errors = []
     parsed_data = {}
 
@@ -46,16 +35,15 @@ def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
             related_column_name = field_specs["column_name"]
             sheet_rows = spreadsheet_data[sheet_name]
             data, invalid_field_maps = get_field_based_on(
-                field_name, related_column_name, sheet_rows
+                field_name, related_column_name, sheet_rows, fill_data
             )
-
             if invalid_field_maps:
                 errors += invalid_field_maps
                 continue
 
             if not parsed_data.get(segment_name):
                 parsed_data[segment_name] = {}
-            parsed_data[segment_name][field_name] = data
+            parsed_data[segment_name].update(data)
 
     if invalid_field_maps:
         raise Exception(invalid_field_maps)
@@ -63,12 +51,15 @@ def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
     return parsed_data
 
 
-def get_field_based_on(field_name: str, origin_spreadsheet_name: str, sheet_rows):
-    initial_data = None
+def get_field_based_on(
+        field_name: str,
+        origin_spreadsheet_name: str,
+        sheet_rows: dict,
+        fillData
+    ):
+    initial_data = {}
     invalid_field_maps = []
     is_composed_field = isinstance(origin_spreadsheet_name, list)
-    multiple_entries = []
-    has_multiple_entries = field_name in get_fields_from_lote()
 
     for row in sheet_rows:
         try:
@@ -88,13 +79,18 @@ def get_field_based_on(field_name: str, origin_spreadsheet_name: str, sheet_rows
                             f"exists on the '{origin_spreadsheet_name}' sheet."
                         )
                         invalid_field_maps.append({field_name: error_msg})
-                initial_data = composed_fields
+                initial_data = fillData(
+                    initial_data,
+                    field_name,
+                    composed_fields
+                )
             else:
                 data = row[origin_spreadsheet_name]
-                initial_data = str(data)
-
-            if has_multiple_entries:
-                multiple_entries += [initial_data]
+                initial_data = fillData(
+                    initial_data,
+                    field_name,
+                    str(data)
+                )
         except KeyError:
             error_msg = (
                 f"The column '{origin_spreadsheet_name}' doesn't "
@@ -102,7 +98,6 @@ def get_field_based_on(field_name: str, origin_spreadsheet_name: str, sheet_rows
             )
             invalid_field_maps.append({field_name: error_msg})
 
-    if has_multiple_entries:
-        return multiple_entries, invalid_field_maps
-
     return initial_data, invalid_field_maps
+
+
