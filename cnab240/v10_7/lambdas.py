@@ -84,8 +84,7 @@ def get_complemento_tipo_de_servico():
     ‘18’ = Pagamento de honorários
     ‘19’ = Pagamento de prebenda (Remuneração a padres e sacerdotes)
     """
-    # return "01"  # Pagamento Salários
-    return ''
+    return "01"  # Pagamento Salários
 
 
 def get_forma_de_lancamento():
