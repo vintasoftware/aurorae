@@ -84,7 +84,8 @@ def get_complemento_tipo_de_servico():
     ‘18’ = Pagamento de honorários
     ‘19’ = Pagamento de prebenda (Remuneração a padres e sacerdotes)
     """
-    return "01"  # Pagamento Salários
+    # return "01"  # Pagamento Salários
+    return ''
 
 
 def get_forma_de_lancamento():
@@ -104,7 +105,8 @@ def get_codigo_instrucao_movimento():
 
 
 def get_codigo_finalidade_da_ted():
-    return "077"  # inter
+    # return "077"  # inter
+    return ""  # inter
 
 
 def get_tipo_de_moeda():

@@ -35,7 +35,7 @@ MODELS_SPREADSHEET_MAP = {
         "field_10_0": {
             "name": "Número da Conta Corrente",
             "sheet_name": "Empresa",
-            "column_name": "* Dígito Verificador da Agência",
+            "column_name": "* Número da Conta Corrente",
         },
         "field_11_0": {
             "name": "Dígito Verificador da Conta",
@@ -92,7 +92,7 @@ MODELS_SPREADSHEET_MAP = {
         "field_14_1": {
             "name": "Número da Conta Corrente",
             "sheet_name": "Empresa",
-            "column_name": "* Dígito Verificador da Agência",
+            "column_name": "* Número da Conta Corrente",
         },
         "field_15_1": {
             "name": "Dígito Verificador da Conta",
@@ -169,7 +169,7 @@ MODELS_SPREADSHEET_MAP = {
         "field_12_3A": {
             "name": "Número da Conta Corrente",
             "sheet_name": "Funcionários",
-            "column_name": "* Dígito Verificador da Agência",
+            "column_name": "* Número da Conta Corrente",
         },
         "field_13_3A": {
             "name": "Dígito Verificador da Conta",
