@@ -1,3 +1,5 @@
+import random
+import colorsys
 class BaseLine:
     total_positions = 240
     formatted_value = ""
@@ -25,6 +27,26 @@ class BaseLine:
         assert len(self.formatted_value) == self.total_positions
 
         return self.formatted_value
+    
+    def formatted_html(self):
+        formatted_html = ""
+        for field in self.get_fields():
+            h,s,l = random.random(), 0.5 + random.random()/2.0, 0.4 + random.random()/5.0
+            r,g,b = [int(256*i) for i in colorsys.hls_to_rgb(h,l,s)]
+
+            field_representation = field.to_cnab240_representation().replace(" ", "&nbsp;")
+            span_width = (field.pos_end - field.pos_initial + 1) * 15
+
+            field_html_representation = (
+                f"<span style='background-color: rgba({r}, {g}, {b}, .7); width: {span_width}px' "
+                f"id='{field.field_name}' "
+                f"data-name='{field.name}' "
+                f"data-description='{field.description}'>"
+                f"{field_representation}"
+                f"</span>"
+            )
+            formatted_html = f"{formatted_html}{field_html_representation}"
+        return f"<div class='{self.__class__.__name__}'>{formatted_html}</div>"
 
     def get_fields(self):
         fields = []
