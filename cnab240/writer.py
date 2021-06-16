@@ -25,12 +25,9 @@ class CNAB240File:
 
     def generate_html_file(self):
         with open("testing_cnab240_v3.html", "w") as f:
-            f.write(
-                "<html><head>"
-                "<link href='./staticfiles/styles.css' rel='stylesheet'>"
-                "<script src='./staticfiles/scripts.js'></script>"
-                "</head><body>"
-            )
+            f.write("<html><head>")
+            f.write("<link href='./staticfiles/styles.css' rel='stylesheet'>")
+            f.write("</head><body>")
             f.write(f"{self.header.formatted_html()}\n")
             f.write(f"{self.lote.formatted_html()}")
             f.write(f"{self.trailer.formatted_html()}")
