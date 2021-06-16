@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("/home/paim/Projects/vinta-pagamentos")
+sys.path.append("/home/sarai/Documents/vinta/vinta-pagamentos")
 
 from base import BaseLine, Field
 

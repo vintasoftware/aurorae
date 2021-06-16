@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("/home/paim/Projects/vinta-pagamentos")
+sys.path.append("/home/sarai/Documents/vinta/vinta-pagamentos")
 
 
 from v10_7 import models
@@ -22,7 +22,6 @@ class CNAB240File:
             f.write(f"{self.header.formatted_data()}\n")
             f.write(f"{self.lote.formatted_data()}")
             f.write(f"{self.trailer.formatted_data()}")
-
 
 
 class Lote:
