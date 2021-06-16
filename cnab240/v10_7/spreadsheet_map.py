@@ -339,19 +339,19 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_16_0": {
             "name": "Código Remessa / Retorno",
-            "lambda": "get_codigo_remessa_retorno",
+            "lambda": "get_16_0",
         },
         "field_17_0": {
             "name": "Data de Geração do Arquivo",
-            "lambda": "get_data_geracao_do_arquivo",
+            "lambda": "get_17_0",
         },
         "field_18_0": {
             "name": "Hora de Geração do Arquivo",
-            "lambda": "get_hora_geracao_do_arquivo",
+            "lambda": "get_18_0",
         },
         "field_19_0": {
             "name": "Número Seqüencial do Arquivo",
-            "lambda": "get_num_sequencial_do_arquivo",
+            "lambda": "get_19_0",
         },
         "field_20_0": {
             "name": "Número da Versão do Layout do Arquivo",
@@ -359,7 +359,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_21_0": {
             "name": "Densidade de Gravação do Arquivo",
-            "lambda": "get_densidade_de_gravacao_do_arquivo",
+            "lambda": "get_21_0",
         },
         "field_22_0": {
             "name": "Para Uso Reservado do Banco",
@@ -377,7 +377,7 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_header": {
         "field_02_1": {
             "name": "Lote de Serviço",
-            "lambda": "get_sequencial_lote_de_servico",
+            "lambda": "get_02_1",
         },
         "field_03_1": {
             "name": "Tipo de Registro",
@@ -389,11 +389,11 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_05_1": {
             "name": "Tipo do Serviço",
-            "lambda": "get_tipo_de_servico",
+            "lambda": "get_05_1",
         },
         "field_06_1": {
             "name": "Forma de Lançamento",
-            "lambda": "get_forma_de_lancamento",
+            "lambda": "get_06_1",
         },
         "field_07_1": {
             "name": "Nº da Versão do Layout do Lote",
@@ -405,7 +405,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_26_1": {
             "name": "Indicativo da Forma de Pagamento do Serviço",
-            "lambda": "get_indicativo_da_forma_de_pagamento_do_servico",
+            "lambda": "get_26_1",
         },
         "field_27_1": {
             "name": "Uso Exclusivo FEBRABAN/CNAB",
@@ -419,7 +419,7 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_detalhe_segmento_a": {
         "field_02_3A": {
             "name": "Lote de Serviço",
-            "lambda": "get_sequencial_lote_de_servico",
+            "lambda": "get_02_1",  # To Do: Consider creating a separate lambda for this code
         },
         "field_03_3A": {
             "name": "Tipo de Registro",
@@ -427,7 +427,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_04_3A": {
             "name": "Nº Seqüencial do Registro no Lote",
-            "lambda": "get_sequencial_registro_no_lote",
+            "lambda": "get_04_3A",
         },
         "field_05_3A": {
             "name": "Código de Segmento do Reg. Detalhe",
@@ -435,15 +435,15 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_06_3A": {
             "name": "Tipo de Movimento",
-            "lambda": "get_tipo_de_movimento",
+            "lambda": "get_06_3A",
         },
         "field_07_3A": {
             "name": "Código da Instrução p/ Movimento",
-            "lambda": "get_codigo_instrucao_movimento",
+            "lambda": "get_07_3A",
         },
         "field_08_3A": {
             "name": "Código da Câmara Centralizadora",
-            "lambda": "get_camara_centralizadora",
+            "lambda": "get_08_3A",
         },
         "field_16_3A": {
             "name": "Nº do Docum. Atribuído p/ Empresa",
@@ -451,7 +451,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_18_3A": {
             "name": "Tipo da Moeda",
-            "lambda": "get_tipo_de_moeda",
+            "lambda": "get_18_3A",
         },
         "field_19_3A": {
             "name": "Quantidade da Moeda",
@@ -471,11 +471,11 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_25_3A": {
             "name": "Compl. Tipo Serviço",
-            "lambda": "get_complemento_tipo_de_servico",
+            "lambda": "get_25_3A",
         },
         "field_26_3A": {
             "name": "Codigo finalidade da TED",
-            "lambda": "get_codigo_finalidade_da_ted",
+            "lambda": "get_26_3A",
         },
         "field_27_3A": {
             "name": "Complemento de finalidade pagto.",
@@ -497,7 +497,7 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_detalhe_segmento_b": {
         "field_02_3B": {
             "name": "Lote de Serviço",
-            "lambda": "get_sequencial_lote_de_servico",
+            "lambda": "get_02_1",  # To Do: Consider creating a separate lambda for this code
         },
         "field_03_3B": {
             "name": "Tipo de Registro",
@@ -505,7 +505,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_04_3B": {
             "name": "Nº Seqüencial do Registro no Lote",
-            "lambda": "get_sequencial_registro_no_lote",
+            "lambda": "get_04_3A",  # To Do: Consider creating a separate lambda for this code
         },
         "field_05_3B": {
             "name": "Código de Segmento do Reg. Detalhe",
@@ -513,11 +513,11 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_06_3B": {
             "name": "Forma de Iniciação",
-            "lambda": "get_forma_iniciacao",
+            "lambda": "get_06_3B",
         },
         "field_07_3B": {
             "name": "Tipo de Inscrição do Favorecido",
-            "lambda": "get_tipo_inscricao_favorecido",
+            "lambda": "get_07_3B",
         },
         "field_12_3B": {
             "name": "Uso Exclusivo para o SIAPE",
@@ -527,7 +527,7 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_detalhe_segmento_c": {
         "field_02_3C": {
             "name": "Lote de Serviço",
-            "lambda": "get_sequencial_lote_de_servico",
+            "lambda": "get_02_1",  # To Do: Consider creating a separate lambda for this code
         },
         "field_03_3C": {
             "name": "Tipo de Registro",
@@ -535,7 +535,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_04_3C": {
             "name": "Nº Seqüencial do Registro no Lote",
-            "lambda": "get_sequencial_registro_no_lote",
+            "lambda": "get_04_3A",  # To Do: Consider creating a separate lambda for this code
         },
         "field_05_3C": {
             "name": "Código de Segmento do Reg. Detalhe",
@@ -553,7 +553,7 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_trailer": {
         "field_02_5": {
             "name": "Lote de Serviço",
-            "lambda": "get_sequencial_lote_de_servico",
+            "lambda": "get_02_1",  # To Do: Consider creating a separate lambda for this code
         },
         "field_03_5": {
             "name": "Tipo de Registro",
@@ -565,12 +565,12 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_05_5": {
             "name": "Quantidade de Registros do Lote",
-            "lambda": "get_qtde_registros_do_lote",
+            "lambda": "get_05_5",
         },
         "field_06_5": {
             "name": "Somatória dos Valores",
             "params": True,
-            "lambda": "get_somatorio_dos_valores",
+            "lambda": "get_06_5",
         },
         "field_07_5": {
             "name": "Somatória de Quantidade de Moedas",
@@ -604,11 +604,11 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_05_9": {
             "name": "Quantidade de Lotes do Arquivo",
-            "lambda": "get_qtde_de_lotes_do_arquivo",
+            "lambda": "get_05_9",
         },
         "field_06_9": {
             "name": "Quantidade de Registros do Arquivo",
-            "lambda": "get_qtde_registros_do_arquivo",
+            "lambda": "get_06_9",
         },
         "field_07_9": {
             "name": "Qtde de Contas p/ Conc. (Lotes)",

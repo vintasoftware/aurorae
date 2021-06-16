@@ -6,7 +6,7 @@ def get_numero_aviso_debito():
     return " "
 
 
-def get_camara_centralizadora():
+def get_08_3A():
     """
     '018' = TED (STR,CIP)
     '700' = DOC (COMPE)
@@ -19,20 +19,20 @@ def get_camara_centralizadora():
     return '018'
 
 
-def get_num_sequencial_registro_lote():
+def get_17_0():
     # TODO double check what is this
     return ""
 
 
-def get_num_sequencial_do_arquivo():
+def get_19_0():
     return str(len(os.listdir("generated_files")) + 1)
 
 
-def get_codigo_remessa_retorno():
+def get_16_0():
     return "1"
 
 
-def get_densidade_de_gravacao_do_arquivo():
+def get_21_0():
     # "01600" or "06250"
     return "01600"
 
@@ -49,11 +49,11 @@ def get_hora_geracao_do_arquivo():
     return datetime.datetime.now().strftime("%H%M%S")
 
 
-def get_tipo_de_servico():
+def get_05_1():
     return "30"  # Pagamento Salários
 
 
-def get_forma_iniciacao():
+def get_06_3B():
     """
     “01” – Chave Pix – tipo Telefone
     “02” – Chave Pix – tipo Email
@@ -64,7 +64,7 @@ def get_forma_iniciacao():
     return '05'
 
 
-def get_complemento_tipo_de_servico():
+def get_25_3A():
     """
     '01' = Crédito em Conta
     '02' = Pagamento de Aluguel/Condomínio
@@ -87,27 +87,27 @@ def get_complemento_tipo_de_servico():
     return "01"  # Pagamento Salários
 
 
-def get_forma_de_lancamento():
+def get_06_1():
     return "01"  # Crédito em Conta Corrente/Salário
 
 
-def get_indicativo_da_forma_de_pagamento_do_servico():
+def get_26_1():
     return "01"  # Débito em Conta Corrente
 
 
-def get_tipo_de_movimento():
+def get_06_3A():
     return "0"  # Indica INCLUSÃO
 
 
-def get_codigo_instrucao_movimento():
+def get_07_3A():
     return "00"  # Inclusão de Registro Detalhe Liberado
 
 
-def get_codigo_finalidade_da_ted():
+def get_26_3A():
     return "077"  # inter
 
 
-def get_tipo_de_moeda():
+def get_18_3A():
     """
     "BTN" = Bônus do Tesouro Nacional + TR
     "BRL" = Real
@@ -130,20 +130,20 @@ def get_tipo_de_moeda():
     return "BRL"
 
 
-def get_sequencial_lote_de_servico():
+def get_02_1():
     return '0001'
 
 
 COUNT = 0
 
 
-def get_sequencial_registro_no_lote():
+def get_04_3A():
     global COUNT
     COUNT = COUNT + 1
     return str(COUNT)
 
 
-def get_qtde_registros_do_arquivo():
+def get_06_9():
     """
     Somatório dos tipos de registro
     No nosso caso, número de registros do lote + loteheader + lotetrailer + header + trailer
@@ -152,11 +152,11 @@ def get_qtde_registros_do_arquivo():
     return str(COUNT + 2 + 2)
 
 
-def get_qtde_de_lotes_do_arquivo():
+def get_05_9():
     return '1'
 
 
-def get_qtde_registros_do_lote():
+def get_05_5():
     """
     Somatório dos tipos de registro
     No nosso caso, número de registros do lote + loteheader + lotetrailer
@@ -164,7 +164,7 @@ def get_qtde_registros_do_lote():
     return str(COUNT + 2)
 
 
-def get_somatorio_dos_valores(spreadsheet_data):
+def get_06_5(spreadsheet_data):
     somatorio = 0
     for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
         str_pagamento = str(data_pagamento["field_20_3A"])
@@ -184,7 +184,7 @@ def get_codigo_finalidade_complementar():
     pass
 
 
-def get_tipo_inscricao_favorecido():
+def get_07_3B():
     """
         '0' = Isento / Não Informado
         '1' = CPF
