@@ -1,7 +1,7 @@
 from openpyxl import load_workbook
 
-from cnab240.v10_7 import lambdas
-from cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP, CUSTOM_FIELDS_MAPPING
+from cnab.cnab240.v10_7 import lambdas
+from cnab.cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP, CUSTOM_FIELDS_MAPPING
 
 INITIAL_DATA_DICT = {
     'header': [],

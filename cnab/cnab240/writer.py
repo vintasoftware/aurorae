@@ -1,9 +1,4 @@
-import sys
-
-sys.path.append("/home/sarai/Documents/vinta/vinta-pagamentos")
-
-
-from v10_7 import models
+from cnab.cnab240.v10_7 import models
 
 
 class CNAB240File:

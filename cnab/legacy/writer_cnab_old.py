@@ -16,7 +16,7 @@ def get_num_sequencial_registro_lote():
 
 
 def get_num_sequencial_do_arquivo():
-    return str(len(os.listdir("../generated_files")) + 1)
+    return str(len(os.listdir("../../generated_files")) + 1)
 
 
 # @TODO Check this
