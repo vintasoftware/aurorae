@@ -19,7 +19,7 @@ def get_08_3A():
     return '018'
 
 
-def get_17_0():
+def get_num_sequencial_registro_lote():
     # TODO double check what is this
     return ""
 
@@ -37,13 +37,13 @@ def get_21_0():
     return "01600"
 
 
-def get_data_geracao_do_arquivo():
+def get_17_0():
     import datetime
 
     return datetime.datetime.now().strftime("%d%m%Y")
 
 
-def get_hora_geracao_do_arquivo():
+def get_18_0():
     import datetime
 
     return datetime.datetime.now().strftime("%H%M%S")
