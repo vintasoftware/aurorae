@@ -15,12 +15,12 @@ def get_num_sequencial_registro_lote():
     return ""
 
 
-def get_19_0():
+def get_num_sequencial_do_arquivo():
     return str(len(os.listdir("../generated_files")) + 1)
 
 
 # @TODO Check this
-def get_07_3B(name):
+def get_tipo_inscricao_favorecido(name):
     if name == "Isento / Não Informado":
         return "0"
 
@@ -59,28 +59,28 @@ def get_numero_sequencial_do_arquivo():
     return 1
 
 
-def get_21_0():
+def get_densidade_de_gravacao_do_arquivo():
     # "01600" or "06250"
     return "01600"
 
 
-def get_05_1():
+def get_tipo_de_servico():
     return "30"  # Pagamento Salários
 
 
-def get_06_1():
+def get_forma_de_lancamento():
     return "01"  # Crédito em Conta Corrente/Salário
 
 
-def get_26_1():
+def get_indicativo_da_forma_de_pagamento_do_servico():
     return "01"  # Débito em Conta Corrente
 
 
-def get_06_3A():
+def get_tipo_de_movimento():
     return "0"  # Indica INCLUSÃO
 
 
-def get_07_3A():
+def get_codigo_instrucao_movimento():
     return "00"  # Inclusão de Registro Detalhe Liberado
 
 
@@ -88,7 +88,7 @@ def get_complemento_tipo_servico():
     return "06"  # Pagamento de Salários
 
 
-def get_26_3A():
+def get_codigo_finalidade_da_ted():
     return "077"  # inter
 
 
@@ -105,7 +105,7 @@ def get_aviso_ao_favorecido():
     return "2"  # Emite Aviso Somente para o Remetente
 
 
-def get_18_3A():
+def get_tipo_de_moeda():
     """
     "BTN" = Bônus do Tesouro Nacional + TR
     "BRL" = Real
@@ -208,13 +208,13 @@ class GerarArquivoCNAB240_V10_7:
                     value = get_codigo_remessa_retorno(key)
 
                 if key == "05.1":
-                    value = get_05_1()
+                    value = get_tipo_de_servico()
 
                 if key == "06.1":
-                    value = get_06_1()
+                    value = get_forma_de_lancamento()
 
                 if key == "26.1":
-                    value = get_26_1()
+                    value = get_indicativo_da_forma_de_pagamento_do_servico()
 
                 if key == "05.5":
                     value = "1"
@@ -254,10 +254,10 @@ class GerarArquivoCNAB240_V10_7:
                     value = get_hora_geracao_do_arquivo()
 
                 if key == "19.0":
-                    value = get_19_0()
+                    value = get_num_sequencial_do_arquivo()
 
                 if key == "21.0":
-                    value = get_21_0()
+                    value = get_densidade_de_gravacao_do_arquivo()
 
                 assert value, f"Campo {key} não pode ser None"
                 campo = Field(value, campo_config=field_config)
@@ -294,7 +294,7 @@ class GerarArquivoCNAB240_V10_7:
 
                 if key == "07.3B":
                     value = local_dados_entrada_mapeados[planilha][name]
-                    line += get_07_3B(value)
+                    line += get_tipo_inscricao_favorecido(value)
                     continue
 
                 if key == "10.3B":
@@ -354,7 +354,7 @@ class GerarArquivoCNAB240_V10_7:
                     continue
 
                 if key == "18.3A":
-                    line += get_18_3A()
+                    line += get_tipo_de_moeda()
                     continue
 
                 if key == "04.3C":
@@ -362,19 +362,19 @@ class GerarArquivoCNAB240_V10_7:
                     continue
 
                 if key == "06.3A":
-                    line += get_06_3A()
+                    line += get_tipo_de_movimento()
                     continue
 
                 if key == "07.3A":
-                    line += get_07_3A()
+                    line += get_codigo_instrucao_movimento()
                     continue
 
                 if key == "26.3A":
-                    line += get_26_3A()
+                    line += get_codigo_finalidade_da_ted()
                     continue
 
                 if key == "25.3A":
-                    line += get_05_1()
+                    line += get_tipo_de_servico()
                     continue
 
                 if key in [
