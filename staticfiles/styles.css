@@ -1,0 +1,37 @@
+html * {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: monospace;
+}
+div {
+  white-space: nowrap;
+}
+span {
+  padding: 10px 0px;
+  display: inline-block;
+  text-indent: 0px;
+  font-family: monospace;
+}
+
+span:hover {
+  position: relative;
+}
+span:hover::before {
+  all: initial;
+  font-family: Arial, Helvetica, sans-serif;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #1a1a1a;
+  content: attr(data-tooltip);
+  color: #f9f9f9;
+  position: absolute;
+  top: 100%;
+  width: 120px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 14px;
+}
