@@ -11,7 +11,9 @@ class BaseLine:
         self.initial_data = initial_data
 
     def get_field_names(self):
-        field_names = filter(lambda field_name: field_name.startswith("field_"), dir(self))
+        field_names = filter(
+            lambda field_name: field_name.startswith("field_"), dir(self)
+        )
         return list(field_names)
 
     def formatted_data(self):
@@ -24,7 +26,9 @@ class BaseLine:
             raise Exception(f"The `initial_data` is not valid {self.errors}")
 
         for field in self.get_fields():
-            self.formatted_value = f"{self.formatted_value}{field.to_cnab240_representation()}"
+            self.formatted_value = (
+                f"{self.formatted_value}{field.to_cnab240_representation()}"
+            )
 
         assert len(self.formatted_value) == self.total_positions
 
@@ -58,8 +62,8 @@ class BaseLine:
         if not self.initial_data:
             self.errors.append(
                 Exception(
-                    'Cannot call `.is_valid()` as no `initial_data={}` keyword argument was '
-                    'passed when instantiating the Header instance.'
+                    "Cannot call `.is_valid()` as no `initial_data={}` keyword argument was "
+                    "passed when instantiating the Header instance."
                 )
             )
 
@@ -81,11 +85,22 @@ class Field:
     """
     This class is only responsible to know on how to format the initial value to be written on the file.
     """
+
     formatted_value = ""
     field_name = None
     initial_value = None
 
-    def __init__(self, name, pos_initial, pos_end, data_type, default_value, description, code, required=False):
+    def __init__(
+        self,
+        name,
+        pos_initial,
+        pos_end,
+        data_type,
+        default_value,
+        description,
+        code,
+        required=False,
+    ):
         self.name = name
         self.pos_initial = pos_initial
         self.pos_end = pos_end
@@ -121,16 +136,10 @@ class Field:
 
         if self.required:
             if self.data_type == "num" and not self.initial_value.isdigit():
-                errors.append(
-                    Exception("Este campo aceita somente números")
-                )
+                errors.append(Exception("Este campo aceita somente números"))
 
         if not self.initial_value and self.required:
-            errors.append(
-                Exception(
-                    f"O campo '{self.field_name}' é obrigatório"
-                )
-            )
+            errors.append(Exception(f"O campo '{self.field_name}' é obrigatório"))
 
         if self.initial_value and (len(self.initial_value) > self.length):
             errors.append(

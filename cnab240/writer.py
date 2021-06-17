@@ -10,8 +10,11 @@ class CNAB240File:
     def __init__(self, initial_data):
         assert len(initial_data["header"]) == 1
         assert len(initial_data["trailer"]) == 1
-        assert len(initial_data["lote_detalhe_segmento_c"]) == len(
-            initial_data["lote_detalhe_segmento_b"]) == len(initial_data["lote_detalhe_segmento_a"])
+        assert (
+            len(initial_data["lote_detalhe_segmento_c"])
+            == len(initial_data["lote_detalhe_segmento_b"])
+            == len(initial_data["lote_detalhe_segmento_a"])
+        )
 
         self.header = models.HeaderLine(initial_data["header"][0])
         self.lote = Lote(initial_data)
@@ -50,11 +53,14 @@ class Lote:
         lote_content = f"{header.formatted_data()}\n"
 
         for i, _ in enumerate(self.initial_data["lote_detalhe_segmento_a"]):
-            segmento_a = self.segmento_a(self.initial_data["lote_detalhe_segmento_a"][i])
+            segmento_a = self.segmento_a(
+                self.initial_data["lote_detalhe_segmento_a"][i]
+            )
             lote_content = f"{lote_content}{segmento_a.formatted_data()}\n"
 
             segmento_b = self.segmento_b(
-                self.initial_data["lote_detalhe_segmento_b"][i])
+                self.initial_data["lote_detalhe_segmento_b"][i]
+            )
             lote_content = f"{lote_content}{segmento_b.formatted_data()}\n"
 
             # segmento_c = self.segmento_c(
