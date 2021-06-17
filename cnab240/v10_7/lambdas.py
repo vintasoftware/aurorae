@@ -16,7 +16,7 @@ def get_08_3A():
     conforme descrito na Nota P015.
     “009” – PIX (SPI)
     """
-    return '018'
+    return "018"
 
 
 def get_num_sequencial_registro_lote():
@@ -61,7 +61,7 @@ def get_06_3B():
     “04” – Chave Aleatória
     “05” – Dados bancários
     """
-    return '05'
+    return "05"
 
 
 def get_25_3A():
@@ -131,7 +131,7 @@ def get_18_3A():
 
 
 def get_02_1():
-    return '0001'
+    return "0001"
 
 
 COUNT = 0
@@ -153,7 +153,7 @@ def get_06_9():
 
 
 def get_05_9():
-    return '1'
+    return "1"
 
 
 def get_05_5():
@@ -192,4 +192,4 @@ def get_07_3B():
         '3' = PIS / PASEP
         '9' = Outros
     """
-    return '1'
+    return "1"
