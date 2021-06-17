@@ -104,8 +104,7 @@ def get_codigo_instrucao_movimento():
 
 
 def get_codigo_finalidade_da_ted():
-    # return "077"  # inter
-    return ""  # inter
+    return ""
 
 
 def get_tipo_de_moeda():
