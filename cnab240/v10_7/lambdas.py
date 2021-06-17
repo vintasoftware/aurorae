@@ -6,7 +6,7 @@ def get_numero_aviso_debito():
     return " "
 
 
-def get_08_3A():
+def get_field_P001():
     """
     '018' = TED (STR,CIP)
     '700' = DOC (COMPE)
@@ -24,36 +24,36 @@ def get_num_sequencial_registro_lote():
     return ""
 
 
-def get_19_0():
+def get_field_G018():
     return str(len(os.listdir("generated_files")) + 1)
 
 
-def get_16_0():
+def get_field_G015():
     return "1"
 
 
-def get_21_0():
+def get_field_G020():
     # "01600" or "06250"
     return "01600"
 
 
-def get_17_0():
+def get_field_G016():
     import datetime
 
     return datetime.datetime.now().strftime("%d%m%Y")
 
 
-def get_18_0():
+def get_field_G017():
     import datetime
 
     return datetime.datetime.now().strftime("%H%M%S")
 
 
-def get_05_1():
+def get_field_G025():
     return "30"  # Pagamento Salários
 
 
-def get_06_3B():
+def get_field_G100():
     """
     “01” – Chave Pix – tipo Telefone
     “02” – Chave Pix – tipo Email
@@ -64,7 +64,7 @@ def get_06_3B():
     return "05"
 
 
-def get_25_3A():
+def get_field_P005():
     """
     '01' = Crédito em Conta
     '02' = Pagamento de Aluguel/Condomínio
@@ -87,27 +87,27 @@ def get_25_3A():
     return "01"  # Pagamento Salários
 
 
-def get_06_1():
+def get_field_G029():
     return "01"  # Crédito em Conta Corrente/Salário
 
 
-def get_26_1():
+def get_field_P014():
     return "01"  # Débito em Conta Corrente
 
 
-def get_06_3A():
+def get_field_G060():
     return "0"  # Indica INCLUSÃO
 
 
-def get_07_3A():
+def get_field_G061():
     return "00"  # Inclusão de Registro Detalhe Liberado
 
 
-def get_26_3A():
+def get_field_P011():
     return "077"  # inter
 
 
-def get_18_3A():
+def get_field_G040():
     """
     "BTN" = Bônus do Tesouro Nacional + TR
     "BRL" = Real
@@ -130,20 +130,20 @@ def get_18_3A():
     return "BRL"
 
 
-def get_02_1():
+def get_field_G002():
     return "0001"
 
 
 COUNT = 0
 
 
-def get_04_3A():
+def get_field_G038():
     global COUNT
     COUNT = COUNT + 1
     return str(COUNT)
 
 
-def get_06_9():
+def get_field_G056():
     """
     Somatório dos tipos de registro
     No nosso caso, número de registros do lote + loteheader + lotetrailer + header + trailer
@@ -152,11 +152,11 @@ def get_06_9():
     return str(COUNT + 2 + 2)
 
 
-def get_05_9():
+def get_field_G049():
     return "1"
 
 
-def get_05_5():
+def get_field_G057():
     """
     Somatório dos tipos de registro
     No nosso caso, número de registros do lote + loteheader + lotetrailer
@@ -164,7 +164,7 @@ def get_05_5():
     return str(COUNT + 2)
 
 
-def get_06_5(spreadsheet_data):
+def get_field_P007(spreadsheet_data):
     somatorio = 0
     for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
         str_pagamento = str(data_pagamento["field_20_3A"])
@@ -184,7 +184,7 @@ def get_codigo_finalidade_complementar():
     pass
 
 
-def get_07_3B():
+def get_field_G005():
     """
         '0' = Isento / Não Informado
         '1' = CPF
