@@ -1,7 +1,3 @@
-import random
-import colorsys
-
-
 class BaseLine:
     total_positions = 240
     formatted_value = ""
