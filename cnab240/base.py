@@ -37,13 +37,17 @@ class BaseLine:
     def formatted_html(self):
         formatted_html = ""
         for field in self.get_fields():
+            field_tooltip = (
+                f"{field.code} - "
+                f"{field.name} - "
+                f"{field.description}\n"
+                f"[{field.pos_initial}:{field.pos_end}]"
+            )
             field_representation = field.to_cnab240_representation().replace(" ", "_")
-            span_width = (field.pos_end - field.pos_initial + 1) * 8
 
             field_html_representation = (
-                f"<span style='background-color: aliceblue; width: {span_width}px' "
-                f"id='{field.field_name}' "
-                f"data-tooltip='{field.code} - {field.name}'>"
+                f"<span id='{field.field_name}' "
+                f"data-tooltip='{field_tooltip}'>"
                 f"{field_representation}"
                 f"</span>"
             )
