@@ -16,7 +16,7 @@ def get_camara_centralizadora():
     conforme descrito na Nota P015.
     “009” – PIX (SPI)
     """
-    return '018'
+    return "018"
 
 
 def get_num_sequencial_registro_lote():
@@ -61,7 +61,7 @@ def get_forma_iniciacao():
     “04” – Chave Aleatória
     “05” – Dados bancários
     """
-    return '05'
+    return "05"
 
 
 def get_complemento_tipo_de_servico():
@@ -131,7 +131,7 @@ def get_tipo_de_moeda():
 
 
 def get_sequencial_lote_de_servico():
-    return '0001'
+    return "0001"
 
 
 COUNT = 0
@@ -153,7 +153,7 @@ def get_qtde_registros_do_arquivo():
 
 
 def get_qtde_de_lotes_do_arquivo():
-    return '1'
+    return "1"
 
 
 def get_qtde_registros_do_lote():
@@ -192,4 +192,4 @@ def get_tipo_inscricao_favorecido():
         '3' = PIS / PASEP
         '9' = Outros
     """
-    return '1'
+    return "1"
