@@ -669,8 +669,7 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=20,
         data_type="num",
         default_value=None,
-        description="P001: Código adotado pela FEBRABAN, para identificar qual Câmara de Centralizadora será "
-        "responsável pelo processamento dos pagamentos. ",
+        description="P001",  # Código adotado pela FEBRABAN, para identificar qual Câmara de Centralizadora será responsável pelo processamento dos pagamentos
         code="08.3A",
     )
     field_09_3A = Field(
@@ -805,8 +804,7 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=177,
         data_type="num",
         default_value=None,
-        description="P004: A ser preenchido quando arquivo for de retorno (Código=2 no Header de Arquivo) e "
-        "referir-se a uma confirmação de lançamento.",
+        description="P004",  # A ser preenchido quando arquivo for de retorno (Código=2 no Header de Arquivo) e referir-se a uma confirmação de lançamento
         code="23.3A",
     )
     field_24_3A = Field(

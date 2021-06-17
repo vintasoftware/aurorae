@@ -39,4 +39,5 @@ span:hover::before {
   margin-bottom: 15px;
   text-align: center;
   font-size: 14px;
+  white-space: pre-wrap;
 }
