@@ -17,4 +17,4 @@ To ease the development mode of the library we are using code as a package:
 
 ## Running with test data
 
-- Run `python cnab240/writer.py`
+- Run `python cnab/cnab240/writer.py`
