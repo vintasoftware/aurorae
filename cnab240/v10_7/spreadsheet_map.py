@@ -535,7 +535,7 @@ CUSTOM_FIELDS_MAPPING = {
         },
         "field_04_3C": {
             "name": "Nº Seqüencial do Registro no Lote",
-            "lambda": "get_sequencial_registro_no_lote",
+            "lambda": "default",
         },
         "field_05_3C": {
             "name": "Código de Segmento do Reg. Detalhe",
