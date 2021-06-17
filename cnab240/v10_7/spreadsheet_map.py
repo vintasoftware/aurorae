@@ -367,7 +367,7 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_detalhe_segmento_a": {
         "field_02_3A": {
             "name": "Lote de Serviço",
-            "lambda": "get_field_G002",  # To Do: Consider creating a separate lambda for this code
+            "lambda": "get_field_G002",
         },
         "field_03_3A": {"name": "Tipo de Registro", "lambda": "default"},
         "field_04_3A": {
@@ -418,12 +418,12 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_detalhe_segmento_b": {
         "field_02_3B": {
             "name": "Lote de Serviço",
-            "lambda": "get_field_G002",  # To Do: Consider creating a separate lambda for this code
+            "lambda": "get_field_G002",
         },
         "field_03_3B": {"name": "Tipo de Registro", "lambda": "default"},
         "field_04_3B": {
             "name": "Nº Seqüencial do Registro no Lote",
-            "lambda": "get_field_G038",  # To Do: Consider creating a separate lambda for this code
+            "lambda": "get_field_G038",
         },
         "field_05_3B": {
             "name": "Código de Segmento do Reg. Detalhe",
@@ -439,12 +439,12 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_detalhe_segmento_c": {
         "field_02_3C": {
             "name": "Lote de Serviço",
-            "lambda": "get_field_G002",  # To Do: Consider creating a separate lambda for this code
+            "lambda": "get_field_G002",
         },
         "field_03_3C": {"name": "Tipo de Registro", "lambda": "default"},
         "field_04_3C": {
             "name": "Nº Seqüencial do Registro no Lote",
-            "lambda": "get_field_G038",  # To Do: Consider creating a separate lambda for this code
+            "lambda": "get_field_G038",
         },
         "field_05_3C": {
             "name": "Código de Segmento do Reg. Detalhe",
@@ -456,7 +456,7 @@ CUSTOM_FIELDS_MAPPING = {
     "lote_trailer": {
         "field_02_5": {
             "name": "Lote de Serviço",
-            "lambda": "get_field_G002",  # To Do: Consider creating a separate lambda for this code
+            "lambda": "get_field_G002",
         },
         "field_03_5": {"name": "Tipo de Registro", "lambda": "default"},
         "field_04_5": {"name": "Uso Exclusivo FEBRABAN/CNAB", "lambda": "default"},
