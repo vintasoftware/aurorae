@@ -63,10 +63,6 @@ class Lote:
             )
             lote_content = f"{lote_content}{segmento_b.formatted_data()}\n"
 
-            # segmento_c = self.segmento_c(
-            #     self.initial_data["lote_detalhe_segmento_c"][i])
-            # lote_content = f"{lote_content}{segmento_c.formatted_data()}\n"
-
         trailer = self.trailer(self.initial_data["lote_trailer"][0])
         lote_content = f"{lote_content}{trailer.formatted_data()}\n"
 
@@ -87,10 +83,6 @@ class Lote:
                 self.initial_data["lote_detalhe_segmento_b"][i]
             )
             lote_content = f"{lote_content}{segmento_b.formatted_html()}\n"
-
-            # segmento_c = self.segmento_c(
-            #     self.initial_data["lote_detalhe_segmento_c"][i])
-            # lote_content = f"{lote_content}{segmento_c.formatted_html()}\n"
 
         trailer = self.trailer(self.initial_data["lote_trailer"][0])
         lote_content = f"{lote_content}{trailer.formatted_html()}\n"
