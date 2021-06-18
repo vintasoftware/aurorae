@@ -1,7 +1,3 @@
-import random
-import colorsys
-
-
 class BaseLine:
     total_positions = 240
     formatted_value = ""
@@ -11,7 +7,9 @@ class BaseLine:
         self.initial_data = initial_data
 
     def get_field_names(self):
-        field_names = filter(lambda field_name: field_name.startswith("field_"), dir(self))
+        field_names = filter(
+            lambda field_name: field_name.startswith("field_"), dir(self)
+        )
         return list(field_names)
 
     def formatted_data(self):
@@ -24,7 +22,9 @@ class BaseLine:
             raise Exception(f"The `initial_data` is not valid {self.errors}")
 
         for field in self.get_fields():
-            self.formatted_value = f"{self.formatted_value}{field.to_cnab240_representation()}"
+            self.formatted_value = (
+                f"{self.formatted_value}{field.to_cnab240_representation()}"
+            )
 
         assert len(self.formatted_value) == self.total_positions
 
@@ -33,16 +33,17 @@ class BaseLine:
     def formatted_html(self):
         formatted_html = ""
         for field in self.get_fields():
-            h,s,l = random.random(), 0.5 + random.random()/2.0, 0.4 + random.random()/5.0
-            r,g,b = [int(256*i) for i in colorsys.hls_to_rgb(h,l,s)]
-
+            field_tooltip = (
+                f"{field.code} - "
+                f"{field.name} - "
+                f"{field.description}\n"
+                f"[{field.pos_initial}:{field.pos_end}]"
+            )
             field_representation = field.to_cnab240_representation().replace(" ", "_")
-            span_width = (field.pos_end - field.pos_initial + 1) * 8
 
             field_html_representation = (
-                f"<span style='background-color: rgba({r}, {g}, {b}, .7); width: {span_width}px' "
-                f"id='{field.field_name}' "
-                f"data-tooltip='{field.code} - {field.name}'>"
+                f"<span id='{field.field_name}' "
+                f"data-tooltip='{field_tooltip}'>"
                 f"{field_representation}"
                 f"</span>"
             )
@@ -61,8 +62,8 @@ class BaseLine:
         if not self.initial_data:
             self.errors.append(
                 Exception(
-                    'Cannot call `.is_valid()` as no `initial_data={}` keyword argument was '
-                    'passed when instantiating the Header instance.'
+                    "Cannot call `.is_valid()` as no `initial_data={}` keyword argument was "
+                    "passed when instantiating the Header instance."
                 )
             )
 
@@ -84,11 +85,22 @@ class Field:
     """
     This class is only responsible to know on how to format the initial value to be written on the file.
     """
+
     formatted_value = ""
     field_name = None
     initial_value = None
 
-    def __init__(self, name, pos_initial, pos_end, data_type, default_value, description, code, required=False):
+    def __init__(
+        self,
+        name,
+        pos_initial,
+        pos_end,
+        data_type,
+        default_value,
+        description,
+        code,
+        required=False,
+    ):
         self.name = name
         self.pos_initial = pos_initial
         self.pos_end = pos_end
@@ -124,16 +136,10 @@ class Field:
 
         if self.required:
             if self.data_type == "num" and not self.initial_value.isdigit():
-                errors.append(
-                    Exception("Este campo aceita somente números")
-                )
+                errors.append(Exception("Este campo aceita somente números"))
 
         if not self.initial_value and self.required:
-            errors.append(
-                Exception(
-                    f"O campo '{self.field_name}' é obrigatório"
-                )
-            )
+            errors.append(Exception(f"O campo '{self.field_name}' é obrigatório"))
 
         if self.initial_value and (len(self.initial_value) > self.length):
             errors.append(
