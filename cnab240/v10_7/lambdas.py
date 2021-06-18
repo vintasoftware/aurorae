@@ -104,7 +104,7 @@ def get_field_G061():
 
 
 def get_field_P011():
-    return "077"  # inter
+    return ""
 
 
 def get_field_G040():
