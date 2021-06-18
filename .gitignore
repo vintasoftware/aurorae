@@ -282,5 +282,6 @@ Thumbs.db #thumbnail cache on Windows
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,python,pycharm+all,spreadsheet
 
+
 # Generated files path
 generated_files/*
