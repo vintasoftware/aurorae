@@ -30,6 +30,26 @@ class BaseLine:
 
         return self.formatted_value
 
+    def formatted_html(self):
+        formatted_html = ""
+        for field in self.get_fields():
+            field_tooltip = (
+                f"{field.code} - "
+                f"{field.name} - "
+                f"{field.description}\n"
+                f"[{field.pos_initial}:{field.pos_end}]"
+            )
+            field_representation = field.to_cnab240_representation().replace(" ", "_")
+
+            field_html_representation = (
+                f"<span id='{field.field_name}' "
+                f"data-tooltip='{field_tooltip}'>"
+                f"{field_representation}"
+                f"</span>"
+            )
+            formatted_html = f"{formatted_html}{field_html_representation}"
+        return f"<div class='{self.__class__.__name__}'>{formatted_html}</div>"
+
     def get_fields(self):
         fields = []
         for field_name in self.get_field_names():
