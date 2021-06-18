@@ -1,0 +1,37 @@
+fail_fast: true
+repos:
+- repo: git://github.com/pre-commit/pre-commit-hooks
+  rev: v0.9.2
+  hooks:
+    - id: check-added-large-files
+      args: ['--maxkb=500']
+    - id: check-byte-order-marker
+    - id: check-case-conflict
+    - id: check-merge-conflict
+    - id: check-symlinks
+    - id: debug-statements
+    - id: detect-private-key
+
+- repo: local
+  hooks:
+  - id: isort
+    name: isort-local
+    entry : isort
+    language: python
+    types: [python]
+    exclude: .+/(settings|migrations)/.+
+    pass_filenames: true
+  - id: black
+    name: black-local
+    entry: black
+    language: python
+    types: [python]
+    exclude: .+/(settings|migrations)/.+
+    pass_filenames: true
+  - id: prospector
+    name: prospector-local
+    entry: prospector --messages-only
+    language: python
+    types: [python]
+    exclude: .+/(settings|migrations)/.+
+    pass_filenames: true
