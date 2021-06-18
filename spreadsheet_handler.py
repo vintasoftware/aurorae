@@ -4,13 +4,13 @@ from cnab.cnab240.v10_7 import lambdas
 from cnab.cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP, CUSTOM_FIELDS_MAPPING
 
 INITIAL_DATA_DICT = {
-    'header': [],
-    'trailer': [],
-    'lote_header': [],
-    'lote_trailer': [],
-    'lote_detalhe_segmento_c': [],
-    'lote_detalhe_segmento_b': [],
-    'lote_detalhe_segmento_a': [],
+    "header": [],
+    "trailer": [],
+    "lote_header": [],
+    "lote_trailer": [],
+    "lote_detalhe_segmento_c": [],
+    "lote_detalhe_segmento_b": [],
+    "lote_detalhe_segmento_a": [],
 }
 
 
@@ -25,7 +25,8 @@ def worksheet_dict_reader(worksheet):
 
 def get_spreadsheet_data():
     workbook = load_workbook(
-        filename="./tmp/test_data.xlsx", read_only=True, data_only=True)
+        filename="./tmp/test_data.xlsx", read_only=True, data_only=True
+    )
     dados_empresa = worksheet_dict_reader(workbook["Empresa"])
     dados_funcionarios = worksheet_dict_reader(workbook["Funcionários"])
     dados_pagamentos = worksheet_dict_reader(workbook["Pagamentos"])
@@ -33,19 +34,19 @@ def get_spreadsheet_data():
     return {
         "Empresa": list(dados_empresa),
         "Funcionários": list(dados_funcionarios),
-        "Pagamentos": list(dados_pagamentos)
+        "Pagamentos": list(dados_pagamentos),
     }
 
 
 def get_initial_data_from(spreadsheet_data):
     initial_data = {
-        'header': [],
-        'trailer': [],
-        'lote_header': [],
-        'lote_trailer': [],
-        'lote_detalhe_segmento_c': [],
-        'lote_detalhe_segmento_b': [],
-        'lote_detalhe_segmento_a': [],
+        "header": [],
+        "trailer": [],
+        "lote_header": [],
+        "lote_trailer": [],
+        "lote_detalhe_segmento_c": [],
+        "lote_detalhe_segmento_b": [],
+        "lote_detalhe_segmento_a": [],
     }
     invalid_field_maps = []
 
@@ -65,7 +66,9 @@ def get_initial_data_from(spreadsheet_data):
                         for mapped_column in field_specs["column_name"]:
                             custom_column_name = mapped_column[0]
                             try:
-                                custom_fields[custom_column_name] = row[custom_column_name]
+                                custom_fields[custom_column_name] = row[
+                                    custom_column_name
+                                ]
                             except KeyError:
                                 error_msg = (
                                     f"The column '{custom_column_name}' doesn't "
@@ -77,7 +80,7 @@ def get_initial_data_from(spreadsheet_data):
                         data = row[field_specs["column_name"]]
                         model_initial_data[field_name] = str(data)
 
-                    if 'lote' in segment_name:
+                    if "lote" in segment_name:
                         registers += [model_initial_data]
                 except KeyError:
                     error_msg = (
@@ -103,10 +106,10 @@ def _generate_line(fields, spreadsheet_data):
     for field_name, field_specs in fields.items():
         lambda_func_name = field_specs["lambda"]
         try:
-            if lambda_func_name == 'default':
+            if lambda_func_name == "default":
                 # For the fields to get the default value this values must be none or ''
                 # doing this to ease development
-                model_initial_data[field_name] = ''
+                model_initial_data[field_name] = ""
             else:
                 has_params = field_specs.get("params", False)
                 method_to_call = getattr(lambdas, lambda_func_name)
@@ -126,13 +129,13 @@ def _generate_line(fields, spreadsheet_data):
 
 def get_custom_fields_data(spreadsheet_data):
     initial_data = {
-        'header': [],
-        'trailer': [],
-        'lote_header': [],
-        'lote_trailer': [],
-        'lote_detalhe_segmento_c': [],
-        'lote_detalhe_segmento_b': [],
-        'lote_detalhe_segmento_a': [],
+        "header": [],
+        "trailer": [],
+        "lote_header": [],
+        "lote_trailer": [],
+        "lote_detalhe_segmento_c": [],
+        "lote_detalhe_segmento_b": [],
+        "lote_detalhe_segmento_a": [],
     }
     invalid_field_maps = []
 
@@ -145,7 +148,7 @@ def get_custom_fields_data(spreadsheet_data):
             invalid_field_maps += errs
             continue
 
-        for i, _ in enumerate(spreadsheet_data['lote_detalhe_segmento_a']):
+        for i, _ in enumerate(spreadsheet_data["lote_detalhe_segmento_a"]):
             model_initial_data, errs = _generate_line(fields, spreadsheet_data)
             invalid_field_maps += errs
             initial_data[segment_name] += [model_initial_data]
@@ -159,13 +162,13 @@ def get_custom_fields_data(spreadsheet_data):
 def generate_initial_data():
     keys = INITIAL_DATA_DICT.keys()
     initial_data = {
-        'header': [],
-        'trailer': [],
-        'lote_header': [],
-        'lote_trailer': [],
-        'lote_detalhe_segmento_c': [],
-        'lote_detalhe_segmento_b': [],
-        'lote_detalhe_segmento_a': [],
+        "header": [],
+        "trailer": [],
+        "lote_header": [],
+        "lote_trailer": [],
+        "lote_detalhe_segmento_c": [],
+        "lote_detalhe_segmento_b": [],
+        "lote_detalhe_segmento_a": [],
     }
     spreadsheet_data = get_spreadsheet_data()
 

@@ -70,7 +70,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "G004",
             },
-        }
+        },
     },
     "trailer_lote": {
         "opcional": False,
@@ -155,7 +155,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "G059",
             },
-        }
+        },
     },
     "lote_detalhe_segmento_c": {
         "opcional": True,
@@ -312,7 +312,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "G004",
             },
-        }
+        },
     },
     "lote_detalhe_segmento_b": {
         "opcional": False,
@@ -421,7 +421,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "P015",
             },
-        }
+        },
     },
     "lote_detalhe_segmento_a": {
         "opcional": False,
@@ -666,7 +666,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "code": "G059",
             },
-        }
+        },
     },
     # Pagamento Através de Crédito em Conta, Cheque, OP, DOC, TED ou Pagamento com Autenticação
     "header_lote": {
@@ -896,7 +896,7 @@ FEBRABAN_V10_7 = {
                 "default": None,
                 "descricao": "G059",
             },
-        }
+        },
     },
     "header": {
         "opcional": False,
@@ -1093,6 +1093,6 @@ FEBRABAN_V10_7 = {
                 "default": "Brancos",
                 "descricao": "G004",
             },
-        }
+        },
     },
 }

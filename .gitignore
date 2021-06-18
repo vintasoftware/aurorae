@@ -281,5 +281,7 @@ Thumbs.db #thumbnail cache on Windows
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,python,pycharm+all,spreadsheet
+
 cnab.egg-info/
 .pytest_cache/
+testing_cnab240*
