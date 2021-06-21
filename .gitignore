@@ -285,3 +285,6 @@ Thumbs.db #thumbnail cache on Windows
 cnab.egg-info/
 .pytest_cache/
 testing_cnab240*
+
+# Generated files path
+generated_files/*
