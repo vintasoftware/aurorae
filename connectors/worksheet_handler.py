@@ -1,31 +1,7 @@
-from pathlib import Path
-from openpyxl import load_workbook
-
-
-def worksheet_dict_reader(worksheet):
-    rows = worksheet.iter_rows(values_only=True)
-    header = next(rows)
-    for row in rows:
-        if not any(row):
-            return
-        yield dict(zip(header, row))
-
-
-def get_spreadsheet_data(filename: Path) -> dict:
-    workbook = load_workbook(filename=filename, read_only=True, data_only=True)
-    dados_empresa = worksheet_dict_reader(workbook["Empresa"])
-    dados_funcionarios = worksheet_dict_reader(workbook["Funcionários"])
-    dados_pagamentos = worksheet_dict_reader(workbook["Pagamentos"])
-
-    return {
-        "Empresa": list(dados_empresa),
-        "Funcionários": list(dados_funcionarios),
-        "Pagamentos": list(dados_pagamentos),
-    }
+from connectors.parser import fill_segment_data, get_field_based_on
 
 
 def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
-    from connectors.parser import fill_segment_data, get_field_based_on
     errors = []
     parsed_data = {}
     amount_of_payments = len(spreadsheet_data["Pagamentos"])
@@ -58,4 +34,3 @@ def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
         raise Exception(invalid_field_maps)
 
     return parsed_data
-
