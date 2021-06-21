@@ -17,9 +17,6 @@ class Field103B(Field):
         "Complemento do CEP": "",
         "Sigla do Estado": "PE"
     }
-    TODO
-    - Refactor "custom_columns" to be "composed_fields
-    - Refactor "custom_columns" to be a dictionary
     """
 
     composed_fields = [

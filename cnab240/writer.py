@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("/home/mary/repositories/vinta-pagamentos")
+sys.path.append("/home/sarai/Documents/vinta/vinta-pagamentos")
 
 
 from v10_7 import models

@@ -25,79 +25,37 @@ def get_spreadsheet_data(filename: Path) -> dict:
 
 
 def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
-    from .parser import fill_data
+    from connectors.parser import fill_segment_data, get_field_based_on
     errors = []
     parsed_data = {}
+    amount_of_payments = len(spreadsheet_data["Pagamentos"])
 
     for segment_name, segment_fields in spreadsheet_map.items():
         for field_name, field_specs in segment_fields.items():
             sheet_name = field_specs["sheet_name"]
             related_column_name = field_specs["column_name"]
             sheet_rows = spreadsheet_data[sheet_name]
+
             data, invalid_field_maps = get_field_based_on(
-                field_name, related_column_name, sheet_rows, fill_data
+                field_name=field_name,
+                origin_spreadsheet_name=related_column_name,
+                sheet_rows=sheet_rows,
+                amount_of_payments=amount_of_payments,
             )
+
             if invalid_field_maps:
                 errors += invalid_field_maps
                 continue
 
-            if not parsed_data.get(segment_name):
-                parsed_data[segment_name] = {}
-            parsed_data[segment_name].update(data)
+            parsed_data = fill_segment_data(
+                data=parsed_data,
+                segment_name=segment_name,
+                segment_value=data,
+                amount_of_payments=amount_of_payments,
+            )
 
     if invalid_field_maps:
         raise Exception(invalid_field_maps)
 
     return parsed_data
-
-
-def get_field_based_on(
-        field_name: str,
-        origin_spreadsheet_name: str,
-        sheet_rows: dict,
-        fillData
-    ):
-    initial_data = {}
-    invalid_field_maps = []
-    is_composed_field = isinstance(origin_spreadsheet_name, list)
-
-    for row in sheet_rows:
-        try:
-            if is_composed_field:
-                # Multiple fields mapped as one column
-                composed_fields = {}
-                composed_fields_definition = origin_spreadsheet_name
-                for composed_field_def in composed_fields_definition:
-                    composed_column_name = composed_field_def["name"]
-                    try:
-                        composed_fields[composed_column_name] = row[
-                            composed_column_name
-                        ]
-                    except KeyError:
-                        error_msg = (
-                            f"The column '{composed_column_name}' doesn't "
-                            f"exists on the '{origin_spreadsheet_name}' sheet."
-                        )
-                        invalid_field_maps.append({field_name: error_msg})
-                initial_data = fillData(
-                    initial_data,
-                    field_name,
-                    composed_fields
-                )
-            else:
-                data = row[origin_spreadsheet_name]
-                initial_data = fillData(
-                    initial_data,
-                    field_name,
-                    str(data)
-                )
-        except KeyError:
-            error_msg = (
-                f"The column '{origin_spreadsheet_name}' doesn't "
-                f"exists on the '{origin_spreadsheet_name}' sheet."
-            )
-            invalid_field_maps.append({field_name: error_msg})
-
-    return initial_data, invalid_field_maps
-
 
