@@ -1,8 +1,4 @@
-import sys
-
-sys.path.append("/home/sarai/Documents/vinta/vinta-pagamentos/cnab240")
-
-from base import BaseLine, Field
+from cnab.cnab240.base import BaseLine, Field
 
 
 class Field103B(Field):
@@ -77,8 +73,6 @@ class Field103B(Field):
             self.custom_fields, self.composed_fields
         ):
             custom_field.validate(initial_value[custom_column["name"]])
-
-        return None
 
     def to_cnab240_representation(self):
         self.formatted_value = ""
@@ -177,8 +171,6 @@ class Field113B(Field):
             self.custom_fields, self.composed_fields
         ):
             custom_field.validate(initial_value[custom_column["name"]])
-
-        return None
 
     def to_cnab240_representation(self):
         self.formatted_value = ""
@@ -738,8 +730,8 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=20,
         data_type="num",
         default_value=None,
-        description="P001: Código adotado pela FEBRABAN, para identificar qual Câmara de Centralizadora será "
-        "responsável pelo processamento dos pagamentos. ",
+        description="P001",  # Código adotado pela FEBRABAN, para identificar qual Câmara de
+        # Centralizadora será responsável pelo processamento dos pagamentos
         code="08.3A",
     )
     field_09_3A = Field(
@@ -874,8 +866,8 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=177,
         data_type="num",
         default_value=None,
-        description="P004: A ser preenchido quando arquivo for de retorno (Código=2 no Header de Arquivo) e "
-        "referir-se a uma confirmação de lançamento.",
+        description="P004",  # A ser preenchido quando arquivo for de retorno
+        # (Código=2 no Header de Arquivo) e referir-se a uma confirmação de lançamento
         code="23.3A",
     )
     field_24_3A = Field(

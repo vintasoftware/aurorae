@@ -6,7 +6,7 @@ def get_numero_aviso_debito():
     return " "
 
 
-def get_camara_centralizadora():
+def get_field_P001():
     """
     '018' = TED (STR,CIP)
     '700' = DOC (COMPE)
@@ -16,7 +16,7 @@ def get_camara_centralizadora():
     conforme descrito na Nota P015.
     “009” – PIX (SPI)
     """
-    return '018'
+    return "018"
 
 
 def get_num_sequencial_registro_lote():
@@ -24,36 +24,36 @@ def get_num_sequencial_registro_lote():
     return ""
 
 
-def get_num_sequencial_do_arquivo():
+def get_field_G018():
     return str(len(os.listdir("generated_files")) + 1)
 
 
-def get_codigo_remessa_retorno():
+def get_field_G015():
     return "1"
 
 
-def get_densidade_de_gravacao_do_arquivo():
+def get_field_G020():
     # "01600" or "06250"
     return "01600"
 
 
-def get_data_geracao_do_arquivo():
+def get_field_G016():
     import datetime
 
     return datetime.datetime.now().strftime("%d%m%Y")
 
 
-def get_hora_geracao_do_arquivo():
+def get_field_G017():
     import datetime
 
     return datetime.datetime.now().strftime("%H%M%S")
 
 
-def get_tipo_de_servico():
+def get_field_G025():
     return "30"  # Pagamento Salários
 
 
-def get_forma_iniciacao():
+def get_field_G100():
     """
     “01” – Chave Pix – tipo Telefone
     “02” – Chave Pix – tipo Email
@@ -61,10 +61,10 @@ def get_forma_iniciacao():
     “04” – Chave Aleatória
     “05” – Dados bancários
     """
-    return '05'
+    return "05"
 
 
-def get_complemento_tipo_de_servico():
+def get_field_P005():
     """
     '01' = Crédito em Conta
     '02' = Pagamento de Aluguel/Condomínio
@@ -87,27 +87,27 @@ def get_complemento_tipo_de_servico():
     return "01"  # Pagamento Salários
 
 
-def get_forma_de_lancamento():
+def get_field_G029():
     return "01"  # Crédito em Conta Corrente/Salário
 
 
-def get_indicativo_da_forma_de_pagamento_do_servico():
+def get_field_P014():
     return "01"  # Débito em Conta Corrente
 
 
-def get_tipo_de_movimento():
+def get_field_G060():
     return "0"  # Indica INCLUSÃO
 
 
-def get_codigo_instrucao_movimento():
+def get_field_G061():
     return "00"  # Inclusão de Registro Detalhe Liberado
 
 
-def get_codigo_finalidade_da_ted():
-    return "077"  # inter
+def get_field_P011():
+    return ""
 
 
-def get_tipo_de_moeda():
+def get_field_G040():
     """
     "BTN" = Bônus do Tesouro Nacional + TR
     "BRL" = Real
@@ -130,20 +130,20 @@ def get_tipo_de_moeda():
     return "BRL"
 
 
-def get_sequencial_lote_de_servico():
-    return '0001'
+def get_field_G002():
+    return "0001"
 
 
 COUNT = 0
 
 
-def get_sequencial_registro_no_lote():
+def get_field_G038():
     global COUNT
     COUNT = COUNT + 1
     return str(COUNT)
 
 
-def get_qtde_registros_do_arquivo():
+def get_field_G056():
     """
     Somatório dos tipos de registro
     No nosso caso, número de registros do lote + loteheader + lotetrailer + header + trailer
@@ -152,11 +152,11 @@ def get_qtde_registros_do_arquivo():
     return str(COUNT + 2 + 2)
 
 
-def get_qtde_de_lotes_do_arquivo():
-    return '1'
+def get_field_G049():
+    return "1"
 
 
-def get_qtde_registros_do_lote():
+def get_field_G057():
     """
     Somatório dos tipos de registro
     No nosso caso, número de registros do lote + loteheader + lotetrailer
@@ -164,7 +164,7 @@ def get_qtde_registros_do_lote():
     return str(COUNT + 2)
 
 
-def get_somatorio_dos_valores(spreadsheet_data):
+def get_field_P007(spreadsheet_data):
     somatorio = 0
     for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
         str_pagamento = str(data_pagamento["field_20_3A"])
@@ -184,12 +184,12 @@ def get_codigo_finalidade_complementar():
     pass
 
 
-def get_tipo_inscricao_favorecido():
+def get_field_G005():
     """
-        '0' = Isento / Não Informado
-        '1' = CPF
-        '2' = CGC / CNPJ
-        '3' = PIS / PASEP
-        '9' = Outros
+    '0' = Isento / Não Informado
+    '1' = CPF
+    '2' = CGC / CNPJ
+    '3' = PIS / PASEP
+    '9' = Outros
     """
-    return '1'
+    return "1"
