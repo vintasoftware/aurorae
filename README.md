@@ -18,3 +18,9 @@ To ease the development mode of the library we are using code as a package:
 ## Running with test data
 
 - Run `python cnab/cnab240/writer.py`
+
+## Pre-commit hooks
+- Make sure you have installed the `dev-requirements.txt`.
+- Run `pre-commit install` to enable the hook into your git repo. The hook will run automatically for each commit.
+- Run `git commit -m "Your message" -n` to skip the hook if you need.
+

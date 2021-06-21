@@ -1,0 +1,6 @@
+black
+flake8==3.8.4
+isort
+pre-commit
+prospector[with-vulture]
+
