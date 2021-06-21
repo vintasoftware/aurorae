@@ -154,7 +154,11 @@ def get_custom_fields_data(spreadsheet_data):
         invalid_field_maps += errs
 
     for i, _ in enumerate(spreadsheet_data["lote_detalhe_segmento_a"]):
-        for segment_name in ["lote_detalhe_segmento_a", "lote_detalhe_segmento_b"]:
+        for segment_name in [
+            "lote_detalhe_segmento_a",
+            "lote_detalhe_segmento_b",
+            "lote_detalhe_segmento_c",
+        ]:
             fields = CUSTOM_FIELDS_MAPPING[segment_name]
             model_initial_data, errs = _generate_line(fields, spreadsheet_data)
             invalid_field_maps += errs

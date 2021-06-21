@@ -34,9 +34,7 @@ class CNAB240File:
         file_path = f"{self.default_folder}/{self.default_name}-{created_at}.html"
         with open(file_path, "w") as f:
             f.write("<html><head>")
-            f.write(
-                "<link href='/home/sarai/Documents/vinta/vinta-pagamentos/staticfiles/styles.css' rel='stylesheet'>"
-            )
+            f.write("<link href='../staticfiles/styles.css' rel='stylesheet'>")
             f.write("</head><body>")
             f.write(f"{self.header.formatted_html()}\n")
             f.write(f"{self.lote.formatted_html()}")
