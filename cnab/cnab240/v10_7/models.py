@@ -839,8 +839,8 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=134,
         data_type="num",
         default_value=None,
-        description=None,
-        code="P010",
+        description="P010",
+        code="20.3A",
     )
     field_21_3A = Field(
         name="Nº do Docum. Atribuído pelo Banco",

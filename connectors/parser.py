@@ -2,7 +2,7 @@ import copy
 
 
 def get_fields_from_lote():
-    from cnab240.v10_7 import models
+    from cnab.cnab240.v10_7 import models
 
     return (
         dir(models.LoteHeader)
@@ -29,7 +29,9 @@ def fill_fields_data(field_name: str, field_value: str, amount_of_payments: int)
     return data_cp
 
 
-def fill_segment_data(data: dict, segment_name: str, segment_value: dict, amount_of_payments: int):
+def fill_segment_data(
+    data: dict, segment_name: str, segment_value: dict, amount_of_payments: int
+):
     data_cp = copy.deepcopy(data)
     if not data_cp.get(segment_name):
         data_cp[segment_name] = [{} for _ in range(amount_of_payments)]
@@ -39,7 +41,9 @@ def fill_segment_data(data: dict, segment_name: str, segment_value: dict, amount
         field_value = list(item_to_add.values())[0]
 
         if not line_detail.get(field_key):
-            line_detail[field_key] = field_value[0] if isinstance(field_value, list) else field_value
+            line_detail[field_key] = (
+                field_value[0] if isinstance(field_value, list) else field_value
+            )
         else:
             if isinstance(field_value, list):
                 line_detail[field_key].update({field_key: field_value[0]})
@@ -49,10 +53,10 @@ def fill_segment_data(data: dict, segment_name: str, segment_value: dict, amount
 
 
 def get_field_based_on(
-        field_name: str,
-        origin_spreadsheet_name: str,
-        sheet_rows: dict,
-        amount_of_payments: int,
+    field_name: str,
+    origin_spreadsheet_name: str,
+    sheet_rows: dict,
+    amount_of_payments: int,
 ):
     invalid_field_maps = []
     is_composed_field = isinstance(origin_spreadsheet_name, list)
