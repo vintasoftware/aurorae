@@ -1,10 +1,6 @@
-import sys
 from datetime import datetime
 
-sys.path.append("/home/mary/repositories/vinta-pagamentos")
-
-
-from v10_7 import models
+from cnab.cnab240.v10_7 import models
 
 
 class CNAB240File:

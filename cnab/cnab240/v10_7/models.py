@@ -1,8 +1,4 @@
-import sys
-
-sys.path.append("/home/sarai/Documents/vinta/vinta-pagamentos/cnab240")
-
-from base import BaseLine, Field
+from cnab.cnab240.base import BaseLine, Field
 
 
 class Field103B(Field):
