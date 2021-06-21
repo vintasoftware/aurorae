@@ -186,10 +186,10 @@ def get_codigo_finalidade_complementar():
 
 def get_field_G005():
     """
-        '0' = Isento / Não Informado
-        '1' = CPF
-        '2' = CGC / CNPJ
-        '3' = PIS / PASEP
-        '9' = Outros
+    '0' = Isento / Não Informado
+    '1' = CPF
+    '2' = CGC / CNPJ
+    '3' = PIS / PASEP
+    '9' = Outros
     """
     return "1"
