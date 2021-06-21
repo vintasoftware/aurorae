@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 
 sys.path.append("/home/mary/repositories/vinta-pagamentos")
 
@@ -21,7 +22,12 @@ class CNAB240File:
         self.trailer = models.TrailerLine(initial_data["trailer"][0])
 
     def generate_file(self):
-        with open("testing_cnab240.txt", "w") as f:
+        default_folder = "generated_files"
+        default_name = "cnab240"
+        created_at = datetime.now().isoformat()
+        file_path = f"{default_folder}/{default_name}-{created_at}.txt"
+
+        with open(file_path, "w") as f:
             f.write(f"{self.header.formatted_data()}\n")
             f.write(f"{self.lote.formatted_data()}")
             f.write(f"{self.trailer.formatted_data()}")
