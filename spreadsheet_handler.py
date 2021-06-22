@@ -28,7 +28,7 @@ def worksheet_dict_reader(worksheet):
 
 def get_spreadsheet_data():
     workbook = load_workbook(
-        filename="./tmp/v3.xlsx", read_only=True, data_only=True
+        filename="./tmp/test_data.xlsx", read_only=True, data_only=True
     )
     dados_empresa = worksheet_dict_reader(workbook["Empresa"])
     dados_funcionarios = worksheet_dict_reader(workbook["Funcionários"])
