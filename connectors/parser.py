@@ -13,7 +13,7 @@ def get_fields_from_lote():
     )
 
 
-def fill_fields_data(field_name: str, field_value: str, amount_of_payments: int):
+def format_field_info(field_name: str, field_value: str, amount_of_payments: int):
     has_multiple_entries = field_name in get_fields_from_lote()
 
     if has_multiple_entries:
@@ -52,7 +52,7 @@ def fill_segment_data(
     return data_cp
 
 
-def get_field_based_on(
+def get_field_values_based_on(
     field_name: str,
     origin_spreadsheet_name: str,
     sheet_rows: dict,
@@ -91,7 +91,7 @@ def get_field_based_on(
             )
             invalid_field_maps.append({field_name: error_msg})
 
-    initial_data = fill_fields_data(
+    initial_data = format_field_info(
         field_name=field_name, field_value=lines, amount_of_payments=amount_of_payments
     )
     return initial_data, invalid_field_maps

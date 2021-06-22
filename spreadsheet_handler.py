@@ -1,10 +1,7 @@
 from openpyxl import load_workbook
 
 from cnab.cnab240.v10_7 import lambdas
-from cnab.cnab240.v10_7.spreadsheet_map import (
-    CUSTOM_FIELDS_MAPPING,
-    MODELS_SPREADSHEET_MAP,
-)
+from cnab.cnab240.v10_7.spreadsheet_map import CUSTOM_FIELDS_MAPPING, MODELS_SPREADSHEET_MAP
 
 
 INITIAL_DATA_DICT = {
@@ -43,15 +40,7 @@ def get_spreadsheet_data():
 
 
 def get_initial_data_from(spreadsheet_data):
-    initial_data = {
-        "header": [],
-        "trailer": [],
-        "lote_header": [],
-        "lote_trailer": [],
-        "lote_detalhe_segmento_c": [],
-        "lote_detalhe_segmento_b": [],
-        "lote_detalhe_segmento_a": [],
-    }
+    initial_data = INITIAL_DATA_DICT.copy()
     invalid_field_maps = []
 
     # Models
@@ -131,20 +120,12 @@ def _generate_line(fields, spreadsheet_data):
     return model_initial_data, invalid_field_maps
 
 
-def get_custom_fields_data(spreadsheet_data):
+def get_calculated_fields_data(spreadsheet_data):
     """
     Fields need to be generated in sequence. In particular, the trailers and the lote_detalhe_segmentos
     need information from previous lines.
     """
-    initial_data = {
-        "header": [],
-        "trailer": [],
-        "lote_header": [],
-        "lote_trailer": [],
-        "lote_detalhe_segmento_c": [],
-        "lote_detalhe_segmento_b": [],
-        "lote_detalhe_segmento_a": [],
-    }
+    initial_data = INITIAL_DATA_DICT.copy()
     invalid_field_maps = []
 
     for segment_name in ["header", "lote_header"]:
@@ -178,19 +159,11 @@ def get_custom_fields_data(spreadsheet_data):
 
 def generate_initial_data():
     keys = INITIAL_DATA_DICT.keys()
-    initial_data = {
-        "header": [],
-        "trailer": [],
-        "lote_header": [],
-        "lote_trailer": [],
-        "lote_detalhe_segmento_c": [],
-        "lote_detalhe_segmento_b": [],
-        "lote_detalhe_segmento_a": [],
-    }
+    initial_data = INITIAL_DATA_DICT.copy()
     spreadsheet_data = get_spreadsheet_data()
 
     input_fields_data = get_initial_data_from(spreadsheet_data)
-    custom_fields_data = get_custom_fields_data(input_fields_data)
+    custom_fields_data = get_calculated_fields_data(input_fields_data)
 
     for key in keys:
         input_fields_content = input_fields_data[key]
@@ -209,22 +182,13 @@ def generate_initial_data():
 
 def generate_initial_data_with_connectors():
     from connectors.worksheet_handler import parse_data_from
-    from cnab.cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP
 
     keys = INITIAL_DATA_DICT.keys()
-    initial_data = {
-        "header": [],
-        "trailer": [],
-        "lote_header": [],
-        "lote_trailer": [],
-        "lote_detalhe_segmento_c": [],
-        "lote_detalhe_segmento_b": [],
-        "lote_detalhe_segmento_a": [],
-    }
+    initial_data = INITIAL_DATA_DICT.copy()
     spreadsheet_data = get_spreadsheet_data()
 
-    input_fields_data = parse_data_from(spreadsheet_data, MODELS_SPREADSHEET_MAP)
-    custom_fields_data = get_custom_fields_data(input_fields_data)
+    input_fields_data = parse_data_from(spreadsheet_data)
+    custom_fields_data = get_calculated_fields_data(input_fields_data)
 
     for key in keys:
         input_fields_content = input_fields_data[key]
