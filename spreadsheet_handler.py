@@ -1,3 +1,5 @@
+import copy
+
 from openpyxl import load_workbook
 
 from cnab.cnab240.v10_7 import lambdas
@@ -26,7 +28,7 @@ def worksheet_dict_reader(worksheet):
 
 def get_spreadsheet_data():
     workbook = load_workbook(
-        filename="./tmp/test_data.xlsx", read_only=True, data_only=True
+        filename="./tmp/v3.xlsx", read_only=True, data_only=True
     )
     dados_empresa = worksheet_dict_reader(workbook["Empresa"])
     dados_funcionarios = worksheet_dict_reader(workbook["Funcionários"])
@@ -40,7 +42,7 @@ def get_spreadsheet_data():
 
 
 def get_initial_data_from(spreadsheet_data):
-    initial_data = INITIAL_DATA_DICT.copy()
+    initial_data = copy.deepcopy(INITIAL_DATA_DICT)
     invalid_field_maps = []
 
     # Models
@@ -125,7 +127,7 @@ def get_calculated_fields_data(spreadsheet_data):
     Fields need to be generated in sequence. In particular, the trailers and the lote_detalhe_segmentos
     need information from previous lines.
     """
-    initial_data = INITIAL_DATA_DICT.copy()
+    initial_data = copy.deepcopy(INITIAL_DATA_DICT)
     invalid_field_maps = []
 
     for segment_name in ["header", "lote_header"]:
@@ -159,7 +161,7 @@ def get_calculated_fields_data(spreadsheet_data):
 
 def generate_initial_data():
     keys = INITIAL_DATA_DICT.keys()
-    initial_data = INITIAL_DATA_DICT.copy()
+    initial_data = copy.deepcopy(INITIAL_DATA_DICT)
     spreadsheet_data = get_spreadsheet_data()
 
     input_fields_data = get_initial_data_from(spreadsheet_data)
@@ -183,13 +185,12 @@ def generate_initial_data():
 def generate_initial_data_with_connectors():
     from connectors.worksheet_handler import parse_data_from
 
-    keys = INITIAL_DATA_DICT.keys()
-    initial_data = INITIAL_DATA_DICT.copy()
     spreadsheet_data = get_spreadsheet_data()
-
     input_fields_data = parse_data_from(spreadsheet_data)
     custom_fields_data = get_calculated_fields_data(input_fields_data)
 
+    keys = INITIAL_DATA_DICT.keys()
+    initial_data = copy.deepcopy(INITIAL_DATA_DICT)
     for key in keys:
         input_fields_content = input_fields_data[key]
         input_fields_content = [info for info in input_fields_content if info]
