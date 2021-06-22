@@ -54,12 +54,12 @@ class Field103B(Field):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.custom_fields = []
-        for custom_column in self.composed_fields:
+        for composed_field in self.composed_fields:
             custom_field = Field(
-                name=custom_column["name"],
-                pos_initial=custom_column["pos_initial"],
-                pos_end=custom_column["pos_end"],
-                data_type=custom_column["data_type"],
+                name=composed_field["name"],
+                pos_initial=composed_field["pos_initial"],
+                pos_end=composed_field["pos_end"],
+                data_type=composed_field["data_type"],
                 default_value="",
                 description="",
                 code="",
@@ -152,12 +152,12 @@ class Field113B(Field):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.custom_fields = []
-        for custom_column in self.composed_fields:
+        for composed_field in self.composed_fields:
             custom_field = Field(
-                name=custom_column["name"],
-                pos_initial=custom_column["pos_initial"],
-                pos_end=custom_column["pos_end"],
-                data_type=custom_column["data_type"],
+                name=composed_field["name"],
+                pos_initial=composed_field["pos_initial"],
+                pos_end=composed_field["pos_end"],
+                data_type=composed_field["data_type"],
                 default_value="",
                 description="",
                 code="",
