@@ -3,8 +3,9 @@ class BaseLine:
     formatted_value = ""
     errors = []
 
-    def __init__(self, initial_data):
+    def __init__(self, initial_data, line_number):
         self.initial_data = initial_data
+        self.line_number = line_number
 
     def get_field_names(self):
         field_names = filter(
@@ -31,7 +32,7 @@ class BaseLine:
         return self.formatted_value
 
     def formatted_html(self):
-        formatted_html = ""
+        formatted_html = f"<span>{self.line_number}</span>"
         for field in self.get_fields():
             field_tooltip = (
                 f"{field.code} - "

@@ -1,3 +1,4 @@
+import itertools
 from datetime import datetime
 
 from cnab.cnab240.v10_7 import models
@@ -12,10 +13,38 @@ class CNAB240File:
             == len(initial_data["lote_detalhe_segmento_b"])
             == len(initial_data["lote_detalhe_segmento_a"])
         )
+        lote_children = []
+        line_count = itertools.count(1)
 
-        self.header = models.HeaderLine(initial_data["header"][0])
-        self.lote = Lote(initial_data)
-        self.trailer = models.TrailerLine(initial_data["trailer"][0])
+        self.header = models.HeaderLine(
+            initial_data["header"][0], line_number=next(line_count)
+        )
+
+        lote_header = models.LoteHeader(
+            initial_data["lote_header"][0], line_number=next(line_count)
+        )
+        for data_segmento_a, data_segmento_b in zip(
+            initial_data["lote_detalhe_segmento_a"],
+            initial_data["lote_detalhe_segmento_b"],
+        ):
+            segmento_a = models.LoteDetalheSegmentoA(
+                data_segmento_a, line_number=next(line_count)
+            )
+            segmento_b = models.LoteDetalheSegmentoB(
+                data_segmento_b, line_number=next(line_count)
+            )
+            lote_children.append(LoteChildren(segmento_a, segmento_b))
+
+        lote_trailer = models.LoteTrailer(
+            initial_data["lote_trailer"][0], line_number=next(line_count)
+        )
+        self.lote = Lote(
+            header=lote_header, children=lote_children, trailer=lote_trailer
+        )
+
+        self.trailer = models.TrailerLine(
+            initial_data["trailer"][0], line_number=next(line_count)
+        )
 
     def generate_file(self):
         default_folder = "generated_files"
@@ -39,56 +68,49 @@ class CNAB240File:
             f.write("</body></html>")
 
 
-class Lote:
-    header = models.LoteHeader
-    segmento_a = models.LoteDetalheSegmentoA
-    segmento_b = models.LoteDetalheSegmentoB
-    segmento_c = models.LoteDetalheSegmentoC
-    trailer = models.LoteTrailer
+class LoteChildren:
+    def __init__(self, segmento_a, segmento_b, segmento_c=None):
+        self.segmento_a = segmento_a
+        self.segmento_b = segmento_b
+        self.segmento_c = segmento_c
 
-    def __init__(self, initial_data):
-        self.initial_data = initial_data
+    def lines_count(self):
+        return 3 if self.segmento_c else 2
+
+
+class Lote:
+    def __init__(self, header, trailer, children=[]):
+        self.header = header
+        self.trailer = trailer
+        self.children = children
 
     def formatted_data(self):
         lote_content = []
-        header = self.header(self.initial_data["lote_header"][0])
-        lote_content = f"{header.formatted_data()}\n"
+        lote_content = f"{self.header.formatted_data()}\n"
 
-        for i, _ in enumerate(self.initial_data["lote_detalhe_segmento_a"]):
-            segmento_a = self.segmento_a(
-                self.initial_data["lote_detalhe_segmento_a"][i]
-            )
-            lote_content = f"{lote_content}{segmento_a.formatted_data()}\n"
+        for child in self.children:
+            lote_content = f"{lote_content}{child.segmento_a.formatted_data()}\n"
+            lote_content = f"{lote_content}{child.segmento_b.formatted_data()}\n"
 
-            segmento_b = self.segmento_b(
-                self.initial_data["lote_detalhe_segmento_b"][i]
-            )
-            lote_content = f"{lote_content}{segmento_b.formatted_data()}\n"
-
-        trailer = self.trailer(self.initial_data["lote_trailer"][0])
-        lote_content = f"{lote_content}{trailer.formatted_data()}\n"
-
+        lote_content = f"{lote_content}{self.trailer.formatted_data()}\n"
         return lote_content
 
     def formatted_html(self):
         lote_content = []
-        header = self.header(self.initial_data["lote_header"][0])
-        lote_content = f"{header.formatted_html()}\n"
+        lote_content = f"{self.header.formatted_html()}\n"
 
-        for i, _ in enumerate(self.initial_data["lote_detalhe_segmento_a"]):
-            segmento_a = self.segmento_a(
-                self.initial_data["lote_detalhe_segmento_a"][i]
-            )
-            lote_content = f"{lote_content}{segmento_a.formatted_html()}\n"
+        for child in self.children:
+            lote_content = f"{lote_content}{child.segmento_a.formatted_html()}\n"
+            lote_content = f"{lote_content}{child.segmento_b.formatted_html()}\n"
 
-            segmento_b = self.segmento_b(
-                self.initial_data["lote_detalhe_segmento_b"][i]
-            )
-            lote_content = f"{lote_content}{segmento_b.formatted_html()}\n"
-
-        trailer = self.trailer(self.initial_data["lote_trailer"][0])
-        lote_content = f"{lote_content}{trailer.formatted_html()}\n"
+        lote_content = f"{lote_content}{self.trailer.formatted_html()}\n"
         return lote_content
+
+    def lines_count(self):
+        counter = 0
+        for child in self.children:
+            counter += child.lines_count
+        return counter
 
 
 if __name__ == "__main__":
