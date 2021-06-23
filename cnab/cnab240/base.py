@@ -32,7 +32,7 @@ class BaseLine:
         return self.formatted_value
 
     def formatted_html(self):
-        formatted_html = f"<span>{self.line_number}</span>"
+        formatted_html = f"<span class='line-number'>{self.line_number}.</span>"
         for field in self.get_fields():
             field_tooltip = (
                 f"{field.code} - "
