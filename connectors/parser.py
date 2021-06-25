@@ -1,9 +1,9 @@
 import copy
 
+from cnab.cnab240.v10_7 import models
+
 
 def get_fields_from_lote():
-    from cnab.cnab240.v10_7 import models
-
     return (
         dir(models.LoteHeader)
         + dir(models.LoteDetalheSegmentoA)
@@ -13,13 +13,13 @@ def get_fields_from_lote():
     )
 
 
-def format_field_info(field_name: str, field_value: str, amount_of_payments: int):
+def format_field_info(field_name: str, field_value: list, amount_of_payments: int):
     has_multiple_entries = field_name in get_fields_from_lote()
 
     if has_multiple_entries:
         if len(field_value) == 1:
-            # This happens when the field has one correspondence on the origin file AND repeats for all lines
-            # a good example is the field field_01_3A
+            # This happens when the field has one correspondence on the origin file AND
+            # repeats for all lines a good example is the field field_01_3A
             data_cp = [{field_name: field_value} for _ in range(amount_of_payments)]
         else:
             data_cp = [{field_name: value} for value in field_value]
@@ -86,7 +86,7 @@ def get_field_values_based_on(
                 lines.append(data)
         except KeyError:
             error_msg = (
-                f"The column '{origin_spreadsheet_name}' doesn't "
+                f"The column '{field_name}' doesn't "
                 f"exists on the '{origin_spreadsheet_name}' sheet."
             )
             invalid_field_maps.append({field_name: error_msg})
