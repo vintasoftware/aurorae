@@ -6,6 +6,7 @@ class BaseLine:
     def __init__(self, initial_data, line_number):
         self.initial_data = initial_data
         self.line_number = line_number
+        self.is_valid()
 
     def get_field_names(self):
         field_names = filter(

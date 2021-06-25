@@ -1,5 +1,6 @@
 from cnab.cnab240.v10_7.models import Field103B, Field113B
 
+
 MODELS_SPREADSHEET_MAP = {
     "header": {
         "field_01_0": {
@@ -217,12 +218,12 @@ MODELS_SPREADSHEET_MAP = {
         "field_10_3B": {
             "name": "Informação 11",
             "sheet_name": "Funcionários",
-            "column_name": Field103B.custom_columns,
+            "column_name": Field103B.composed_fields,
         },
         "field_11_3B": {
             "name": "Informação 12",
             "sheet_name": "Pagamentos",
-            "column_name": Field113B.custom_columns,
+            "column_name": Field113B.composed_fields,
         },
         "field_13_3B": {
             "name": "Código ISPB",
@@ -309,7 +310,7 @@ MODELS_SPREADSHEET_MAP = {
             "name": "Código do Banco na Compensação",
             "sheet_name": "Empresa",
             "column_name": "* Código do Convênio no Banco",
-        }
+        },
     },
 }
 

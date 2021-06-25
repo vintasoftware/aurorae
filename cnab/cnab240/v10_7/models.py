@@ -15,26 +15,51 @@ class Field103B(Field):
     }
     """
 
-    custom_columns = [
-        # ("Chave Pix", (68, 127, "alfa")),
-        ("Número (Nº do Local)", (68, 72, "num")),
-        ("Complemento (Casa, Apto, Etc)", (73, 87, "alfa")),
-        ("Bairro", (88, 102, "alfa")),
-        ("Nome da Cidade", (103, 117, "alfa")),
-        ("CEP", (118, 122, "num")),
-        ("Complemento do CEP", (123, 125, "alfa")),
-        ("Sigla do Estado", (126, 127, "alfa")),
+    composed_fields = [
+        # {"name": "Chave Pix", "pos_initial": 68, "pos_end": 127, "data_type": "alfa"},
+        {
+            "name": "Número (Nº do Local)",
+            "pos_initial": 68,
+            "pos_end": 72,
+            "data_type": "num",
+        },
+        {
+            "name": "Complemento (Casa, Apto, Etc)",
+            "pos_initial": 73,
+            "pos_end": 87,
+            "data_type": "alfa",
+        },
+        {"name": "Bairro", "pos_initial": 88, "pos_end": 102, "data_type": "alfa"},
+        {
+            "name": "Nome da Cidade",
+            "pos_initial": 103,
+            "pos_end": 117,
+            "data_type": "alfa",
+        },
+        {"name": "CEP", "pos_initial": 118, "pos_end": 122, "data_type": "num"},
+        {
+            "name": "Complemento do CEP",
+            "pos_initial": 123,
+            "pos_end": 125,
+            "data_type": "alfa",
+        },
+        {
+            "name": "Sigla do Estado",
+            "pos_initial": 126,
+            "pos_end": 127,
+            "data_type": "alfa",
+        },
     ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.custom_fields = []
-        for custom_column in self.custom_columns:
+        for composed_field in self.composed_fields:
             custom_field = Field(
-                name=custom_column[0],
-                pos_initial=custom_column[1][0],
-                pos_end=custom_column[1][1],
-                data_type=custom_column[1][2],
+                name=composed_field["name"],
+                pos_initial=composed_field["pos_initial"],
+                pos_end=composed_field["pos_end"],
+                data_type=composed_field["data_type"],
                 default_value="",
                 description="",
                 code="",
@@ -44,10 +69,10 @@ class Field103B(Field):
 
     def validate(self, initial_value=None):
         super().validate(initial_value)
-        for custom_field, custom_column in zip(self.custom_fields, self.custom_columns):
-            custom_field.validate(initial_value[custom_column[0]])
-
-        return None
+        for custom_field, custom_column in zip(
+            self.custom_fields, self.composed_fields
+        ):
+            custom_field.validate(initial_value[custom_column["name"]])
 
     def to_cnab240_representation(self):
         self.formatted_value = ""
@@ -72,27 +97,67 @@ class Field113B(Field):
     }
     """
 
-    custom_columns = [
-        # ("Chave Pix", (128, 226, "alfa")),
-        ("Data do Vencimento (Nominal)", (128, 135, "num")),
-        ("Valor do Documento (Nominal)", (136, 150, "num")),
-        ("Valor do Abatimento", (151, 165, "num")),
-        ("Valor do Desconto", (166, 180, "num")),
-        ("Valor da Mora", (181, 195, "num")),
-        ("Valor da Multa", (196, 210, "num")),
-        ("Código/Documento do Favorecido", (211, 225, "alfa")),
-        ("Aviso ao Favorecido", (226, 226, "num")),
+    composed_fields = [
+        # {"name": "Chave Pix", "pos_initial": 128, "pos_end": 226, "data_type": "alfa"},
+        {
+            "name": "Data do Vencimento (Nominal)",
+            "pos_initial": 128,
+            "pos_end": 135,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor do Documento (Nominal)",
+            "pos_initial": 136,
+            "pos_end": 150,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor do Abatimento",
+            "pos_initial": 151,
+            "pos_end": 165,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor do Desconto",
+            "pos_initial": 166,
+            "pos_end": 180,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor da Mora",
+            "pos_initial": 181,
+            "pos_end": 195,
+            "data_type": "num",
+        },
+        {
+            "name": "Valor da Multa",
+            "pos_initial": 196,
+            "pos_end": 210,
+            "data_type": "num",
+        },
+        {
+            "name": "Código/Documento do Favorecido",
+            "pos_initial": 211,
+            "pos_end": 225,
+            "data_type": "alfa",
+        },
+        {
+            "name": "Aviso ao Favorecido",
+            "pos_initial": 226,
+            "pos_end": 226,
+            "data_type": "num",
+        },
     ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.custom_fields = []
-        for custom_column in self.custom_columns:
+        for composed_field in self.composed_fields:
             custom_field = Field(
-                name=custom_column[0],
-                pos_initial=custom_column[1][0],
-                pos_end=custom_column[1][1],
-                data_type=custom_column[1][2],
+                name=composed_field["name"],
+                pos_initial=composed_field["pos_initial"],
+                pos_end=composed_field["pos_end"],
+                data_type=composed_field["data_type"],
                 default_value="",
                 description="",
                 code="",
@@ -102,10 +167,10 @@ class Field113B(Field):
 
     def validate(self, initial_value=None):
         super().validate(initial_value)
-        for custom_field, custom_column in zip(self.custom_fields, self.custom_columns):
-            custom_field.validate(initial_value[custom_column[0]])
-
-        return None
+        for custom_field, custom_column in zip(
+            self.custom_fields, self.composed_fields
+        ):
+            custom_field.validate(initial_value[custom_column["name"]])
 
     def to_cnab240_representation(self):
         self.formatted_value = ""
@@ -665,7 +730,8 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=20,
         data_type="num",
         default_value=None,
-        description="P001",  # Código adotado pela FEBRABAN, para identificar qual Câmara de Centralizadora será responsável pelo processamento dos pagamentos
+        description="P001",  # Código adotado pela FEBRABAN, para identificar qual Câmara de
+        # Centralizadora será responsável pelo processamento dos pagamentos
         code="08.3A",
     )
     field_09_3A = Field(
@@ -773,8 +839,8 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=134,
         data_type="num",
         default_value=None,
-        description=None,
-        code="P010",
+        description="P010",
+        code="20.3A",
     )
     field_21_3A = Field(
         name="Nº do Docum. Atribuído pelo Banco",
@@ -800,7 +866,8 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=177,
         data_type="num",
         default_value=None,
-        description="P004",  # A ser preenchido quando arquivo for de retorno (Código=2 no Header de Arquivo) e referir-se a uma confirmação de lançamento
+        description="P004",  # A ser preenchido quando arquivo for de retorno
+        # (Código=2 no Header de Arquivo) e referir-se a uma confirmação de lançamento
         code="23.3A",
     )
     field_24_3A = Field(
