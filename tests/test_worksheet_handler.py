@@ -8,7 +8,7 @@ from connectors.worksheet_handler import parse_data_from
 def test_parse_data_from_with_header(spreadsheet_data):
     spreadsheet_map = {"header": MODELS_SPREADSHEET_MAP["header"]}
     parsed_data = parse_data_from(spreadsheet_data, spreadsheet_map)
-    print(parsed_data)
+
     assert parsed_data == {
         "header": [
             {
