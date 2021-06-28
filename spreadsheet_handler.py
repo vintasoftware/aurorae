@@ -3,7 +3,10 @@ import copy
 from openpyxl import load_workbook
 
 from cnab.cnab240.v10_7 import lambdas
-from cnab.cnab240.v10_7.spreadsheet_map import CUSTOM_FIELDS_MAPPING, MODELS_SPREADSHEET_MAP
+from connectors.spreadsheet.spreadsheet_map import (
+    CUSTOM_FIELDS_MAPPING,
+    MODELS_SPREADSHEET_MAP,
+)
 
 
 INITIAL_DATA_DICT = {
@@ -27,9 +30,7 @@ def worksheet_dict_reader(worksheet):
 
 
 def get_spreadsheet_data():
-    workbook = load_workbook(
-        filename="./tmp/test_data.xlsx", read_only=True, data_only=True
-    )
+    workbook = load_workbook(filename="test_data.xlsx", read_only=True, data_only=True)
     dados_empresa = worksheet_dict_reader(workbook["Empresa"])
     dados_funcionarios = worksheet_dict_reader(workbook["Funcionários"])
     dados_pagamentos = worksheet_dict_reader(workbook["Pagamentos"])
