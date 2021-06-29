@@ -37,4 +37,4 @@ jobs:
         run: bandit -r . 
 
       - name: Run Tests
-        run: pytest --cov-report=html ./tests
+        run: python -m pytest --cov-report=html /tests
