@@ -1,5 +1,5 @@
-from cnab.cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP
 from connectors.parser import fill_segment_data, get_field_values_based_on
+from connectors.spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
 
 
 def parse_data_from(spreadsheet_data: dict) -> dict:
