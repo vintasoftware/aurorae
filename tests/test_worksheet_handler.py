@@ -1,6 +1,6 @@
 import pytest
 
-from cnab.cnab240.v10_7.spreadsheet_map import MODELS_SPREADSHEET_MAP
+from connectors.spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
 from connectors.worksheet_handler import parse_data_from
 
 
