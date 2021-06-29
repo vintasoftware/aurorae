@@ -19,6 +19,12 @@ span {
   background-color: aliceblue;
 }
 
+span.line-number {
+  border: 0;
+  width: 15px;
+  background-color: transparent;
+}
+
 span:hover {
   position: relative;
 }
