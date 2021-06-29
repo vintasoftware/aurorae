@@ -1,4 +1,5 @@
 # pylint: disable=global-statement
+import datetime
 import os
 
 
@@ -39,14 +40,10 @@ def get_field_G020():
 
 
 def get_field_G016():
-    import datetime
-
     return datetime.datetime.now().strftime("%d%m%Y")
 
 
 def get_field_G017():
-    import datetime
-
     return datetime.datetime.now().strftime("%H%M%S")
 
 
