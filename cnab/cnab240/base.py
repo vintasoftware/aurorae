@@ -60,6 +60,7 @@ class BaseLine:
             fields.append(field)
         return fields
 
+    # pylint: disable=broad-except
     def is_valid(self, raise_exception=False):
         if not self.initial_data:
             self.errors.append(
@@ -83,9 +84,11 @@ class BaseLine:
         return not any(self.errors)
 
 
+# pylint: disable=too-many-instance-attributes, too-many-arguments
 class Field:
     """
-    This class is only responsible to know on how to format the initial value to be written on the file.
+    This class is only responsible to know on how to format
+    the initial value to be written on the file.
     """
 
     formatted_value = ""
@@ -129,6 +132,7 @@ class Field:
 
         return initial_value
 
+    # pylint: disable=useless-return
     def validate(self, initial_value=None):
         self.initial_value = initial_value
         errors = []
@@ -146,7 +150,8 @@ class Field:
         if self.initial_value and (len(self.initial_value) > self.length):
             errors.append(
                 Exception(
-                    f"A quantidade total de caracteres do valor '{self.initial_value}' da coluna '{self.name}' "
+                    f"A quantidade total de caracteres do valor "
+                    f"'{self.initial_value}' da coluna '{self.name}' "
                     f"é invalida: Total permitido '{self.length}'."
                 )
             )
