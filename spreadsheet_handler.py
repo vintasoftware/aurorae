@@ -5,6 +5,7 @@ from openpyxl import load_workbook
 from cnab.cnab240.v10_7 import lambdas
 from cnab.cnab240.v10_7.custom_fields import CUSTOM_FIELDS_MAPPING
 from connectors.spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
+from connectors.worksheet_handler import parse_data_from
 
 
 INITIAL_DATA_DICT = {
@@ -186,8 +187,6 @@ def generate_initial_data():
 
 
 def generate_initial_data_with_connectors():
-    from connectors.worksheet_handler import parse_data_from
-
     spreadsheet_data = get_spreadsheet_data()
     input_fields_data = parse_data_from(spreadsheet_data, MODELS_SPREADSHEET_MAP)
     custom_fields_data = get_calculated_fields_data(input_fields_data)
