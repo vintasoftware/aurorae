@@ -36,12 +36,12 @@ class CNAB240File:
             segmento_b = models.LoteDetalheSegmentoB(
                 data_segmento_b, line_number=next(line_count)
             )
-            lote_children.append(LoteChildren(segmento_a, segmento_b))
+            lote_children.append(models.LoteChildren(segmento_a, segmento_b))
 
         lote_trailer = models.LoteTrailer(
             initial_data["lote_trailer"][0], line_number=next(line_count)
         )
-        self.lote = Lote(
+        self.lote = models.Lote(
             header=lote_header, children=lote_children, trailer=lote_trailer
         )
 
@@ -69,51 +69,6 @@ class CNAB240File:
             f.write(f"{self.lote.formatted_html()}")
             f.write(f"{self.trailer.formatted_html()}")
             f.write("</body></html>")
-
-
-class LoteChildren:
-    def __init__(self, segmento_a, segmento_b, segmento_c=None):
-        self.segmento_a = segmento_a
-        self.segmento_b = segmento_b
-        self.segmento_c = segmento_c
-
-    def lines_count(self):
-        return 3 if self.segmento_c else 2
-
-
-class Lote:
-    def __init__(self, header, trailer, children=[]):
-        self.header = header
-        self.trailer = trailer
-        self.children = children
-
-    def formatted_data(self):
-        lote_content = []
-        lote_content = f"{self.header.formatted_data()}\n"
-
-        for child in self.children:
-            lote_content = f"{lote_content}{child.segmento_a.formatted_data()}\n"
-            lote_content = f"{lote_content}{child.segmento_b.formatted_data()}\n"
-
-        lote_content = f"{lote_content}{self.trailer.formatted_data()}\n"
-        return lote_content
-
-    def formatted_html(self):
-        lote_content = []
-        lote_content = f"{self.header.formatted_html()}\n"
-
-        for child in self.children:
-            lote_content = f"{lote_content}{child.segmento_a.formatted_html()}\n"
-            lote_content = f"{lote_content}{child.segmento_b.formatted_html()}\n"
-
-        lote_content = f"{lote_content}{self.trailer.formatted_html()}\n"
-        return lote_content
-
-    def lines_count(self):
-        counter = 0
-        for child in self.children:
-            counter += child.lines_count
-        return counter
 
 
 if __name__ == "__main__":
