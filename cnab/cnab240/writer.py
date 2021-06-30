@@ -36,12 +36,12 @@ class CNAB240File:
             segmento_b = models.LoteDetalheSegmentoB(
                 data_segmento_b, line_number=next(line_count)
             )
-            lote_children.append(LoteChildren(segmento_a, segmento_b))
+            lote_children.append(models.LoteChildren(segmento_a, segmento_b))
 
         lote_trailer = models.LoteTrailer(
             initial_data["lote_trailer"][0], line_number=next(line_count)
         )
-        self.lote = Lote(
+        self.lote = models.Lote(
             header=lote_header, children=lote_children, trailer=lote_trailer
         )
 
