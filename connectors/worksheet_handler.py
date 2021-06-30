@@ -1,13 +1,12 @@
 from connectors.parser import fill_segment_data, get_field_values_based_on
-from connectors.spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
 
 
-def parse_data_from(spreadsheet_data: dict) -> dict:
+def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
     errors = []
     parsed_data = {}
     amount_of_payments = len(spreadsheet_data["Pagamentos"])
 
-    for segment_name, segment_fields in MODELS_SPREADSHEET_MAP.items():
+    for segment_name, segment_fields in spreadsheet_map.items():
         for field_name, field_specs in segment_fields.items():
             sheet_name = field_specs["sheet_name"]
             related_column_name = field_specs["column_name"]
