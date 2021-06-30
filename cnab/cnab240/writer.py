@@ -82,10 +82,10 @@ class LoteChildren:
 
 
 class Lote:
-    def __init__(self, header, trailer, children=[]):
+    def __init__(self, header, trailer, children):
         self.header = header
         self.trailer = trailer
-        self.children = children
+        self.children = children or []
 
     def formatted_data(self):
         lote_content = []

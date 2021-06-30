@@ -2,9 +2,11 @@
 
 """The setup script."""
 
-from pkg_resources import parse_requirements
-from setuptools import setup, find_packages
 import pathlib
+
+from pkg_resources import parse_requirements
+from setuptools import find_packages, setup
+
 
 here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")

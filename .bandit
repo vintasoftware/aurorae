@@ -1,0 +1,4 @@
+[bandit]
+exclude: test_*.py
+# B101: assert_used
+skips: B101
