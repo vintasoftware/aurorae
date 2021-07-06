@@ -1,4 +1,4 @@
 [bandit]
-exclude: test_*.py
+exclude: test_*.py,./.venv,.venv
 # B101: assert_used
 skips: B101

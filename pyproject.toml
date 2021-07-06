@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "cnab"
+version = "0.1.0"
+description = "A Python implementation of the CNAB240 file to perform bulk payments."
+authors = [
+    "Mariane Pastor (Vinta Software) <mariane.pastor@vinta.com.br>",
+    "Rebeca Sarai (Vinta Software) <rebeca@vinta.com.br>",
+    "Thiago Paim (Vinta Software) <thiago.paim@vinta.com.br>"
+]
+license = "MIT"
+readme = "README.md"
+keywords = ["cnab240", "payments", "openbanking"]
+classifiers = [
+    "Development Status :: 2 -  Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Bank Payments :: Build Tools",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+attrs = "^21.2.0"
+backcall = "^0.2.0"
+decorator = "^5.0.9"
+et-xmlfile = "^1.1.0"
+iniconfig = "^1.1.1"
+ipdb = "^0.13.9"
+ipython = "^7.25.0"
+ipython_genutils = "^0.2.0"
+jedi = "^0.18.0"
+openpyxl = "^3.0.7"
+packaging = "^21.0"
+parso = "^0.8.2"
+pexpect = "^4.8.0"
+pickleshare = "^0.7.5"
+pluggy = "^0.13.1"
+prompt-toolkit = "^3.0.19"
+ptyprocess = "^0.7.0"
+py = "^1.10.0"
+Pygments = "^2.9.0"
+pyparsing = "^2.4.7"
+pytest = "^6.2.4"
+toml = "^0.10.2"
+traitlets = "^5.0.5"
+wcwidth = "^0.2.5"
+
+[tool.poetry.dev-dependencies]
+bandit = "^1.7.0"
+black = "^21.6b0"
+flake8 = "3.8.4"
+pre-commit = "^2.13.0"
+prospector = {extras = ["with-vulture"], version = "^1.3.1"}
+pytest = "^6.2.4"
+pytest-cov = "^2.12.1"
+mypy = "^0.910"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
