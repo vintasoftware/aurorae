@@ -11,8 +11,10 @@ A Python implementation of the CNAB240 file to perform bulk payments.
 - openpyxl (3.0.7)
 
 ## Working in development mode
+
 To ease the development mode of the library we are using code as a package: 
 - Clone the repo
+- Inside the root folder of the project run `mkdir generated_files`
 - Inside a virtualenv and on the root folder of the project run `poetry install`. This will install all dependencies and install the library locally in editable mode. 
 
 ## Running with test data
