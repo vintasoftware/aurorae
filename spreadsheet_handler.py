@@ -29,10 +29,8 @@ def worksheet_dict_reader(worksheet):
         yield dict(zip(header, row))
 
 
-def get_spreadsheet_data():
-    workbook = load_workbook(
-        filename="./test_data/test_data.xlsx", read_only=True, data_only=True
-    )
+def get_spreadsheet_data(filename):
+    workbook = load_workbook(filename=filename, read_only=True, data_only=True)
     dados_empresa = worksheet_dict_reader(workbook["Empresa"])
     dados_funcionarios = worksheet_dict_reader(workbook["Funcionários"])
     dados_pagamentos = worksheet_dict_reader(workbook["Pagamentos"])
@@ -163,10 +161,10 @@ def get_calculated_fields_data(spreadsheet_data):
     return initial_data
 
 
-def generate_initial_data():
+def generate_initial_data(filename):
     keys = INITIAL_DATA_DICT.keys()
     initial_data = copy.deepcopy(INITIAL_DATA_DICT)
-    spreadsheet_data = get_spreadsheet_data()
+    spreadsheet_data = get_spreadsheet_data(filename)
 
     input_fields_data = get_initial_data_from(spreadsheet_data)
     custom_fields_data = get_calculated_fields_data(input_fields_data)
@@ -186,8 +184,8 @@ def generate_initial_data():
     return initial_data
 
 
-def generate_initial_data_with_connectors():
-    spreadsheet_data = get_spreadsheet_data()
+def generate_initial_data_with_connectors(filename):
+    spreadsheet_data = get_spreadsheet_data(filename)
     input_fields_data = parse_data_from(spreadsheet_data, MODELS_SPREADSHEET_MAP)
     custom_fields_data = get_calculated_fields_data(input_fields_data)
 

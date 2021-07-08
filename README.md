@@ -18,8 +18,7 @@ To ease the development mode of the library we are using code as a package:
 - Inside a virtualenv and on the root folder of the project run `poetry install`. This will install all dependencies and install the library locally in editable mode. 
 
 ## Running with test data
-
-- Run `python cnab/cnab240/writer.py`
+- Run `poetry run generate test_data/test_data.xlsx`
 
 ## Pre-commit hooks
 - Run `poetry run pre-commit install` to enable the hook into your git repo. The hook will run automatically for each commit.

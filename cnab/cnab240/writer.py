@@ -2,6 +2,8 @@ import itertools
 from datetime import datetime
 
 from cnab.cnab240.v10_7 import models
+from connectors.utils import parse_args
+from spreadsheet_handler import generate_initial_data_with_connectors
 
 
 class CNAB240File:
@@ -71,55 +73,10 @@ class CNAB240File:
             f.write("</body></html>")
 
 
-class LoteChildren:
-    def __init__(self, segmento_a, segmento_b, segmento_c=None):
-        self.segmento_a = segmento_a
-        self.segmento_b = segmento_b
-        self.segmento_c = segmento_c
+def generate_cnab_files():
+    args = parse_args()
 
-    def lines_count(self):
-        return 3 if self.segmento_c else 2
-
-
-class Lote:
-    def __init__(self, header, trailer, children):
-        self.header = header
-        self.trailer = trailer
-        self.children = children or []
-
-    def formatted_data(self):
-        lote_content = []
-        lote_content = f"{self.header.formatted_data()}\n"
-
-        for child in self.children:
-            lote_content = f"{lote_content}{child.segmento_a.formatted_data()}\n"
-            lote_content = f"{lote_content}{child.segmento_b.formatted_data()}\n"
-
-        lote_content = f"{lote_content}{self.trailer.formatted_data()}\n"
-        return lote_content
-
-    def formatted_html(self):
-        lote_content = []
-        lote_content = f"{self.header.formatted_html()}\n"
-
-        for child in self.children:
-            lote_content = f"{lote_content}{child.segmento_a.formatted_html()}\n"
-            lote_content = f"{lote_content}{child.segmento_b.formatted_html()}\n"
-
-        lote_content = f"{lote_content}{self.trailer.formatted_html()}\n"
-        return lote_content
-
-    def lines_count(self):
-        counter = 0
-        for child in self.children:
-            counter += child.lines_count
-        return counter
-
-
-if __name__ == "__main__":
-    from spreadsheet_handler import generate_initial_data_with_connectors
-
-    fields_initial_data = generate_initial_data_with_connectors()
+    fields_initial_data = generate_initial_data_with_connectors(filename=args.filename)
     cnab = CNAB240File(fields_initial_data)
     cnab.generate_file()
     cnab.generate_html_file()
