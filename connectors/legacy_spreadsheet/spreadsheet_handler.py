@@ -4,8 +4,8 @@ from openpyxl import load_workbook
 
 from cnab.cnab240.v10_7 import lambdas
 from cnab.cnab240.v10_7.custom_fields import CUSTOM_FIELDS_MAPPING
-from connectors.spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
-from connectors.worksheet_handler import parse_data_from
+from connectors.legacy_spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
+from connectors.legacy_spreadsheet.worksheet_handler import parse_data_from
 
 
 INITIAL_DATA_DICT = {

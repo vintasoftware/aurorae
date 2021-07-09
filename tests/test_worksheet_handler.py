@@ -1,7 +1,7 @@
 import pytest
 
-from connectors.spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
-from connectors.worksheet_handler import parse_data_from
+from connectors.legacy_spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
+from connectors.legacy_spreadsheet.worksheet_handler import parse_data_from
 
 
 @pytest.mark.usefixtures("spreadsheet_data")

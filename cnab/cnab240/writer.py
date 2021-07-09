@@ -2,8 +2,10 @@ import itertools
 from datetime import datetime
 
 from cnab.cnab240.v10_7 import models
+from connectors.legacy_spreadsheet.spreadsheet_handler import (
+    generate_initial_data_with_connectors,
+)
 from connectors.utils import parse_args
-from spreadsheet_handler import generate_initial_data_with_connectors
 
 
 class CNAB240File:
