@@ -2,6 +2,10 @@ from connectors.parser import fill_segment_data, get_field_values_based_on
 
 
 def parse_data_from(spreadsheet_data: dict, spreadsheet_map: dict) -> dict:
+    """
+    Uses the spreadsheet_map to parse values in the spreasheet_data dict
+    to the final format expected by each line model.
+    """
     errors = []
     parsed_data = {}
     amount_of_payments = len(spreadsheet_data["Pagamentos"])
