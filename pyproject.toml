@@ -5,7 +5,8 @@ description = "A Python implementation of the CNAB240 file to perform bulk payme
 authors = [
     "Mariane Pastor (Vinta Software) <mariane.pastor@vinta.com.br>",
     "Rebeca Sarai (Vinta Software) <rebeca@vinta.com.br>",
-    "Thiago Paim (Vinta Software) <thiago.paim@vinta.com.br>"
+    "Thiago Paim (Vinta Software) <thiago.paim@vinta.com.br>",
+    "Jaênia Sousa (Vinta Software) <jaenia@vinta.com.br>",
 ]
 license = "MIT"
 readme = "README.md"
