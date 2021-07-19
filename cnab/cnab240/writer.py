@@ -58,9 +58,13 @@ class CNAB240File:
         file_path = f"{self.default_folder}/{self.default_name}-{created_at}.txt"
 
         with open(file_path, "w") as f:
-            f.write(f"{self.header.formatted_data()}\n")
-            f.write(f"{self.lote.formatted_data()}")
-            f.write(f"{self.trailer.formatted_data()}")
+            file_content = (
+                f"{self.header.formatted_data()}\n"
+                f"{self.lote.formatted_data()}"
+                f"{self.trailer.formatted_data()}"
+            )
+
+            f.write(file_content)
 
     def generate_html_file(self):
         created_at = datetime.now().isoformat()
