@@ -3,27 +3,16 @@ import datetime
 import os
 
 
-def get_numero_aviso_debito():
-    # @rsarai TODO is_valid this
-    return " "
-
-
 def get_field_P001():
     """
     '018' = TED (STR,CIP)
     '700' = DOC (COMPE)
-    “988”- TED (STR/CIP) – Utilizado quando for necessário o envio de TED utilizando
-    o código ISPB da Instituição Financeira Destinatária. Neste caso é obrigatório o
-    preenchimento do campo “Código ISPB” – Campo 26.3B, do Segmento de Pagamento,
-    conforme descrito na Nota P015.
+    “988”- TED (STR/CIP) – Used when it's necessary to send TED using the ISPB code
+    of the Recipient Financial Institution. In this case, it's mandatory to fill
+    the field "ISPB Code" - field 26.3B, of the Payment Segment, as described in Note P015.
     “009” – PIX (SPI)
     """
     return "018"
-
-
-def get_num_sequencial_registro_lote():
-    # TODO double check what is this
-    return ""
 
 
 def get_field_G018():
@@ -35,7 +24,6 @@ def get_field_G015():
 
 
 def get_field_G020():
-    # "01600" or "06250"
     return "01600"
 
 
@@ -48,57 +36,57 @@ def get_field_G017():
 
 
 def get_field_G025():
-    return "30"  # Pagamento Salários
+    return "30"  # Salary Payment
 
 
 def get_field_G100():
     """
-    “01” – Chave Pix – tipo Telefone
-    “02” – Chave Pix – tipo Email
-    “03” – Chave Pix – tipo CPF/CNPJ
-    “04” – Chave Aleatória
-    “05” – Dados bancários
+    “01” – Pix Key – Phone type
+    “02” – Pix Key – Email type
+    “03” – Pix Key – CPF/CNPJ type
+    “04” – Random Key
+    “05” – Bank Data
     """
     return "05"
 
 
 def get_field_P005():
     """
-    '01' = Crédito em Conta
-    '02' = Pagamento de Aluguel/Condomínio
-    '03' = Pagamento de Duplicata/Títulos
-    '04' = Pagamento de Dividendos
-    '05' = Pagamento de Mensalidade Escolar
-    '06' = Pagamento de Salários
-    '07' = Pagamento a Fornecedores
-    '08' = Operações de Câmbios/Fundos/Bolsa de Valores
-    '09' = Repasse de Arrecadação/Pagamento de Tributos
-    '10' = Transferência Internacional em Real
-    '11' = DOC para Poupança
-    '12' = DOC para Depósito Judicial
-    '13' = Outros
-    ‘16’ = Pagamento de bolsa auxílio
-    ‘17’ = Remuneração à cooperado
-    ‘18’ = Pagamento de honorários
-    ‘19’ = Pagamento de prebenda (Remuneração a padres e sacerdotes)
+    '01' = Account Credit
+    '02' = Payment of Rent/Condominium
+    '03' = Payment of Duplicate/Securities
+    '04' = Payment of Dividends
+    '05' = Payment of School Tuition
+    '06' = Salary Payment
+    '07' = Payment to Suppliers
+    '08' = Transactions of Foreign Exchange/Funds/Stock Exchange
+    '09' = Transfer of Collection/Payment of Taxes
+    '10' = International Transfer in Real
+    '11' = DOC for Savings
+    '12' = DOC for Judicial Deposit
+    '13' = Others
+    ‘16’ = Stipend Payment
+    ‘17’ = Remuneration to the Member
+    ‘18’ = Pagamento of Fees
+    ‘19’ = Payment of Prebends (Remuneração to priests)
     """
-    return "01"  # Pagamento Salários
+    return "01"  # Salary Payment
 
 
 def get_field_G029():
-    return "01"  # Crédito em Conta Corrente/Salário
+    return "01"  # Credit to Current Account/Salary
 
 
 def get_field_P014():
-    return "01"  # Débito em Conta Corrente
+    return "01"  # Debit at Current Account
 
 
 def get_field_G060():
-    return "0"  # Indica INCLUSÃO
+    return "0"  # Indicates INCLUSION
 
 
 def get_field_G061():
-    return "00"  # Inclusão de Registro Detalhe Liberado
+    return "00"  # Inclusion of Released Detail Record
 
 
 def get_field_P011():
@@ -107,23 +95,23 @@ def get_field_P011():
 
 def get_field_G040():
     """
-    "BTN" = Bônus do Tesouro Nacional + TR
+    "BTN" = National Treasury Bonus + TR
     "BRL" = Real
-    "USD" = Dólar Americano
-    "PTE" = Escudo Português
-    "FRF" = Franco Francês
-    "CHF" = Franco Suíço
-    "JPY" = Ien Japonês
-    "IGP" = Índice Geral de Preços
-    "IGM" = Índice Geral de Preços de Mercado
-    "GBP" = Libra Esterlina
-    "ITL" = Lira Italiana
-    "DEM" = Marco Alemão
-    "TRD" = Taxa Referencial Diária
-    "UPC" = Unidade Padrão de Capital
-    "UPF" = Unidade Padrão de Financiamento
-    "UFR" = Unidade Fiscal de Referência
-    "XEU" = Unidade Monetária Européia
+    "USD" = US Dollar
+    "PTE" = Portuguese Shield
+    "FRF" = French Franc
+    "CHF" = Swiss Franc
+    "JPY" = Japanese Yen
+    "IGP" = General Price Index
+    "IGM" = General Market Price Index
+    "GBP" = Pound Sterling
+    "ITL" = Italian Lira
+    "DEM" = German Mark
+    "TRD" = Daily Referential Rate
+    "UPC" = Standard Capital Unit
+    "UPF" = Standard Financing Unit
+    "UFR" = Tax Reference Unit
+    "XEU" = European Currency
     """
     return "BRL"
 
@@ -143,9 +131,9 @@ def get_field_G038():
 
 def get_field_G056():
     """
-    Somatório dos tipos de registro
-    No nosso caso, número de registros do lote + loteheader + lotetrailer + header + trailer
-    Qtd de linhas do arquivo
+    Sum of record types.
+    In our case, number of batch records + batch header + batch trailer + header + trailer
+    Number of lines in the file
     """
     return str(COUNT + 2 + 2)
 
@@ -156,8 +144,8 @@ def get_field_G049():
 
 def get_field_G057():
     """
-    Somatório dos tipos de registro
-    No nosso caso, número de registros do lote + loteheader + lotetrailer
+    Sum of record types.
+    In our case, number of batch records + batch header + batch trailer
     """
     return str(COUNT + 2)
 
@@ -170,24 +158,16 @@ def get_field_P007(spreadsheet_data):
     return str(somatorio)
 
 
-# def get_somatorio_quantidade_de_moedas(spreadsheet_data):
-#     somatorio = 0
-#     for data_pagamento in spreadsheet_data["lote_detalhe_segmento_a"]:
-#         str_pagamento = str(data_pagamento["field_19_3A"])
-#         somatorio += int(str_pagamento)
-#     return str(somatorio)
-
-
 def get_codigo_finalidade_complementar():
     pass
 
 
 def get_field_G005():
     """
-    '0' = Isento / Não Informado
+    '0' = Exempt / Not Informed
     '1' = CPF
     '2' = CGC / CNPJ
     '3' = PIS / PASEP
-    '9' = Outros
+    '9' = Others
     """
     return "1"

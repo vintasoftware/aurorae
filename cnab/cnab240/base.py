@@ -18,7 +18,8 @@ class BaseLine:
         """
         This method requires that all the formatted values from the fields must be
         already formatted and with the right amount of positions. The field values
-        are instantiated after calling `.is_valid()`.
+        are instantiated after calling `.is_valid()`. It returns the CNAB representation
+        for the BaseLine, applying the CNAB 240 representation for each field.
         """
         if not self.is_valid():
             raise Exception(f"The `initial_data` is not valid {self.errors}")

@@ -7,14 +7,14 @@ from cnab.cnab240.base import BaseLine, Field
 class Field103B(Field):
     """
     Example of `initial_value`: {
-        "Chave Pix": "",
-        "Número (Nº do Local)": "1",
-        "Complemento (Casa, Apto, Etc)": "Casa",
-        "Bairro": "Candeias",
-        "Nome da Cidade": "Recife",
+        "Pix key": "",
+        "Number (Location Number)": "1",
+        "Complement (House, Apt, Etc)": "House",
+        "Neighborhood": "Candeias",
+        "Name of the City": "Recife",
         "CEP": "88420420",
-        "Complemento do CEP": "",
-        "Sigla do Estado": "PE"
+        "CEP complement": "",
+        "State Acronym": "PE"
     }
     """
 
@@ -87,19 +87,6 @@ class Field103B(Field):
 
 
 class Field113B(Field):
-    """
-    Example of `initial_value`: {
-        "Data do Vencimento (Nominal)": "",
-        "Valor do Documento (Nominal)": "1",
-        "Valor do Abatimento": "Casa",
-        "Valor do Desconto": "Candeias",
-        "Valor da Mora": "Recife",
-        "Valor da Multa": "88420420",
-        "Código/Documento do Favorecido": "",
-        "Aviso ao Favorecido": "PE"
-    }
-    """
-
     composed_fields = [
         # {"name": "Chave Pix", "pos_initial": 128, "pos_end": 226, "data_type": "alfa"},
         {
@@ -778,8 +765,7 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=20,
         data_type="num",
         default_value=None,
-        description="P001",  # Código adotado pela FEBRABAN, para identificar qual Câmara de
-        # Centralizadora será responsável pelo processamento dos pagamentos
+        description="P001",
         code="08.3A",
     )
     field_09_3A = Field(
@@ -914,8 +900,7 @@ class LoteDetalheSegmentoA(BaseLine):
         pos_end=177,
         data_type="num",
         default_value=None,
-        description="P004",  # A ser preenchido quando arquivo for de retorno
-        # (Código=2 no Header de Arquivo) e referir-se a uma confirmação de lançamento
+        description="P004",
         code="23.3A",
     )
     field_24_3A = Field(

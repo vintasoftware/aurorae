@@ -19,7 +19,7 @@ def format_field_info(field_name: str, field_value: list, amount_of_payments: in
     if has_multiple_entries:
         if len(field_value) == 1:
             # This happens when the field has one correspondence on the origin file AND
-            # repeats for all lines a good example is the field field_01_3A
+            # repeats for all lines. A good example is the field field_01_3A.
             data_cp = [{field_name: field_value} for _ in range(amount_of_payments)]
         else:
             data_cp = [{field_name: value} for value in field_value]
