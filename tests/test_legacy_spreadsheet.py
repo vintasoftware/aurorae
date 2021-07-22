@@ -5,12 +5,9 @@ import pytest
 from freezegun import freeze_time
 
 from cnab.cnab240.v10_7 import lambdas
-from cnab.cnab240.writer import CNAB240File
-from connectors.legacy_spreadsheet.spreadsheet_handler import (
-    generate_initial_data_with_connectors,
-)
-from connectors.legacy_spreadsheet.spreadsheet_map import MODELS_SPREADSHEET_MAP
-from connectors.legacy_spreadsheet.worksheet_handler import parse_data_from
+from connectors.legacy_spreadsheet.handler import LegacySpreadsheetHandler
+from connectors.legacy_spreadsheet.mapping import MODELS_SPREADSHEET_MAP
+from connectors.legacy_spreadsheet.utils import parse_data_from
 
 
 @freeze_time(datetime(2021, 7, 8, 13, 30, 50))
@@ -144,10 +141,10 @@ class TestWorksheetHandler:
         }
 
     def test_header_formatted_data(self, __):
-        initial_data = generate_initial_data_with_connectors(
+        spreadsheet_handler = LegacySpreadsheetHandler(
             filename="./tests/fixtures/test_spreadsheet.xlsx"
         )
-        cnab = CNAB240File(initial_data)
+        cnab = spreadsheet_handler.get_cnab_file()
         expected_header = (
             "07700000         99999999900099977                  00001900000099999999 VINTA "
             "SERVICOS E SOLUCOES TECBANCO INTERMEDIUM                       1080720211330500"
@@ -156,10 +153,10 @@ class TestWorksheetHandler:
         assert cnab.header.formatted_data() == expected_header
 
     def test_lote_header_formatted_data(self, __):
-        initial_data = generate_initial_data_with_connectors(
+        spreadsheet_handler = LegacySpreadsheetHandler(
             filename="./tests/fixtures/test_spreadsheet.xlsx"
         )
-        cnab = CNAB240File(initial_data)
+        cnab = spreadsheet_handler.get_cnab_file()
         expected_lote_header = (
             "07700011C3001046 99999999900099977                  00001900000099999999 VINTA "
             "SERVICOS E SOLUCOES TEC                                        AVENIDA AGAMENON"
@@ -168,10 +165,10 @@ class TestWorksheetHandler:
         assert cnab.lote.header.formatted_data() == expected_lote_header
 
     def test_lote_segment_a_formatted_data(self, __):
-        initial_data = generate_initial_data_with_connectors(
+        spreadsheet_handler = LegacySpreadsheetHandler(
             filename="./tests/fixtures/test_spreadsheet.xlsx"
         )
-        cnab = CNAB240File(initial_data)
+        cnab = spreadsheet_handler.get_cnab_file()
         expected_segmento_a = (
             "0770001300001A00001807700001900000999999900MARIA FULANA DA SILVA                "
             "             11062021BRL000000000000000000000000001000                    110620"
@@ -180,10 +177,10 @@ class TestWorksheetHandler:
         assert cnab.lote.children[0].segmento_a.formatted_data() == expected_segmento_a
 
     def test_lote_segment_b_formatted_data(self, __):
-        initial_data = generate_initial_data_with_connectors(
+        spreadsheet_handler = LegacySpreadsheetHandler(
             filename="./tests/fixtures/test_spreadsheet.xlsx"
         )
-        cnab = CNAB240File(initial_data)
+        cnab = spreadsheet_handler.get_cnab_file()
         expected_segmento_b = (
             "0770001300002B05 100099999999999RUA DAS AMELIAS                    001231 ANDAR "
             "       CENTRO         RECIFE         50050000PE110620210000000000000010000000000"
@@ -192,10 +189,10 @@ class TestWorksheetHandler:
         assert cnab.lote.children[0].segmento_b.formatted_data() == expected_segmento_b
 
     def test_lote_trailer_formatted_data(self, __):
-        initial_data = generate_initial_data_with_connectors(
+        spreadsheet_handler = LegacySpreadsheetHandler(
             filename="./tests/fixtures/test_spreadsheet.xlsx"
         )
-        cnab = CNAB240File(initial_data)
+        cnab = spreadsheet_handler.get_cnab_file()
         expected_lote_trailer = (
             "07700015         000004000000000000001000000000000000000000                     "
             "                                                                                "
@@ -204,10 +201,10 @@ class TestWorksheetHandler:
         assert cnab.lote.trailer.formatted_data() == expected_lote_trailer
 
     def test_trailer_formatted_data(self, __):
-        initial_data = generate_initial_data_with_connectors(
+        spreadsheet_handler = LegacySpreadsheetHandler(
             filename="./tests/fixtures/test_spreadsheet.xlsx"
         )
-        cnab = CNAB240File(initial_data)
+        cnab = spreadsheet_handler.get_cnab_file()
         expected_trailer = (
             "07799999         000001000006000000                                             "
             "                                                                                "
@@ -216,13 +213,14 @@ class TestWorksheetHandler:
         assert cnab.trailer.formatted_data() == expected_trailer
 
     def test_generate_cnab_files(self, __):
-        initial_data = generate_initial_data_with_connectors(
+        spreadsheet_handler = LegacySpreadsheetHandler(
             filename="./tests/fixtures/test_spreadsheet.xlsx"
         )
+        cnab = spreadsheet_handler.get_cnab_file()
+
         with open("./tests/fixtures/test_cnab.txt", "r") as f:
             expected_cnab_file = f.read()
 
-        cnab = CNAB240File(initial_data)
         with mock.patch("builtins.open", mock.mock_open()) as mock_file:
             cnab.generate_file()
 
