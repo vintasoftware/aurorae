@@ -1,174 +1,56 @@
-class BaseLine:
-    total_positions = 240
-    formatted_value = ""
-    errors = []
+from pydantic.fields import PrivateAttr
+from pydantic.main import BaseModel
 
-    def __init__(self, initial_data, line_number):
-        self.initial_data = initial_data
-        self.line_number = line_number
-        self.is_valid()
+
+class Line(BaseModel):
+    _total_positions: int = PrivateAttr(default=240)
+    _formatted_value: str = PrivateAttr(default="")
+    _line_number: int = PrivateAttr()
+
+    def __init__(self, initial_data, line_number):  # noqa
+        self._line_number = line_number
+        super().__init__(**initial_data)
 
     def get_field_names(self):
-        field_names = filter(
-            lambda field_name: field_name.startswith("field_"), dir(self)
-        )
-        return list(field_names)
+        return self.__fields__.keys()
 
-    def formatted_data(self):
-        """
-        This method requires that all the formatted values from the fields must be
-        already formatted and with the right amount of positions. The field values
-        are instantiated after calling `.is_valid()`. It returns the CNAB representation
-        for the BaseLine, applying the CNAB 240 representation for each field.
-        """
-        if not self.is_valid():
-            raise Exception(f"The `initial_data` is not valid {self.errors}")
+    def get_fields(self):
+        fields = []
+        for field_name in self.get_field_names():
+            field = getattr(self, field_name)
+            fields.append(field)
+        return fields
 
+    def get_field_info(self, field_name):
+        field = self.__fields__[field_name]
+        return field.field_info
+
+    def as_fixed_width(self):
         for field in self.get_fields():
-            self.formatted_value = (
-                f"{self.formatted_value}{field.to_cnab240_representation()}"
-            )
+            self._formatted_value = f"{self._formatted_value}{field.as_fixed_width()}"
 
-        assert len(self.formatted_value) == self.total_positions
+        assert len(self._formatted_value) == self._total_positions
 
-        return self.formatted_value
+        return self._formatted_value
 
-    def formatted_html(self):
-        formatted_html = f"<span class='line-number'>{self.line_number}.</span>"
-        for field in self.get_fields():
+    def as_html(self):
+        formatted_html = f"<span class='line-number'>{self._line_number}.</span>"
+        for field_name in self.get_field_names():
+            field = getattr(self, field_name)
+            field_info = self.get_field_info(field_name)
+
             field_tooltip = (
-                f"{field.code} - "
-                f"{field.name} - "
-                f"{field.description}\n"
-                f"[{field.pos_initial}:{field.pos_end}]"
+                f"{field_info.extra['code']} - "
+                f"{field_name} - "
+                f"{field_info.description}\n"
             )
-            field_representation = field.to_cnab240_representation().replace(" ", "_")
+            field_representation = field.as_fixed_width().replace(" ", "_")
 
             field_html_representation = (
-                f"<span id='{field.field_name}' "
+                f"<span id='{field_name}' "
                 f"data-tooltip='{field_tooltip}'>"
                 f"{field_representation}"
                 f"</span>"
             )
             formatted_html = f"{formatted_html}{field_html_representation}"
         return f"<div class='{self.__class__.__name__}'>{formatted_html}</div>"
-
-    def get_fields(self):
-        fields = []
-        for field_name in self.get_field_names():
-            field = getattr(self, field_name)
-            field.field_name = field_name
-            fields.append(field)
-        return fields
-
-    # pylint: disable=broad-except
-    def is_valid(self, raise_exception=False):
-        if not self.initial_data:
-            self.errors.append(
-                Exception(
-                    "Cannot call `.is_valid()` as no `initial_data={}` keyword argument was "
-                    "passed when instantiating the Header instance."
-                )
-            )
-
-        for field in self.get_fields():
-            initial_value = self.initial_data.get(field.field_name)
-
-            try:
-                field.validate(initial_value=initial_value)
-            except Exception as field_error:
-                self.errors.append(f"{field.field_name}: {field_error}")
-
-        if self.errors and raise_exception:
-            raise Exception(self.errors)
-
-        return not any(self.errors)
-
-
-# pylint: disable=too-many-instance-attributes, too-many-arguments
-class Field:
-    """
-    This class is only responsible to know on how to format
-    the initial value to be written on the file.
-    """
-
-    formatted_value = ""
-    field_name = None
-    initial_value = None
-
-    def __init__(
-        self,
-        name,
-        pos_initial,
-        pos_end,
-        data_type,
-        default_value,
-        description,
-        code,
-        required=False,
-    ):
-        self.name = name
-        self.pos_initial = pos_initial
-        self.pos_end = pos_end
-        self.data_type = data_type
-        self.default_value = default_value
-        self.description = description
-        self.code = code
-        self.required = required
-
-    def __str__(self):
-        return self.formatted_value
-
-    @property
-    def length(self):
-        return self.pos_end - self.pos_initial + 1
-
-    def get_initial_value(self):
-        if self.initial_value:
-            initial_value = self.initial_value
-        elif self.default_value:
-            initial_value = self.default_value
-        else:
-            initial_value = ""
-
-        return initial_value
-
-    # pylint: disable=useless-return
-    def validate(self, initial_value=None):
-        self.initial_value = initial_value
-        errors = []
-
-        if self.data_type not in ["num", "alfa"]:
-            errors.append(Exception(f"Formato invalido: {self.data_type}"))
-
-        if self.required:
-            if self.data_type == "num" and not self.initial_value.isdigit():
-                errors.append(Exception("Este campo aceita somente números"))
-
-        if not self.initial_value and self.required:
-            errors.append(Exception(f"O campo '{self.field_name}' é obrigatório"))
-
-        if self.initial_value and (len(self.initial_value) > self.length):
-            errors.append(
-                Exception(
-                    f"A quantidade total de caracteres do valor "
-                    f"'{self.initial_value}' da coluna '{self.name}' "
-                    f"é invalida: Total permitido '{self.length}'."
-                )
-            )
-
-        if errors:
-            raise Exception({self.field_name: errors})
-
-        return None
-
-    def to_cnab240_representation(self):
-        initial_value = self.get_initial_value()
-
-        if self.data_type == "num":
-            self.formatted_value = initial_value.zfill(self.length)
-        elif self.data_type == "alfa":
-            self.formatted_value = initial_value.ljust(self.length, " ")
-            self.formatted_value = self.formatted_value.upper()
-
-        return self.formatted_value

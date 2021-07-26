@@ -2,7 +2,7 @@ import copy
 
 from cnab.cnab240.v10_7 import lambdas
 from cnab.cnab240.v10_7.custom_fields import CUSTOM_FIELDS_MAPPING
-from cnab.cnab240.v10_7.models import CNAB240File
+from cnab.cnab240.v10_7.legacy_models import CNAB240File
 from connectors.legacy_spreadsheet.mapping import MODELS_SPREADSHEET_MAP
 from connectors.legacy_spreadsheet.utils import get_spreadsheet_data, parse_data_from
 from connectors.legacy_spreadsheet.validators import validate_spreadsheet

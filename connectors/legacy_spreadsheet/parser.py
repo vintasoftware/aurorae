@@ -1,15 +1,15 @@
 import copy
 
-from cnab.cnab240.v10_7 import models
+from cnab.cnab240.v10_7 import legacy_models
 
 
 def get_fields_from_lote():
     return (
-        dir(models.LoteHeader)
-        + dir(models.LoteDetalheSegmentoA)
-        + dir(models.LoteDetalheSegmentoB)
-        + dir(models.LoteDetalheSegmentoC)
-        + dir(models.LoteTrailer)
+        dir(legacy_models.LoteHeader)
+        + dir(legacy_models.LoteDetalheSegmentoA)
+        + dir(legacy_models.LoteDetalheSegmentoB)
+        + dir(legacy_models.LoteDetalheSegmentoC)
+        + dir(legacy_models.LoteTrailer)
     )
 
 

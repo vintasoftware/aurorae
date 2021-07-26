@@ -1,6 +1,5 @@
 # pylint: disable=global-statement
 import datetime
-import os
 
 
 def get_field_P001():
@@ -16,7 +15,17 @@ def get_field_P001():
 
 
 def get_field_G018():
-    return str(len(os.listdir("generated_files")) + 1)
+    """File sequential number"""
+    return "1"
+
+
+def get_field_G019():
+    """
+    Code adopted by FEBRABAN to identify which is the received file
+    layout version. The first 2 digits refer to the version, and the last
+    digit for the release.
+    """
+    return "103"
 
 
 def get_field_G015():
@@ -139,6 +148,10 @@ def get_field_G056():
 
 
 def get_field_G049():
+    """
+    The number of batches in a file. This number is
+    defaulted as for now we only support one batch per file.
+    """
     return "1"
 
 

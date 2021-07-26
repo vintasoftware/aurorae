@@ -1,4 +1,4 @@
-from cnab.cnab240.v10_7.models import Field103B, Field113B
+from cnab.cnab240.v10_7.legacy_models import Field103B, Field113B
 
 
 MODELS_SPREADSHEET_MAP = {
