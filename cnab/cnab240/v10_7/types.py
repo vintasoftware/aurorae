@@ -7,9 +7,13 @@ from pydantic import BaseModel, conint, constr
 from pydantic.class_validators import validator
 
 
+STR_FILL_VALUE = " "
+INT_FILL_VALUE = "0"
+
+
 class CNABString(BaseModel):
     def as_fixed_width(self):
-        return self.__root__.ljust(self._max_str_length, " ").upper()
+        return self.__root__.ljust(self._max_str_length, STR_FILL_VALUE).upper()
 
 
 class CNABEnum(BaseModel):
@@ -18,17 +22,13 @@ class CNABEnum(BaseModel):
 
 
 class CNABPositiveInt(BaseModel):
-    __root__: conint(ge=0)
-
     def as_fixed_width(self):
-        return str(self.__root__).rjust(self._max_str_length, "0")
+        return str(self.__root__).rjust(self._max_str_length, INT_FILL_VALUE)
 
 
 class CNABAlphaPositiveInt(BaseModel):
-    __root__: conint(ge=0)
-
     def as_fixed_width(self):
-        return str(self.__root__).ljust(self._max_str_length, " ")
+        return str(self.__root__).ljust(self._max_str_length, STR_FILL_VALUE)
 
 
 class CNABDate(BaseModel):
@@ -71,6 +71,10 @@ class CNABTime(BaseModel):
 
 class BankCode(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 3
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class ServiceBatchEnum(str, Enum):
@@ -109,79 +113,123 @@ class CompanyRegistrationType(CNABEnum):
 
 
 class CompanyRegistrationNumber(CNABPositiveInt):
-    _max_str_length = 14
+    _max_str_length: ClassVar[int] = 14
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 99999999999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class BankConventionCode(CNABAlphaPositiveInt):
-    _max_str_length = 20
+    _max_str_length: ClassVar[int] = 20
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 99999999999999999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class BankAgencyNumber(CNABPositiveInt):
-    _max_str_length = 5
+    _max_str_length: ClassVar[int] = 5
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 99999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class BankAgencyDigitCheck(CNABPositiveInt):
-    _max_str_length = 1
+    _max_str_length: ClassVar[int] = 1
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 9
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class BankAccountNumber(CNABPositiveInt):
-    _max_str_length = 12
+    _max_str_length: ClassVar[int] = 12
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999999999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class BankAccountDigitCheck(CNABPositiveInt):
-    _max_str_length = 1
+    _max_str_length: ClassVar[int] = 1
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 9
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class BankAgencyAccountDigitCheck(CNABPositiveInt):
-    _max_str_length = 1
+    _max_str_length: ClassVar[int] = 1
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 9
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class CompanyName(CNABString):
-    _max_str_length = 30
+    _max_str_length: ClassVar[int] = 30
     __root__: constr(max_length=_max_str_length)
 
 
 class BankName(CNABString):
-    _max_str_length = 30
+    _max_str_length: ClassVar[int] = 30
     __root__: constr(max_length=_max_str_length)
 
 
 class RemmitanceReturnCode(CNABPositiveInt):
-    _max_str_length = 1
+    _max_str_length: ClassVar[int] = 1
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 9
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class FileSequentialNumber(CNABPositiveInt):
-    _max_str_length = 6
+    _max_str_length: ClassVar[int] = 6
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class FileLayoutVersionNumber(CNABPositiveInt):
-    _max_str_length = 3
+    _max_str_length: ClassVar[int] = 3
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class FileRecordDensity(CNABPositiveInt):
-    _max_str_length = 5
+    _max_str_length: ClassVar[int] = 5
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 99999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class BankReservedField(CNABString):
-    _max_str_length = 20
+    _max_str_length: ClassVar[int] = 20
     __root__: constr(max_length=_max_str_length)
 
 
 class CompanyReservedField(CNABString):
-    _max_str_length = 20
+    _max_str_length: ClassVar[int] = 20
     __root__: constr(max_length=_max_str_length)
 
 
 class FEBRABAN9(CNABString):
-    _max_str_length = 9
+    _max_str_length: ClassVar[int] = 9
     __root__: constr(max_length=_max_str_length)
 
 
 class FEBRABAN10(CNABString):
-    _max_str_length = 10
+    _max_str_length: ClassVar[int] = 10
     __root__: constr(max_length=_max_str_length)
 
 
 class FEBRABAN29(CNABString):
-    _max_str_length = 29
+    _max_str_length: ClassVar[int] = 29
     __root__: constr(max_length=_max_str_length)
