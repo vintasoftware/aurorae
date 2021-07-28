@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
 
-from connectors.legacy_spreadsheet.parser import (
+from providers.legacy_spreadsheet.parser import (
     fill_segment_data,
     get_field_values_based_on,
 )

@@ -1,5 +1,5 @@
-from connectors.legacy_spreadsheet.handler import LegacySpreadsheetHandler
-from connectors.utils import parse_args
+from providers.legacy_spreadsheet.handler import LegacySpreadsheetHandler
+from providers.utils import parse_args
 
 
 def generate_cnab_files():

@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 from freezegun.api import freeze_time
 
-from connectors.legacy_spreadsheet.handler import LegacySpreadsheetHandler
+from providers.legacy_spreadsheet.handler import LegacySpreadsheetHandler
 
 
 @pytest.fixture

@@ -3,8 +3,8 @@ from unittest import mock
 import pytest
 
 from cnab.cnab240.v10_7 import lambdas
-from connectors.legacy_spreadsheet.mapping import MODELS_SPREADSHEET_MAP
-from connectors.legacy_spreadsheet.utils import parse_data_from
+from providers.legacy_spreadsheet.mapping import MODELS_SPREADSHEET_MAP
+from providers.legacy_spreadsheet.utils import parse_data_from
 
 
 class TestLegacySpreadsheet:

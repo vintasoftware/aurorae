@@ -2,7 +2,7 @@ import os
 
 from openpyxl import load_workbook
 
-from connectors.legacy_spreadsheet.exceptions import (
+from providers.legacy_spreadsheet.exceptions import (
     EmptyFile,
     InvalidFileSize,
     InvalidFileType,
