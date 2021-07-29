@@ -291,3 +291,6 @@ testing_cnab240*
 
 # Generated files path
 generated_files/*
+
+# Local open files
+sample/.~lock*
