@@ -1,22 +1,25 @@
-# [RFC] Typed Connectors Architecture
+# Typed Connectors Architecture
+Date: 25-06-2021
 
-The connectors are responsible for transforming the input data into a JSON format able to be used by our CNAB240 generator. This part of the system is represented by the red dashed line on the image below.
-![General architecture](../assets/general_architecture.png)
- 
+## Status
+- Accepted
+- Amended by [CNAB Architecture with Pydantic](./0002_cnab_architecture_pydantic.md)
+Amended by [CNAB Architecture with Pydantic](./0002_cnab_architecture_pydantic.md)
+
 ## Context
-We are using this as a learning opportunity. We intend to put to the test new tools and learn with them. `pydantic` is one of these tools; we will use it as the data parser and validator while exploring type hints. The intention is to replicate the structure of models and serializers to assure proper parsing, validation with readable code. 
+We are using this as a learning opportunity. We intend to put to the test new tools and learn with them. `pydantic` is one of these tools; we will use it as the data parser and validator while exploring type hints. The intention is to replicate the structure of models and serializers to assure proper parsing, validation with readable code.
 
-- **Why pydantic?** Enforces type hints at runtime with friendly validations, plus is being widely used by the community. 
-- **Why type hints?** Type hints are new language features that we want to experiment with. 
-- **Why replicate the model/serializer structure?** Separation of concerns and extensibility. 
+- **Why pydantic?** Enforces type hints at runtime with friendly validations, plus is being widely used by the community.
+- **Why type hints?** Type hints are new language features that we want to experiment with.
+- **Why replicate the model/serializer structure?** Separation of concerns and extensibility.
 
-The requirements for the connectors are:
+### Requirements
 - One must easily add a new data provider to generate the CNAB240 file.
 - The part of the library that generates the CNAB240 should be unaware of the connectors.
 
 
 ## Decision
-Use `pydantic` to enforce type hints and validations and generate the JSON schema to be used by the CNAB 240 generator. The components of this architecture are **formaters** and **validators**. 
+Use `pydantic` to enforce type hints and validations and generate the JSON schema to be used by the CNAB 240 generator.
 
 File structure:
 ```
@@ -29,7 +32,7 @@ File structure:
 ```
 
 ### Models
-There will be a single class to mount and format the output JSON. This class is the **general** mapping between the data and the CNAB240 generator. All connectors should use this class to create the output JSON.  
+There will be a single class to mount and format the output JSON. This class is the **general** mapping between the data and the CNAB240 generator. All connectors should use this class to create the output JSON.
 
 ```python
 from typing import ClassVar, List
@@ -159,7 +162,7 @@ class SpreadSheet(BaseModel):
 ```
 
 ### Provider handlers
-There will be one handler for each data provider. Handlers are responsible for parsing the entry data to a CNABFile instance. Every handler should have its own `get_cnab` method. 
+There will be one handler for each data provider. Handlers are responsible for parsing the entry data to a CNABFile instance. Every handler should have its own `get_cnab` method.
 
 ```python
 # handlers.py
