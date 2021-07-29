@@ -95,3 +95,43 @@ class CNABHeader(Line):
     class Config:
         use_enum_values = True
         validate_all = True
+
+
+class CNABTrailer(Line):
+    field_01_9: types.BankCode = FieldSchema(
+        description="Código do Banco na Compensação", code="G001"
+    )
+    field_02_9: types.ServiceBatch = FieldSchema(
+        default=types.ServiceBatchEnum.file_trailer,
+        description="Lote de Serviço",
+        code="G002",
+    )
+    field_03_9: types.EntryType = FieldSchema(
+        default=types.EntryTypeEnum.file_trailer,
+        description="Tipo de Registro",
+        code="G003",
+    )
+    field_04_9: types.FEBRABAN9 = FieldSchema(
+        default="", description="Uso Exclusivo FEBRABAN/CNAB", code="G004"
+    )
+    field_05_9: types.RecordsNumber = FieldSchema(
+        description="Quantidade de Lotes do Arquivo",
+        code="G049",
+        default_factory=lambdas.get_field_G049,
+    )
+    field_06_9: types.RecordsNumber = FieldSchema(
+        description="Quantidade de Registros do Arquivo", code="G056"
+    )
+    field_07_9: types.RecordsNumber = FieldSchema(
+        default=0, description="Qtde de Contas p/ Conc. (Lotes)", code="G037"
+    )
+    field_08_9: types.FEBRABAN205 = FieldSchema(
+        default="", description="Uso Exclusivo FEBRABAN/CNAB", code="G004"
+    )
+
+    def __init__(self, initial_data, line_number):
+        initial_data["field_06_9"] = line_number
+        super().__init__(initial_data, line_number)
+
+    class Config:
+        validate_all = True

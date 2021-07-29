@@ -1,10 +1,10 @@
 from datetime import datetime
 
-import pydantic
 import pytest
 from freezegun.api import freeze_time
+from pydantic import ValidationError
 
-from cnab.cnab240.v10_7.models import CNABHeader
+from cnab.cnab240.v10_7.models import CNABHeader, CNABTrailer
 
 
 @freeze_time(datetime(2021, 7, 8, 13, 30, 50))
@@ -47,7 +47,7 @@ class TestModels:
             "field_14_0": "Banco Intermedium",
         }
 
-        with pytest.raises(pydantic.ValidationError):
+        with pytest.raises(ValidationError):
             CNABHeader(header_data, line_number=1)
 
     def test_header_error_on_field_12_0_with_size_bigger_than_expected(self):
@@ -65,7 +65,7 @@ class TestModels:
             "field_14_0": "Banco Intermedium",
         }
 
-        with pytest.raises(pydantic.ValidationError):
+        with pytest.raises(ValidationError):
             CNABHeader(header_data, line_number=1)
 
     def test_header_error_on_field_10_0_with_size_bigger_than_expected(self):
@@ -83,5 +83,31 @@ class TestModels:
             "field_14_0": "Banco Intermedium",
         }
 
-        with pytest.raises(pydantic.ValidationError):
+        with pytest.raises(ValidationError):
             CNABHeader(header_data, line_number=1)
+
+    def test_trailer_fixed_width(self):
+        trailer_data = {"field_01_9": "77"}
+        trailer = CNABTrailer(trailer_data, line_number=6)
+
+        expected_trailer = expected_trailer = (
+            "07799999         000001000006000000                                             "
+            "                                                                                "
+            "                                                                                "
+        )
+        assert trailer.as_fixed_width() == expected_trailer
+
+    def test_trailer_error_on_field_01_9_with_size_bigger_than_expected(self):
+        trailer_data = {"field_01_9": "9999"}
+        with pytest.raises(
+            ValidationError,
+            match=r"(?s).*field_01_9.*ensure this value is less than or equal to 999.*",
+        ):
+            CNABTrailer(trailer_data, line_number=6)
+
+    def test_trailer_error_on_field_01_9_with_invalid_number(self):
+        trailer_data = {"field_01_9": "invalid_bank_code"}
+        with pytest.raises(
+            ValidationError, match=r"(?s).*field_01_9.*value is not a valid integer.*"
+        ):
+            CNABTrailer(trailer_data, line_number=6)

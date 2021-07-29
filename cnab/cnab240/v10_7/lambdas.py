@@ -14,6 +14,16 @@ def get_field_P001():
     return "018"
 
 
+def get_field_G016():
+    """File creation date"""
+    return datetime.datetime.now().strftime("%d%m%Y")
+
+
+def get_field_G017():
+    """File creation time"""
+    return datetime.datetime.now().strftime("%H%M%S")
+
+
 def get_field_G018():
     """File sequential number"""
     return "1"
@@ -34,14 +44,6 @@ def get_field_G015():
 
 def get_field_G020():
     return "01600"
-
-
-def get_field_G016():
-    return datetime.datetime.now().strftime("%d%m%Y")
-
-
-def get_field_G017():
-    return datetime.datetime.now().strftime("%H%M%S")
 
 
 def get_field_G025():

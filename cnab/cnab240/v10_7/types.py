@@ -233,3 +233,13 @@ class FEBRABAN10(CNABString):
 class FEBRABAN29(CNABString):
     _max_str_length: ClassVar[int] = 29
     __root__: constr(max_length=_max_str_length)
+
+
+class FEBRABAN205(CNABString):
+    _max_str_length = 205
+    __root__: constr(max_length=_max_str_length)
+
+
+class RecordsNumber(CNABPositiveInt):
+    _max_str_length = 6
+    __root__: constr(max_length=_max_str_length)
