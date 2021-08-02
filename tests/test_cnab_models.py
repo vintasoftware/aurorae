@@ -4,11 +4,15 @@ import pytest
 from freezegun.api import freeze_time
 from pydantic import ValidationError
 
-from cnab.cnab240.v10_7.models import CNABHeader, CNABTrailer
+from cnab.cnab240.v10_7 import lambdas
+from cnab.cnab240.v10_7.models import CNABBatchSegmentA, CNABHeader, CNABTrailer
 
 
 @freeze_time(datetime(2021, 7, 8, 13, 30, 50))
 class TestModels:
+    def setup_method(self, __):
+        lambdas.COUNT = 0
+
     def test_header_fixed_width(self):
         header_data = {
             "field_01_0": "77",
@@ -85,6 +89,30 @@ class TestModels:
 
         with pytest.raises(ValidationError):
             CNABHeader(header_data, line_number=1)
+
+    def test_segment_a_fixed_width(self):
+        batch_segment_a_data = {
+            "field_01_3A": "77",
+            "field_09_3A": "77",
+            "field_10_3A": "0001",
+            "field_11_3A": "9",
+            "field_12_3A": "9999999",
+            "field_13_3A": "0",
+            "field_14_3A": "0",
+            "field_15_3A": "Maria Fulana da Silva",
+            "field_17_3A": "11062021",
+            "field_20_3A": "1000",
+            "field_22_3A": "11062021",
+        }
+
+        segment_a = CNABBatchSegmentA(batch_segment_a_data, line_number=1)
+
+        expected_segment_a = (
+            "0770001300001A00001807700001900000999999900MARIA FULANA DA SILVA                "
+            "             11062021BRL000000000000000000000000001000                    110620"
+            "21000000000000000                                        01          0          "
+        )
+        assert segment_a.as_fixed_width() == expected_segment_a
 
     def test_trailer_fixed_width(self):
         trailer_data = {"field_01_9": "77"}
