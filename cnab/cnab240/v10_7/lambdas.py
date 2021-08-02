@@ -131,6 +131,10 @@ def get_field_G002():
     return "0001"
 
 
+def get_field_G002_v2():
+    return 1
+
+
 COUNT = 0
 
 

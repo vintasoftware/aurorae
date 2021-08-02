@@ -294,3 +294,5 @@ generated_files/*
 
 # Local open files
 sample/.~lock*
+
+*.tmp

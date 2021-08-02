@@ -5,7 +5,12 @@ from freezegun.api import freeze_time
 from pydantic import ValidationError
 
 from cnab.cnab240.v10_7 import lambdas
-from cnab.cnab240.v10_7.models import CNABBatchSegmentA, CNABHeader, CNABTrailer
+from cnab.cnab240.v10_7.models import (
+    CNABBatchHeader,
+    CNABBatchSegmentA,
+    CNABHeader,
+    CNABTrailer,
+)
 
 
 @freeze_time(datetime(2021, 7, 8, 13, 30, 50))
@@ -89,6 +94,113 @@ class TestModels:
 
         with pytest.raises(ValidationError):
             CNABHeader(header_data, line_number=1)
+
+    def test_batch_header_fixed_width(self):
+        batch_header_data = {
+            "field_01_1": "77",
+            "field_09_1": "1",
+            "field_10_1": "99999999000999",
+            "field_11_1": "77",
+            "field_12_1": "1",
+            "field_13_1": "1",
+            "field_14_1": "999999",
+            "field_15_1": "1",
+            "field_16_1": "1",
+            "field_17_1": "Vinta Servicos e Solucoes Tec",
+            "field_19_1": "Rua Test Rua",
+            "field_20_1": "123",
+            "field_21_1": "Casa",
+            "field_22_1": "Recife",
+            "field_23_1": 55999,
+            "field_24_1": 000,
+            "field_25_1": "PE",
+        }
+
+        batch_header = CNABBatchHeader(batch_header_data, line_number=1)
+        expected_header = (
+            "07700011C3001046 19999999900099977                  00001100000099999911VINTA "
+            "SERVICOS E SOLUCOES TEC                                         RUA TEST RUA"
+            "                  00123CASA           RECIFE              55999000PE01                "
+        )
+        assert batch_header.as_fixed_width() == expected_header
+
+    def test_batch_header_fixed_width_with_custom_field_01_1(self):
+        batch_header_data = {
+            "field_01_1": "1",
+            "field_09_1": "1",
+            "field_10_1": "99999999000999",
+            "field_11_1": "77",
+            "field_12_1": "1",
+            "field_13_1": "1",
+            "field_14_1": "999999",
+            "field_15_1": "1",
+            "field_16_1": "1",
+            "field_17_1": "Vinta Servicos e Solucoes Tec",
+            "field_19_1": "Rua Test Rua",
+            "field_20_1": "123",
+            "field_21_1": "Casa",
+            "field_22_1": "Recife",
+            "field_23_1": 55999,
+            "field_24_1": 000,
+            "field_25_1": "PE",
+        }
+
+        batch_header = CNABBatchHeader(batch_header_data, line_number=1)
+        expected_header = (
+            "00100011C3001046 19999999900099977                  00001100000099999911VINTA "
+            "SERVICOS E SOLUCOES TEC                                         RUA TEST RUA"
+            "                  00123CASA           RECIFE              55999000PE01                "
+        )
+        assert batch_header.as_fixed_width() == expected_header
+
+    def test_batch_header_with_wrong_field_01_1(self):
+        batch_header_data = {
+            "field_01_1": "1111",
+            "field_09_1": "1",
+            "field_10_1": "99999999000999",
+            "field_11_1": "77",
+            "field_12_1": "1",
+            "field_13_1": "1",
+            "field_14_1": "999999",
+            "field_15_1": "1",
+            "field_16_1": "1",
+            "field_17_1": "Vinta Servicos e Solucoes Tec",
+            "field_19_1": "Rua Test Rua",
+            "field_20_1": "123",
+            "field_21_1": "Casa",
+            "field_22_1": "Recife",
+            "field_23_1": 55999,
+            "field_24_1": 000,
+            "field_25_1": "PE",
+        }
+
+        with pytest.raises(ValidationError):
+            CNABBatchHeader(batch_header_data, line_number=1)
+
+    def test_batch_header_with_wrong_field_05_1_enum_value(self):
+        batch_header_data = {
+            "field_01_1": "1111",
+            "field_05_1": "91",
+            "field_09_1": "1",
+            "field_10_1": "99999999000999",
+            "field_11_1": "77",
+            "field_12_1": "1",
+            "field_13_1": "1",
+            "field_14_1": "999999",
+            "field_15_1": "1",
+            "field_16_1": "1",
+            "field_17_1": "Vinta Servicos e Solucoes Tec",
+            "field_19_1": "Rua Test Rua",
+            "field_20_1": "123",
+            "field_21_1": "Casa",
+            "field_22_1": "Recife",
+            "field_23_1": 55999,
+            "field_24_1": 000,
+            "field_25_1": "PE",
+        }
+
+        with pytest.raises(ValidationError):
+            CNABBatchHeader(batch_header_data, line_number=1)
 
     def test_segment_a_fixed_width(self):
         batch_segment_a_data = {

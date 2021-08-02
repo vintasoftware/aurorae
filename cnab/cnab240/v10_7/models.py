@@ -102,7 +102,134 @@ class CNABHeader(Line):
 
 
 class CNABBatchHeader(Line):
-    pass
+    field_01_1: types.BankCode = FieldSchema(
+        description="Código do Banco na Compensação",
+        code="G001",
+    )
+    field_02_1: types.SequentialServiceBatch = FieldSchema(
+        default_factory=lambdas.get_field_G002_v2,
+        description="Lote de Serviço",
+        code="G002",
+    )
+    field_03_1: types.EntryType = FieldSchema(
+        default=types.EntryTypeEnum.batch_header,
+        description="Tipo de Registro",
+        code="G003",
+    )
+    field_04_1: types.OperationType = FieldSchema(
+        default=types.OperationTypeEnum.credit_entry,
+        description="Tipo da Operação",
+        code="G028",
+    )
+    field_05_1: types.ServiceType = FieldSchema(
+        default_factory=lambdas.get_field_G025,
+        description="Tipo do Serviço",
+        code="G025",
+    )
+    field_06_1: types.ReleaseMethod = FieldSchema(
+        default_factory=lambdas.get_field_G029,
+        description="Forma de Lançamento",
+        code="G029",
+    )
+    field_07_1: types.BatchLayoutVersionNumber = FieldSchema(
+        default=types.BatchLayoutVersionNumberEnum.v0_46,
+        description="Nº da Versão do Layout do Lote",
+        code="G030",
+    )
+    field_08_1: types.FEBRABAN1 = FieldSchema(
+        default="",
+        description="Uso Exclusivo da FEBRABAN/CNAB",
+        code="G004",
+    )
+    field_09_1: types.CompanyRegistrationType = FieldSchema(
+        description="Tipo de Inscrição da Empresa",
+        code="G005",
+    )
+    field_10_1: types.CompanyRegistrationNumber = FieldSchema(
+        description="Número de Inscrição da Empresa",
+        code="G006",
+    )
+    field_11_1: types.BankConventionCode = FieldSchema(
+        description="Código do Convênio no Banco",
+        code="G007",
+    )
+    field_12_1: types.BankAgencyNumber = FieldSchema(
+        description="Agência Mantenedora da Conta",
+        code="G008",
+    )
+    field_13_1: types.BankAgencyDigitCheck = FieldSchema(
+        description="Dígito Verificador da Agência",
+        code="G009",
+    )
+    field_14_1: types.BankAccountNumber = FieldSchema(
+        description="Número da Conta Corrente",
+        code="G010",
+    )
+    field_15_1: types.BankAccountDigitCheck = FieldSchema(
+        description="Dígito Verificador da Conta",
+        code="G011",
+    )
+    field_16_1: types.BankAgencyAccountDigitCheck = FieldSchema(
+        description="Dígito Verificador da Ag/Conta",
+        code="G012",
+    )
+    field_17_1: types.CompanyName = FieldSchema(
+        description="Nome da Empresa",
+        code="G013",
+    )
+    field_18_1: types.CNABMessage = FieldSchema(
+        description="Mensagem",
+        default="",
+        code="G031",
+    )
+    field_19_1: types.CNABNameAddress = FieldSchema(
+        description="Nome da Rua, Av, Pça, Etc",
+        default="",
+        code="G032",
+    )
+    field_20_1: types.CNABAddressNumber = FieldSchema(
+        description="Número do Local",
+        code="G032",
+    )
+    field_21_1: types.CNABAddressDetails = FieldSchema(
+        description="Casa, Apto, Sala, Etc",
+        code="G032",
+    )
+    field_22_1: types.CNABAddressCityName = FieldSchema(
+        description="Nome da Cidade",
+        code="G033",
+    )
+    field_23_1: types.CNABAddressCEP = FieldSchema(
+        description="CEP",
+        code="G034",
+    )
+    field_24_1: types.CNABAddressCEPComplement = FieldSchema(
+        description="Complemento do CEP",
+        code="G035",
+    )
+    field_25_1: types.CNABAddressState = FieldSchema(
+        description="Sigla do Estado",
+        code="G036",
+    )
+    field_26_1: types.PaymentMethod = FieldSchema(
+        default_factory=lambdas.get_field_P014,
+        description="Indicativo da Forma de Pagamento do Serviço",
+        code="P014",
+    )
+    field_27_1: types.FEBRABAN6 = FieldSchema(
+        default="",
+        description="Uso Exclusivo FEBRABAN/CNAB",
+        code="G004",
+    )
+    field_28_1: types.ReturnOccurrenceCodes = FieldSchema(
+        default="",
+        description="Códigos das Ocorrências p/ Retorno",
+        code="G059",
+    )
+
+    class Config:
+        use_enum_values = True
+        validate_all = True
 
 
 class CNABBatchSegmentA(Line):

@@ -208,14 +208,6 @@ class FileSequentialNumber(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class FileLayoutVersionNumber(CNABPositiveInt):
-    _max_str_length: ClassVar[int] = 3
-    _min_int: ClassVar[int] = 1
-    _max_int: ClassVar[int] = 999
-
-    __root__: conint(ge=_min_int, le=_max_int)
-
-
 class FileRecordDensity(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 5
     _min_int: ClassVar[int] = 1
@@ -231,6 +223,16 @@ class BankReservedField(CNABString):
 
 class CompanyReservedField(CNABString):
     _max_str_length: ClassVar[int] = 20
+    __root__: constr(max_length=_max_str_length)
+
+
+class FEBRABAN1(CNABString):
+    _max_str_length = 1
+    __root__: constr(max_length=_max_str_length)
+
+
+class FEBRABAN6(CNABString):
+    _max_str_length = 6
     __root__: constr(max_length=_max_str_length)
 
 
@@ -254,6 +256,135 @@ class FEBRABAN29(CNABString):
     __root__: constr(max_length=_max_str_length)
 
 
+class OperationTypeEnum(str, Enum):
+    credit_entry = "C"
+    debit_entry = "D"
+    conciliation_statement = "E"
+    cash_management_statement = "G"
+    information_securities_secured_from_bank = "I"
+    shipping_file = "R"
+    return_file = "T"
+
+
+class OperationType(CNABEnum):
+    __root__: OperationTypeEnum
+
+
+class ServiceTypeEnum(str, Enum):
+    charge = "01"
+    electronic_payment_slip = "03"
+    bank_reconciliation = "04"
+    debts = "05"
+    check_custody = "06"
+    cash_management = "07"
+    query_margin_nformation = "08"
+    registration_of_consignment_rRetention = "09"
+    dividend_payment = "10"
+    consignment_maintenance = "11"
+    consignment_of_installments = "12"
+    consignment_disallowance_inss = "13"
+    inquiry_taxes_payable = "14"
+    supplier_payment = "20"
+    payment_of_bills_taxes = "22"
+    interoperability_payment_institution_accounts = "23"
+    buy = "25"
+    buy_rotary = "26"
+    payer_claim = "29"
+    salary_payment = "30"
+    payment_fees = "32"
+    payment_stipend = "33"
+    payment_prebends = "34"
+    vendor = "40"
+    forward_seller = "41"
+    payment_of_insured = "50"
+    payment_of_transit_traveler_expenses = "60"
+    authorized_payment = "70"
+    accredited_payment = "75"
+    remuneration_payment = "77"
+    payment_of_authorized_representatives = "80"
+    payment_benefits = "90"
+    miscellaneous_payments = "98"
+
+
+class ServiceType(CNABEnum):
+    __root__: ServiceTypeEnum
+
+
+class ReleaseMethodEnum(str, Enum):
+    credit_in_checking_account = "01"
+    administrative_payment_check = "02"
+    doc_ted = "03"
+    card_salary = "04"
+    credit_in_account_savings = "05"
+    op_disposition = "10"
+    payment_of_accounts_and_tributos_with_bar_code = "11"
+    tax_DARF_normal = "16"
+    tax_GPS = "17"
+    tax_DARF_simple = "18"
+    tax_IPTU_city = "19"
+    payment_with_authentication = "20"
+    tax_DARJ = "21"
+    tax_GARE_SP_ICMS = "22"
+    tax_GARE_SP_DR = "23"
+    tax_GARE_SP_ITCMD = "24"
+    tax_IPVA = "25"
+    tax_licenciamento = "26"
+    tax_DPVAT = "27"
+    settlement_of_securities_of_the_bank = "30"
+    payment_of_securities_from_other_banks = "31"
+    current_account_statement = "40"
+    TED_other_entitlement = "41"
+    TED_same_ownership = "43"
+    TED_transfer_from_investment_account = "44"
+    PIX = "45"
+    PIX_qr_code = "47"
+    debit_checking_account = "50"
+    statement_for_cash_management = "70"
+    deposit_judicial_in_account_current = "71"
+    deposit_judicial_in_savings = "72"
+    statement_of_investment_account = "73"
+    payment_of_municipal_taxes_ISS_own_bank = "80"
+    payment_of_municipal_taxes_ISS_other_bank = "81"
+
+
+class ReleaseMethod(CNABEnum):
+    __root__: ReleaseMethodEnum
+
+
+class BatchLayoutVersionNumberEnum(str, Enum):
+    v0_46 = "046"
+
+
+class BatchLayoutVersionNumber(CNABEnum):
+    __root__: BatchLayoutVersionNumberEnum
+
+
+class FileLayoutVersionNumberEnum(str, Enum):
+    v10_3 = "103"
+
+
+class FileLayoutVersionNumber(CNABEnum):
+    __root__: FileLayoutVersionNumberEnum
+
+
+class CNABMessage(CNABString):
+    _max_str_length = 40
+    __root__: constr(max_length=_max_str_length)
+
+
+class CNABNameAddress(CNABString):
+    _max_str_length = 30
+    __root__: constr(max_length=_max_str_length)
+
+
+class CNABAddressNumber(CNABPositiveInt):
+    _max_str_length = 5
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 99999
+
+    __root__: conint(ge=_min_int, le=_max_int)
+
+
 class DetailRecordSegmentTypeEnum(str, Enum):
     segment_a = "A"
     segment_b = "B"
@@ -275,6 +406,47 @@ class RecordSequentialNumber(CNABPositiveInt):
     _max_int: ClassVar[int] = 99999
 
     __root__: conint(ge=_min_int, le=_max_int)
+
+
+class CNABAddressDetails(CNABString):
+    _max_str_length = 15
+    __root__: constr(max_length=_max_str_length)
+
+
+class CNABAddressCityName(CNABString):
+    _max_str_length = 20
+    __root__: constr(max_length=_max_str_length)
+
+
+class CNABAddressCEP(CNABPositiveInt):
+    _max_str_length = 5
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 99999
+
+    __root__: conint(ge=_min_int, le=_max_int)
+
+
+class CNABAddressCEPComplement(CNABPositiveInt):
+    _max_str_length = 3
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999
+
+    __root__: conint(ge=_min_int, le=_max_int)
+
+
+class CNABAddressState(CNABString):
+    _max_str_length = 2
+    __root__: constr(max_length=_max_str_length)
+
+
+class PaymentMethodEnum(str, Enum):
+    direct_debit = "01"
+    loan_financing_debit = "02"
+    credit_card_debit = "03"
+
+
+class PaymentMethod(CNABEnum):
+    __root__: PaymentMethodEnum
 
 
 class MovimentationTypeEnum(IntEnum):
