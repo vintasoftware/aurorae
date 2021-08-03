@@ -4,10 +4,11 @@ import pytest
 from freezegun.api import freeze_time
 from pydantic import ValidationError
 
-from cnab.cnab240.v10_7 import lambdas
+from cnab.cnab240.v10_7 import lambdas, types
 from cnab.cnab240.v10_7.models import (
     CNABBatchHeader,
     CNABBatchSegmentA,
+    CNABBatchSegmentB,
     CNABHeader,
     CNABTrailer,
 )
@@ -251,3 +252,50 @@ class TestModels:
             ValidationError, match=r"(?s).*field_01_9.*value is not a valid integer.*"
         ):
             CNABTrailer(trailer_data, line_number=6)
+
+    def test_batch_detail_segment_b_as_fixed_width(self):
+        batch_detail_segment_b = {
+            "field_01_3B": "77",
+            "field_08_3B": "99966699900",
+        }
+        batch_detail_segment_b_model = CNABBatchSegmentB(
+            batch_detail_segment_b, line_number=4
+        )
+        expected_line = (
+            "0770001300001B005100099966699900                                 "
+            "                                                                  "
+            "                                                                    "
+            "                           00000000000000"
+        )
+
+        assert batch_detail_segment_b_model.as_fixed_width() == expected_line
+        assert batch_detail_segment_b_model.field_02_3B == types.SequentialServiceBatch(
+            __root__=1
+        )  # noqa
+        assert batch_detail_segment_b_model.field_03_3B == types.EntryType(
+            __root__=3
+        )  # noqa
+        assert (
+            batch_detail_segment_b_model.field_05_3B
+            == types.DetailRecordSegmentType(__root__="B")
+        )  # noqa
+
+    def test_batch_detail_segment_b_as_fixed_width_with_custom_field_01_3B(self):
+        batch_detail_segment_b = {
+            "field_01_3B": "1",
+            "field_08_3B": "99966699900",
+        }
+        batch_detail_segment_b_model = CNABBatchSegmentB(
+            batch_detail_segment_b, line_number=4
+        )
+
+        assert batch_detail_segment_b_model.field_01_3B.as_fixed_width() == "001"
+
+    def test_batch_detail_segment_b_with_wrong_field_01_3B(self):
+        batch_detail_segment_b = {
+            "field_01_3B": "11111111",
+            "field_08_3B": "99966699900",
+        }
+
+        with pytest.raises(ValidationError):
+            CNABBatchSegmentB(batch_detail_segment_b, line_number=4)

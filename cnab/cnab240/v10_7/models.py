@@ -25,10 +25,10 @@ class CNABHeader(Line):
     field_04_0: types.FEBRABAN9 = FieldSchema(
         default="", description="Uso Exclusivo FEBRABAN / CNAB", code="G004"
     )
-    field_05_0: types.CompanyRegistrationType = FieldSchema(
+    field_05_0: types.RegistrationType = FieldSchema(
         description="Tipo de Inscrição da Empresa", code="G005"
     )
-    field_06_0: types.CompanyRegistrationNumber = FieldSchema(
+    field_06_0: types.RegistrationNumber = FieldSchema(
         description="Número de Inscrição da Empresa", code="G006"
     )
     field_07_0: types.BankConventionCode = FieldSchema(
@@ -101,13 +101,83 @@ class CNABHeader(Line):
         validate_all = True
 
 
+class CNABBatchSegmentB(Line):
+    field_01_3B: types.BankCode = FieldSchema(
+        name="Código do Banco na Compensação",
+        code="G001",
+    )
+    field_02_3B: types.SequentialServiceBatch = FieldSchema(
+        default_factory=lambdas.get_field_G002_sequential,
+        name="Lote de Serviço",
+        code="G002",
+    )
+    field_03_3B: types.EntryType = FieldSchema(
+        default=types.EntryTypeEnum.details,
+        name="Tipo de Registro",
+        code="G003",
+    )
+    field_04_3B: types.RecordSequentialNumber = FieldSchema(
+        default_factory=lambdas.get_field_G038,
+        name="Nº Seqüencial do Registro no Lote",
+        code="G038",
+    )
+    field_05_3B: types.DetailRecordSegmentType = FieldSchema(
+        default=types.DetailRecordSegmentTypeEnum.segment_b,
+        name="Código de Segmento do Reg. Detalhe",
+        code="G039",
+    )
+    field_06_3B: types.InitiationForm = FieldSchema(
+        default_factory=lambdas.get_field_G100,
+        name="* Forma de Iniciação",
+        code="G100",
+    )
+    field_07_3B: types.RegistrationType = FieldSchema(
+        default_factory=lambdas.get_field_G005,
+        name="Tipo de Inscrição do Favorecido",
+        code="G005",
+    )
+    field_08_3B: types.RegistrationNumber = FieldSchema(
+        name="Nº de Inscrição do Favorecido",
+        code="G006",
+    )
+    field_09_3B: types.Information35 = FieldSchema(
+        default="",
+        name="Informação 10",
+        code="G101",
+    )
+    field_10_3B: types.Information60 = FieldSchema(
+        default="",
+        name="Informação 11",
+        code="G101",
+    )
+    field_11_3B: types.Information99 = FieldSchema(
+        default="",
+        name="Informação 12",
+        code="G101",
+    )
+    field_12_3B: types.SIAPE6 = FieldSchema(
+        default="",
+        name="Uso Exclusivo para o SIAPE",
+        code="P012",
+    )
+    field_13_3B: types.ISPBCode = FieldSchema(
+        default="",
+        name="Código ISPB",
+        code="P015",
+    )
+
+    class Config:
+        validate_all = True
+        use_enum_values = True
+
+
 class CNABBatchHeader(Line):
     field_01_1: types.BankCode = FieldSchema(
         description="Código do Banco na Compensação",
         code="G001",
     )
     field_02_1: types.SequentialServiceBatch = FieldSchema(
-        default_factory=lambdas.get_field_G002_v2,
+        default_factory=lambdas.get_field_G002_sequential,
         description="Lote de Serviço",
         code="G002",
     )
@@ -141,11 +211,11 @@ class CNABBatchHeader(Line):
         description="Uso Exclusivo da FEBRABAN/CNAB",
         code="G004",
     )
-    field_09_1: types.CompanyRegistrationType = FieldSchema(
+    field_09_1: types.RegistrationType = FieldSchema(
         description="Tipo de Inscrição da Empresa",
         code="G005",
     )
-    field_10_1: types.CompanyRegistrationNumber = FieldSchema(
+    field_10_1: types.RegistrationNumber = FieldSchema(
         description="Número de Inscrição da Empresa",
         code="G006",
     )
@@ -342,10 +412,6 @@ class CNABBatchSegmentA(Line):
 
     class Config:
         validate_all = True
-
-
-class CNABBatchSegmentB(Line):
-    pass
 
 
 class CNABBatchSegmentC(Line):

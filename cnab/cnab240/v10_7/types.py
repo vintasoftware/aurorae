@@ -22,6 +22,11 @@ class CNABEnum(BaseModel):
         return str(self.__root__.value)
 
 
+class CNABEnumFillInt(BaseModel):
+    def as_fixed_width(self):
+        return str(self.__root__.value).rjust(self._max_str_length, INT_FILL_VALUE)
+
+
 class CNABPositiveInt(BaseModel):
     def as_fixed_width(self):
         return str(self.__root__).rjust(self._max_str_length, INT_FILL_VALUE)
@@ -114,7 +119,7 @@ class EntryType(CNABEnum):
     __root__: EntryTypeEnum
 
 
-class CompanyRegistrationTypeEnum(IntEnum):
+class RegistrationTypeEnum(IntEnum):
     exempt = 0
     cpf = 1
     cnpj = 2
@@ -122,11 +127,11 @@ class CompanyRegistrationTypeEnum(IntEnum):
     others = 9
 
 
-class CompanyRegistrationType(CNABEnum):
-    __root__: CompanyRegistrationTypeEnum
+class RegistrationType(CNABEnum):
+    __root__: RegistrationTypeEnum
 
 
-class CompanyRegistrationNumber(CNABPositiveInt):
+class RegistrationNumber(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 14
     _min_int: ClassVar[int] = 1
     _max_int: ClassVar[int] = 99999999999999
@@ -404,8 +409,45 @@ class RecordSequentialNumber(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 5
     _min_int: ClassVar[int] = 1
     _max_int: ClassVar[int] = 99999
-
     __root__: conint(ge=_min_int, le=_max_int)
+
+
+class InitiationFormEnum(str, Enum):
+    pix_phone = "01"
+    pix_email = "02"
+    pix_cpf_cnpj = "03"
+    random_key = "04"
+    bank_info = "05"
+
+
+class InitiationForm(CNABEnumFillInt):
+    _max_str_length: ClassVar[int] = 3
+    __root__: InitiationFormEnum
+
+
+class Information35(CNABString):
+    _max_str_length: ClassVar[int] = 35
+    __root__: constr(max_length=_max_str_length)
+
+
+class Information60(CNABString):
+    _max_str_length: ClassVar[int] = 60
+    __root__: constr(max_length=_max_str_length)
+
+
+class Information99(CNABString):
+    _max_str_length: ClassVar[int] = 99
+    __root__: constr(max_length=_max_str_length)
+
+
+class SIAPE6(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 6
+    __root__: constr(max_length=_max_str_length)
+
+
+class ISPBCode(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 8
+    __root__: constr(max_length=_max_str_length)
 
 
 class CNABAddressDetails(CNABString):

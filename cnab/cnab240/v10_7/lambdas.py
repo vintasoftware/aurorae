@@ -131,7 +131,7 @@ def get_field_G002():
     return "0001"
 
 
-def get_field_G002_v2():
+def get_field_G002_sequential():
     return 1
 
 
