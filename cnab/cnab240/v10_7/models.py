@@ -247,37 +247,37 @@ class CNABBatchHeader(Line):
         description="Nome da Empresa",
         code="G013",
     )
-    field_18_1: types.CNABMessage = FieldSchema(
+    field_18_1: types.Message = FieldSchema(
         description="Mensagem",
         default="",
         code="G031",
     )
-    field_19_1: types.CNABNameAddress = FieldSchema(
+    field_19_1: types.NameAddress = FieldSchema(
         description="Nome da Rua, Av, Pça, Etc",
         default="",
         code="G032",
     )
-    field_20_1: types.CNABAddressNumber = FieldSchema(
+    field_20_1: types.AddressNumber = FieldSchema(
         description="Número do Local",
         code="G032",
     )
-    field_21_1: types.CNABAddressDetails = FieldSchema(
+    field_21_1: types.AddressDetails = FieldSchema(
         description="Casa, Apto, Sala, Etc",
         code="G032",
     )
-    field_22_1: types.CNABAddressCityName = FieldSchema(
+    field_22_1: types.AddressCityName = FieldSchema(
         description="Nome da Cidade",
         code="G033",
     )
-    field_23_1: types.CNABAddressCEP = FieldSchema(
+    field_23_1: types.AddressCEP = FieldSchema(
         description="CEP",
         code="G034",
     )
-    field_24_1: types.CNABAddressCEPComplement = FieldSchema(
+    field_24_1: types.AddressCEPComplement = FieldSchema(
         description="Complemento do CEP",
         code="G035",
     )
-    field_25_1: types.CNABAddressState = FieldSchema(
+    field_25_1: types.AddressState = FieldSchema(
         description="Sigla do Estado",
         code="G036",
     )

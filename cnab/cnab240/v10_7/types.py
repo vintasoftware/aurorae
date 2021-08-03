@@ -197,6 +197,11 @@ class BankName(CNABString):
     __root__: constr(max_length=_max_str_length)
 
 
+class RecipientName(CNABString):
+    _max_str_length: ClassVar[int] = 30
+    __root__: constr(max_length=_max_str_length)
+
+
 class RemmitanceReturnCode(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 1
     _min_int: ClassVar[int] = 1
@@ -256,9 +261,51 @@ class FEBRABAN10(CNABString):
     __root__: constr(max_length=_max_str_length)
 
 
+class FEBRABAN205(CNABString):
+    _max_str_length = 205
+    __root__: constr(max_length=_max_str_length)
+
+
 class FEBRABAN29(CNABString):
     _max_str_length: ClassVar[int] = 29
     __root__: constr(max_length=_max_str_length)
+
+
+class SmallAddressCityName(CNABString):
+    _max_str_length = 15
+    __root__: constr(max_length=_max_str_length)
+
+
+class AddressDistrict(CNABString):
+    _max_str_length = 15
+    __root__: constr(max_length=_max_str_length)
+
+
+class RebateAmount(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 15
+    __root__: constr(max_length=_max_str_length)
+
+
+class DiscountAmount(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 15
+    __root__: constr(max_length=_max_str_length)
+
+
+class ArrearsAmount(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 15
+    __root__: constr(max_length=_max_str_length)
+
+
+class FineAmount(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 15
+    __root__: constr(max_length=_max_str_length)
+
+
+class RecipientRegistrationNumberInformation12(CNABString):
+    _max_str_length: ClassVar[int] = 15
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999999999999999
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class OperationTypeEnum(str, Enum):
@@ -372,17 +419,17 @@ class FileLayoutVersionNumber(CNABEnum):
     __root__: FileLayoutVersionNumberEnum
 
 
-class CNABMessage(CNABString):
+class Message(CNABString):
     _max_str_length = 40
     __root__: constr(max_length=_max_str_length)
 
 
-class CNABNameAddress(CNABString):
+class NameAddress(CNABString):
     _max_str_length = 30
     __root__: constr(max_length=_max_str_length)
 
 
-class CNABAddressNumber(CNABPositiveInt):
+class AddressNumber(CNABPositiveInt):
     _max_str_length = 5
     _min_int: ClassVar[int] = 1
     _max_int: ClassVar[int] = 99999
@@ -450,17 +497,17 @@ class ISPBCode(CNABPositiveInt):
     __root__: constr(max_length=_max_str_length)
 
 
-class CNABAddressDetails(CNABString):
+class AddressDetails(CNABString):
     _max_str_length = 15
     __root__: constr(max_length=_max_str_length)
 
 
-class CNABAddressCityName(CNABString):
+class AddressCityName(CNABString):
     _max_str_length = 20
     __root__: constr(max_length=_max_str_length)
 
 
-class CNABAddressCEP(CNABPositiveInt):
+class AddressCEP(CNABPositiveInt):
     _max_str_length = 5
     _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 99999
@@ -468,7 +515,7 @@ class CNABAddressCEP(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class CNABAddressCEPComplement(CNABPositiveInt):
+class AddressCEPComplement(CNABPositiveInt):
     _max_str_length = 3
     _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 999
@@ -476,7 +523,7 @@ class CNABAddressCEPComplement(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class CNABAddressState(CNABString):
+class AddressState(CNABString):
     _max_str_length = 2
     __root__: constr(max_length=_max_str_length)
 
@@ -643,11 +690,6 @@ class NotifyRecipient(CNABEnum):
 
 class ReturnOccurrenceCodes(CNABString):
     _max_str_length = 10
-    __root__: constr(max_length=_max_str_length)
-
-
-class FEBRABAN205(CNABString):
-    _max_str_length = 205
     __root__: constr(max_length=_max_str_length)
 
 
