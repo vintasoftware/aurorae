@@ -1,5 +1,5 @@
 import itertools
-from datetime import datetime
+import os
 
 
 class BaseLine:
@@ -1657,11 +1657,10 @@ class CNAB240File:
             == len(initial_data["lote_detalhe_segmento_a"])
         )
 
-    def generate_file(self):
-        created_at = datetime.now().isoformat()
-        file_path = f"{self.default_folder}/{self.default_name}-{created_at}.txt"
+    def generate_file(self, output_filename):
+        file_path = f"{output_filename}"
 
-        with open(file_path, "w") as f:
+        with open(os.path.expanduser(file_path), "w") as f:
             file_content = (
                 f"{self.header.formatted_data()}\n"
                 f"{self.lote.formatted_data()}"
@@ -1670,10 +1669,10 @@ class CNAB240File:
 
             f.write(file_content)
 
-    def generate_html_file(self):
-        created_at = datetime.now().isoformat()
-        file_path = f"{self.default_folder}/{self.default_name}-{created_at}.html"
-        with open(file_path, "w") as f:
+    def generate_html_file(self, output_filename=None):
+        file_path = f"{output_filename.with_suffix('.html')}"
+
+        with open(os.path.expanduser(file_path), "w") as f:
             f.write("<html><head>")
             f.write("<link href='../staticfiles/styles.css' rel='stylesheet'>")
             f.write("</head><body>")

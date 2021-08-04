@@ -1,14 +1,27 @@
 import argparse
 import os
+from datetime import datetime
 from pathlib import Path
 
 
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("filename", type=Path, help="entry filename")
-    args = parser.parse_args()
+def parse_args(arguments=None):
+    created_at = datetime.now().isoformat()
 
-    if not os.path.exists(args.filename):
-        parser.error("The provided file does not exist")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_filename", type=Path, help="input filename")
+    parser.add_argument(
+        "--output_filename",
+        dest="output_filename",
+        type=Path,
+        default=f"generated_files/cnab240-{created_at}.txt",
+        help="output filename",
+    )
+    args = parser.parse_args(arguments)
+
+    if not os.path.exists(args.input_filename):
+        parser.error("The provided entry file does not exist")
+
+    if Path(args.output_filename).suffix != ".txt":
+        parser.error("Please provide a txt file as the output")
 
     return args

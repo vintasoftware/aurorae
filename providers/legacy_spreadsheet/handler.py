@@ -20,9 +20,9 @@ INITIAL_DATA_DICT = {
 
 
 class LegacySpreadsheetHandler:
-    def __init__(self, filename):
-        validate_spreadsheet(filename)
-        self.initial_data = self.generate_initial_data_with_connectors(filename)
+    def __init__(self, input_filename):
+        validate_spreadsheet(input_filename)
+        self.initial_data = self.generate_initial_data_with_connectors(input_filename)
 
     def get_cnab_file(self):
         return CNAB240File(self.initial_data)

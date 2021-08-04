@@ -203,7 +203,7 @@ class TestLegacySpreadsheet:
             expected_cnab_file = f.read()
 
         with mock.patch("builtins.open", mock.mock_open()) as mock_file:
-            cnab.generate_file()
+            cnab.generate_file("generated_files/filetest.txt")
 
         handler = mock_file()
 
