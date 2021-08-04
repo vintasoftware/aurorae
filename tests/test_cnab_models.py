@@ -13,10 +13,11 @@ from cnab.cnab240.v10_7.models import (
     CNABHeader,
     CNABTrailer,
 )
+from cnab.payroll.models import Company
 
 
 @freeze_time(datetime(2021, 7, 8, 13, 30, 50))
-class TestModels:
+class TestCNABModels:
     def setup_method(self, __):
         lambdas.COUNT = 0
 
@@ -42,6 +43,38 @@ class TestModels:
             "0000110301600                                                                     "
         )
         assert header.as_fixed_width() == expected_header
+
+    def test_payroll_to_cnab_header(self):
+        company_data = {
+            "bank_code": "77",
+            "registration_type": "9",
+            "registration_number": "99999999000999",
+            "bank_agency": "1",
+            "bank_agency_digit": "9",
+            "bank_account_number": "999999",
+            "bank_account_digit": "9",
+            "bank_account_agency_digit": "9",
+            "company_name": " Vinta Servicos e Solucoes Tec",
+            "bank_name": "Banco Intermedium",
+            "address_location": "",
+            "address_number": 1,
+            "address_complement": "",
+            "address_city": "",
+            "address_cep": 1,
+            "address_cep_complement": 1,
+            "address_state": "",
+        }
+
+        company = Company.parse_obj(company_data)
+
+        expected_header = (
+            "07700000         99999999900099977                  00001900000099999999 VINTA "
+            "SERVICOS E SOLUCOES TECBANCO INTERMEDIUM                       1080720211330500"
+            "0000110301600                                                                     "
+        )
+
+        cnab_header = CNABHeader(company.dict(), line_number=1)
+        assert cnab_header.as_fixed_width() == expected_header
 
     def test_header_error_on_field_01_0_with_size_bigger_than_expected(self):
         header_data = {

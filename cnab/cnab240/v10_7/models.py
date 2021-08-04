@@ -8,6 +8,16 @@ from cnab.cnab240.base import Line
 from cnab.cnab240.v10_7 import lambdas, types
 
 
+class BaseConfig:
+    allow_population_by_field_name = True
+
+    @classmethod
+    def alias_generator(cls, field: str) -> str:
+        if field not in cls._mapping:
+            return field
+        return cls._mapping[field]
+
+
 class CNABHeader(Line):
     field_01_0: types.BankCode = FieldSchema(
         description="Código do Banco na Compensação", code="G001"
@@ -96,8 +106,21 @@ class CNABHeader(Line):
         default="", description="Uso Exclusivo FEBRABAN / CNAB", code="G004"
     )
 
-    class Config:
+    class Config(BaseConfig):
         validate_all = True
+        _mapping = {
+            "field_01_0": "bank_code",
+            "field_05_0": "registration_type",
+            "field_06_0": "registration_number",
+            "field_07_0": "bank_code",
+            "field_08_0": "bank_agency",
+            "field_09_0": "bank_agency_digit",
+            "field_10_0": "bank_account_number",
+            "field_11_0": "bank_account_digit",
+            "field_12_0": "bank_account_agency_digit",
+            "field_13_0": "company_name",
+            "field_14_0": "bank_name",
+        }
 
 
 class CNABBatchHeader(Line):

@@ -1,5 +1,6 @@
+from pydantic import BaseModel, ValidationError
+from pydantic.error_wrappers import ErrorWrapper
 from pydantic.fields import PrivateAttr
-from pydantic.main import BaseModel
 
 
 class Line(BaseModel):
@@ -9,7 +10,42 @@ class Line(BaseModel):
 
     def __init__(self, initial_data, line_number):  # noqa
         self._line_number = line_number
+        self.validate_mapping()
         super().__init__(**initial_data)
+
+    def validate_mapping(self):
+        mapping = self.get_field_mapping()
+        if not mapping:
+            return
+
+        mapping_set = set(mapping.keys())
+        fields_set = set(self.get_field_names())
+
+        diff = mapping_set.difference(fields_set)
+        if not diff:
+            return
+
+        raise (
+            ValidationError(
+                [
+                    ErrorWrapper(
+                        Exception(
+                            f"Config mapping keys: {diff} do not match valid fields"
+                        ),
+                        loc="config_mapping",
+                    )
+                ],
+                model=self.__class__,
+            )
+        )
+
+    def get_field_mapping(self):
+        config = getattr(self, "Config")
+
+        if not config:
+            return None
+
+        return getattr(config, "_mapping", None)
 
     def get_field_names(self):
         return self.__fields__.keys()
