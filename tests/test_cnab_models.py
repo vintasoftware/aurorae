@@ -9,6 +9,7 @@ from cnab.cnab240.v10_7.models import (
     CNABBatchHeader,
     CNABBatchSegmentA,
     CNABBatchSegmentB,
+    CNABBatchTrailer,
     CNABHeader,
     CNABTrailer,
 )
@@ -299,3 +300,18 @@ class TestModels:
 
         with pytest.raises(ValidationError):
             CNABBatchSegmentB(batch_detail_segment_b, line_number=4)
+
+    def test_batch_trailer_fixed_width(self):
+        batch_trailer_data = {
+            "field_01_5": "77",
+            "field_06_5": "1000",
+        }
+
+        batch_trailer = CNABBatchTrailer(batch_trailer_data, line_number=5)
+
+        expected_batch_trailer = (
+            "07700015         000004000000000000001000000000000000000000000000               "
+            "                                                                                "
+            "                                                                                "
+        )
+        assert batch_trailer.as_fixed_width() == expected_batch_trailer

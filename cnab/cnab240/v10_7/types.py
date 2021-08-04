@@ -32,6 +32,11 @@ class CNABPositiveInt(BaseModel):
         return str(self.__root__).rjust(self._max_str_length, INT_FILL_VALUE)
 
 
+class CNABDecimal(BaseModel):
+    def as_fixed_width(self):
+        return str(self.__root__).rjust(self._max_digits, INT_FILL_VALUE)
+
+
 class CNABAlphaPositiveInt(BaseModel):
     def as_fixed_width(self):
         return str(self.__root__).ljust(self._max_str_length, STR_FILL_VALUE)
@@ -54,11 +59,6 @@ class CNABDate(BaseModel):
 
     def as_fixed_width(self):
         return self.__root__
-
-
-class CNABDecimal(BaseModel):
-    def as_fixed_width(self):
-        return str(self.__root__).rjust(self._max_digits, INT_FILL_VALUE)
 
 
 class CNABTime(BaseModel):
@@ -258,6 +258,11 @@ class FEBRABAN9(CNABString):
 
 class FEBRABAN10(CNABString):
     _max_str_length: ClassVar[int] = 10
+    __root__: constr(max_length=_max_str_length)
+
+
+class FEBRABAN165(CNABString):
+    _max_str_length = 165
     __root__: constr(max_length=_max_str_length)
 
 
@@ -697,4 +702,26 @@ class RecordsNumber(CNABPositiveInt):
     _max_str_length = 6
     _min_int = 0
     _max_int = 999999
+    __root__: conint(ge=_min_int, le=_max_int)
+
+
+class ValuesSum(CNABDecimal):
+    _max_digits: ClassVar[int] = 18
+    _decimal_places: ClassVar[int] = 2
+
+    __root__: condecimal(max_digits=_max_digits, decimal_places=_decimal_places)
+
+
+class CurrencyAmountsSum(CNABDecimal):
+    _max_digits: ClassVar[int] = 18
+    _decimal_places: ClassVar[int] = 5
+
+    __root__: condecimal(max_digits=_max_digits, decimal_places=_decimal_places)
+
+
+class DebitNotificationNumber(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 6
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999
+
     __root__: conint(ge=_min_int, le=_max_int)

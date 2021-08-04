@@ -97,78 +97,7 @@ class CNABHeader(Line):
     )
 
     class Config:
-        use_enum_values = True
         validate_all = True
-
-
-class CNABBatchSegmentB(Line):
-    field_01_3B: types.BankCode = FieldSchema(
-        name="Código do Banco na Compensação",
-        code="G001",
-    )
-    field_02_3B: types.SequentialServiceBatch = FieldSchema(
-        default_factory=lambdas.get_field_G002_sequential,
-        name="Lote de Serviço",
-        code="G002",
-    )
-    field_03_3B: types.EntryType = FieldSchema(
-        default=types.EntryTypeEnum.details,
-        name="Tipo de Registro",
-        code="G003",
-    )
-    field_04_3B: types.RecordSequentialNumber = FieldSchema(
-        default_factory=lambdas.get_field_G038,
-        name="Nº Seqüencial do Registro no Lote",
-        code="G038",
-    )
-    field_05_3B: types.DetailRecordSegmentType = FieldSchema(
-        default=types.DetailRecordSegmentTypeEnum.segment_b,
-        name="Código de Segmento do Reg. Detalhe",
-        code="G039",
-    )
-    field_06_3B: types.InitiationForm = FieldSchema(
-        default_factory=lambdas.get_field_G100,
-        name="* Forma de Iniciação",
-        code="G100",
-    )
-    field_07_3B: types.RegistrationType = FieldSchema(
-        default_factory=lambdas.get_field_G005,
-        name="Tipo de Inscrição do Favorecido",
-        code="G005",
-    )
-    field_08_3B: types.RegistrationNumber = FieldSchema(
-        name="Nº de Inscrição do Favorecido",
-        code="G006",
-    )
-    field_09_3B: types.Information35 = FieldSchema(
-        default="",
-        name="Informação 10",
-        code="G101",
-    )
-    field_10_3B: types.Information60 = FieldSchema(
-        default="",
-        name="Informação 11",
-        code="G101",
-    )
-    field_11_3B: types.Information99 = FieldSchema(
-        default="",
-        name="Informação 12",
-        code="G101",
-    )
-    field_12_3B: types.SIAPE6 = FieldSchema(
-        default="",
-        name="Uso Exclusivo para o SIAPE",
-        code="P012",
-    )
-    field_13_3B: types.ISPBCode = FieldSchema(
-        default="",
-        name="Código ISPB",
-        code="P015",
-    )
-
-    class Config:
-        validate_all = True
-        use_enum_values = True
 
 
 class CNABBatchHeader(Line):
@@ -414,12 +343,122 @@ class CNABBatchSegmentA(Line):
         validate_all = True
 
 
+class CNABBatchSegmentB(Line):
+    field_01_3B: types.BankCode = FieldSchema(
+        name="Código do Banco na Compensação",
+        code="G001",
+    )
+    field_02_3B: types.SequentialServiceBatch = FieldSchema(
+        default_factory=lambdas.get_field_G002_sequential,
+        name="Lote de Serviço",
+        code="G002",
+    )
+    field_03_3B: types.EntryType = FieldSchema(
+        default=types.EntryTypeEnum.details,
+        name="Tipo de Registro",
+        code="G003",
+    )
+    field_04_3B: types.RecordSequentialNumber = FieldSchema(
+        default_factory=lambdas.get_field_G038,
+        name="Nº Seqüencial do Registro no Lote",
+        code="G038",
+    )
+    field_05_3B: types.DetailRecordSegmentType = FieldSchema(
+        default=types.DetailRecordSegmentTypeEnum.segment_b,
+        name="Código de Segmento do Reg. Detalhe",
+        code="G039",
+    )
+    field_06_3B: types.InitiationForm = FieldSchema(
+        default_factory=lambdas.get_field_G100,
+        name="* Forma de Iniciação",
+        code="G100",
+    )
+    field_07_3B: types.RegistrationType = FieldSchema(
+        default_factory=lambdas.get_field_G005,
+        name="Tipo de Inscrição do Favorecido",
+        code="G005",
+    )
+    field_08_3B: types.RegistrationNumber = FieldSchema(
+        name="Nº de Inscrição do Favorecido",
+        code="G006",
+    )
+    field_09_3B: types.Information35 = FieldSchema(
+        default="",
+        name="Informação 10",
+        code="G101",
+    )
+    field_10_3B: types.Information60 = FieldSchema(
+        default="",
+        name="Informação 11",
+        code="G101",
+    )
+    field_11_3B: types.Information99 = FieldSchema(
+        default="",
+        name="Informação 12",
+        code="G101",
+    )
+    field_12_3B: types.SIAPE6 = FieldSchema(
+        default="",
+        name="Uso Exclusivo para o SIAPE",
+        code="P012",
+    )
+    field_13_3B: types.ISPBCode = FieldSchema(
+        default="",
+        name="Código ISPB",
+        code="P015",
+    )
+
+    class Config:
+        validate_all = True
+        use_enum_values = True
+
+
 class CNABBatchSegmentC(Line):
     pass
 
 
 class CNABBatchTrailer(Line):
-    pass
+    field_01_5: types.BankCode = FieldSchema(
+        description="Código do Banco na Compensação", code="G001"
+    )
+    field_02_5: types.SequentialServiceBatch = FieldSchema(
+        description="Lote de Serviço",
+        code="G002",
+        default_factory=lambdas.get_field_G002,
+    )
+    field_03_5: types.EntryType = FieldSchema(
+        description="Tipo de Registro",
+        code="G003",
+        default=types.EntryTypeEnum.batch_trailer,
+    )
+    field_04_5: types.FEBRABAN9 = FieldSchema(
+        description="Uso Exclusivo FEBRABAN/CNAB", code="G004", default=""
+    )
+    field_05_5: types.RecordsNumber = FieldSchema(
+        description="Quantidade de Registros do Lote", code="G057"
+    )
+    field_06_5: types.ValuesSum = FieldSchema(
+        description="Somatória dos Valores", code="P007"
+    )
+    field_07_5: types.CurrencyAmountsSum = FieldSchema(
+        description="Somatória de Quantidade de Moedas", code="G058", default=0
+    )
+    field_08_5: types.DebitNotificationNumber = FieldSchema(
+        description="Número Aviso de Débito ", code="G066", default=0
+    )
+    field_09_5: types.FEBRABAN165 = FieldSchema(
+        description="Uso Exclusivo FEBRABAN/CNAB", code="G004", default=""
+    )
+    field_10_5: types.ReturnOccurrenceCodes = FieldSchema(
+        description="Códigos das Ocorrências para Retorno", code="G059", default=""
+    )
+
+    def __init__(self, initial_data, line_number):
+        initial_data["field_05_5"] = line_number - 1
+        super().__init__(initial_data, line_number)
+
+    class Config:
+        validate_all = True
 
 
 class CNABBatchRecords(BaseModel):
