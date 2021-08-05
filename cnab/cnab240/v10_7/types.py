@@ -1,11 +1,11 @@
 # pylint: disable=unsubscriptable-object
 from datetime import datetime
+from decimal import Decimal
 from enum import Enum, IntEnum
 from typing import ClassVar
 
 from pydantic import BaseModel, conint, constr
 from pydantic.class_validators import validator
-from pydantic.types import condecimal
 
 
 STR_FILL_VALUE = " "
@@ -28,6 +28,16 @@ class CNABEnumFillInt(BaseModel):
 
 
 class CNABPositiveInt(BaseModel):
+    @validator("__root__", pre=True, check_fields=False)
+    def validate_int(cls, value):  # noqa
+        """Prevent coersion from float/decimal to int, allow coersion from string"""
+        if isinstance(value, (Decimal, float)):
+            raise ValueError(
+                "value cannot be a float or Decimal, should be an integer instead"
+            )
+
+        return value
+
     def as_fixed_width(self):
         return str(self.__root__).rjust(self._max_str_length, INT_FILL_VALUE)
 
@@ -38,6 +48,16 @@ class CNABDecimal(BaseModel):
 
 
 class CNABAlphaPositiveInt(BaseModel):
+    @validator("__root__", pre=True, check_fields=False)
+    def validate_int(cls, value):  # noqa
+        """Prevent coersion from float/decimal to int, allow coersion from string"""
+        if isinstance(value, (Decimal, float)):
+            raise ValueError(
+                "value cannot be a float or Decimal, should be an integer instead"
+            )
+
+        return value
+
     def as_fixed_width(self):
         return str(self.__root__).ljust(self._max_str_length, STR_FILL_VALUE)
 
@@ -628,18 +648,20 @@ class Currency(CNABEnum):
     __root__: CurrencyEnum
 
 
-class CurrencyAmount(CNABDecimal):
-    _max_digits: ClassVar[int] = 15
-    _decimal_places: ClassVar[int] = 5
+class CurrencyAmount(CNABPositiveInt):
+    _max_str_length = 15
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999999999999
 
-    __root__: condecimal(max_digits=_max_digits, decimal_places=_decimal_places)
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
-class PaymentAmount(CNABDecimal):
-    _max_digits: ClassVar[int] = 15
-    _decimal_places: ClassVar[int] = 2
+class PaymentAmount(CNABPositiveInt):
+    _max_str_length = 15
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999999999999
 
-    __root__: condecimal(max_digits=_max_digits, decimal_places=_decimal_places)
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class BankOrCompanyIssuedDocNumber(CNABString):
@@ -647,11 +669,12 @@ class BankOrCompanyIssuedDocNumber(CNABString):
     __root__: constr(max_length=_max_str_length)
 
 
-class PaymentEffectiveAmount(CNABDecimal):
-    _max_digits: ClassVar[int] = 15
-    _decimal_places: ClassVar[int] = 2
+class PaymentEffectiveAmount(CNABPositiveInt):
+    _max_str_length = 15
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999999999999
 
-    __root__: condecimal(max_digits=_max_digits, decimal_places=_decimal_places)
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class AdditionalInformation(CNABString):
