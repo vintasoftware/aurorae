@@ -50,6 +50,7 @@ toml = "^0.10.2"
 traitlets = "^5.0.5"
 wcwidth = "^0.2.5"
 pydantic = "^1.8.2"
+bump2version = "^1.0.1"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.0"
