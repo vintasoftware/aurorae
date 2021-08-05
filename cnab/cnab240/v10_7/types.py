@@ -288,22 +288,34 @@ class AddressDistrict(CNABString):
 
 class RebateAmount(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 15
-    __root__: constr(max_length=_max_str_length)
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999999999999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class DiscountAmount(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 15
-    __root__: constr(max_length=_max_str_length)
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999999999999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class ArrearsAmount(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 15
-    __root__: constr(max_length=_max_str_length)
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999999999999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class FineAmount(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 15
-    __root__: constr(max_length=_max_str_length)
+    _min_int: ClassVar[int] = 1
+    _max_int: ClassVar[int] = 999999999999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class RecipientRegistrationNumberInformation12(CNABString):
