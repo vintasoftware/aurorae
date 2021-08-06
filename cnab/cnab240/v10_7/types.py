@@ -2,10 +2,9 @@
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum, IntEnum
-from typing import ClassVar
+from typing import ClassVar, Optional
 
-from pydantic import BaseModel, conint, constr
-from pydantic.class_validators import validator
+from pydantic import BaseModel, PrivateAttr, condecimal, conint, constr, validator
 
 
 STR_FILL_VALUE = " "
@@ -17,6 +16,28 @@ class CNABString(BaseModel):
         return self.__root__.ljust(self._max_str_length, STR_FILL_VALUE).upper()
 
 
+class CNABComposedField(BaseModel):
+    _formatted_value: str = PrivateAttr(default="")
+
+    def get_field_names(self):
+        return self.__fields__.keys()
+
+    def get_fields(self):
+        fields = []
+        for field_name in self.get_field_names():
+            field = getattr(self, field_name)
+            fields.append(field)
+        return fields
+
+    def as_fixed_width(self):
+        for field in self.get_fields():
+            self._formatted_value = f"{self._formatted_value}{field.as_fixed_width()}"
+
+        assert len(self._formatted_value) == self._max_str_length
+
+        return self._formatted_value
+
+
 class CNABEnum(BaseModel):
     def as_fixed_width(self):
         return str(self.__root__.value)
@@ -25,6 +46,11 @@ class CNABEnum(BaseModel):
 class CNABEnumFillInt(BaseModel):
     def as_fixed_width(self):
         return str(self.__root__.value).rjust(self._max_str_length, INT_FILL_VALUE)
+
+
+class CNABEnumAplhaFill(BaseModel):
+    def as_fixed_width(self):
+        return str(self.__root__.value).ljust(self._max_str_length, STR_FILL_VALUE)
 
 
 class CNABPositiveInt(BaseModel):
@@ -88,7 +114,7 @@ class CNABTime(BaseModel):
     __root__: constr(min_length=_min_str_length, max_length=_max_str_length)
 
     @validator("__root__")
-    def validate_date(cls, value):  # noqa
+    def validate_time(cls, value):  # noqa
         try:
             datetime.strptime(value, "%H%M%S")
         except ValueError:
@@ -308,7 +334,7 @@ class AddressDistrict(CNABString):
 
 class RebateAmount(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 15
-    _min_int: ClassVar[int] = 1
+    _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 999999999999999
 
     __root__: conint(ge=_min_int, le=_max_int)
@@ -316,7 +342,7 @@ class RebateAmount(CNABPositiveInt):
 
 class DiscountAmount(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 15
-    _min_int: ClassVar[int] = 1
+    _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 999999999999999
 
     __root__: conint(ge=_min_int, le=_max_int)
@@ -324,7 +350,7 @@ class DiscountAmount(CNABPositiveInt):
 
 class ArrearsAmount(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 15
-    _min_int: ClassVar[int] = 1
+    _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 999999999999999
 
     __root__: conint(ge=_min_int, le=_max_int)
@@ -332,7 +358,7 @@ class ArrearsAmount(CNABPositiveInt):
 
 class FineAmount(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 15
-    _min_int: ClassVar[int] = 1
+    _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 999999999999999
 
     __root__: conint(ge=_min_int, le=_max_int)
@@ -340,9 +366,7 @@ class FineAmount(CNABPositiveInt):
 
 class RecipientRegistrationNumberInformation12(CNABString):
     _max_str_length: ClassVar[int] = 15
-    _min_int: ClassVar[int] = 1
-    _max_int: ClassVar[int] = 999999999999999
-    __root__: conint(ge=_min_int, le=_max_int)
+    __root__: constr(max_length=_max_str_length)
 
 
 class OperationTypeEnum(str, Enum):
@@ -504,7 +528,7 @@ class InitiationFormEnum(str, Enum):
     bank_info = "05"
 
 
-class InitiationForm(CNABEnumFillInt):
+class InitiationForm(CNABEnumAplhaFill):
     _max_str_length: ClassVar[int] = 3
     __root__: InitiationFormEnum
 
@@ -526,12 +550,18 @@ class Information99(CNABString):
 
 class SIAPE6(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 6
-    __root__: constr(max_length=_max_str_length)
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class ISPBCode(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 8
-    __root__: constr(max_length=_max_str_length)
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 99999999
+
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class AddressDetails(CNABString):
@@ -657,7 +687,7 @@ class CurrencyAmount(CNABPositiveInt):
 
 
 class PaymentAmount(CNABPositiveInt):
-    _max_str_length = 15
+    _max_str_length: ClassVar[int] = 15
     _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 999999999999999
 
@@ -670,7 +700,7 @@ class BankOrCompanyIssuedDocNumber(CNABString):
 
 
 class PaymentEffectiveAmount(CNABPositiveInt):
-    _max_str_length = 15
+    _max_str_length: ClassVar[int] = 15
     _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 999999999999999
 
@@ -760,3 +790,28 @@ class DebitNotificationNumber(CNABPositiveInt):
     _max_int: ClassVar[int] = 999999
 
     __root__: conint(ge=_min_int, le=_max_int)
+
+
+class ComposedField103B(CNABComposedField):
+    _max_str_length: ClassVar[int] = 60
+
+    address_number: Optional[AddressNumber]
+    address_complement: Optional[AddressDetails]
+    address_district: Optional[AddressDistrict]
+    address_city: Optional[SmallAddressCityName]
+    address_cep: Optional[AddressCEP]
+    address_cep_complement: Optional[AddressCEPComplement]
+    address_state: Optional[AddressState]
+
+
+class ComposedField113B(CNABComposedField):
+    _max_str_length: ClassVar[int] = 99
+
+    payment_date: CNABDate
+    payment_amount: PaymentAmount
+    rebate_amount: RebateAmount
+    discount_amount: DiscountAmount
+    arrears_amount: ArrearsAmount
+    fine_amount: FineAmount
+    registration_number: RecipientRegistrationNumberInformation12
+    notify_recipient: NotifyRecipient
