@@ -256,42 +256,6 @@ class TestCNABModels:
         assert segment_a.as_fixed_width() == expected_segment_a
 
     @pytest.mark.usefixtures("payroll_data")
-    def test_trailer_fixed_width(self, payroll_data):
-        company = Company.parse_obj(payroll_data["Company"])
-        trailer = CNABTrailer(company=company, line_number=6)
-
-        expected_trailer = expected_trailer = (
-            "07799999         000001000006000000                                             "
-            "                                                                                "
-            "                                                                                "
-        )
-        assert trailer.as_fixed_width() == expected_trailer
-
-    @pytest.mark.usefixtures("payroll_data")
-    def test_trailer_error_on_field_01_9_with_size_bigger_than_expected(
-        self, payroll_data
-    ):
-        company_data = payroll_data["Company"]
-        company_data["bank_code"] = "9999"
-        company = Company.parse_obj(payroll_data["Company"])
-
-        with pytest.raises(
-            ValidationError,
-            match=r"(?s).*bank_code.*ensure this value is less than or equal to 999.*",
-        ):
-            CNABTrailer(company=company, line_number=6)
-
-    @pytest.mark.usefixtures("payroll_data")
-    def test_trailer_error_on_field_01_9_with_invalid_number(self, payroll_data):
-        company_data = payroll_data["Company"]
-        company_data["bank_code"] = "invalid_bank_code"
-
-        with pytest.raises(
-            ValidationError, match=r"(?s).*bank_code.*value is not a valid integer.*"
-        ):
-            Company.parse_obj(payroll_data["Company"])
-
-    @pytest.mark.usefixtures("payroll_data")
     def test_batch_detail_segment_b_as_fixed_width(self, payroll_data):
         employee = Employee.parse_obj(payroll_data["Employee"])
         payment = Payment.parse_obj(payroll_data["Payment"])
@@ -395,3 +359,53 @@ class TestCNABModels:
         )
 
         assert trailer.field_05_5 == types.RecordsNumber.parse_obj(record_number)
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_trailer_fixed_width(self, payroll_data):
+        company = Company.parse_obj(payroll_data["Company"])
+        trailer = CNABTrailer(company=company, record_number=6, line_number=6)
+
+        expected_trailer = expected_trailer = (
+            "07799999         000001000006000000                                             "
+            "                                                                                "
+            "                                                                                "
+        )
+        assert trailer.as_fixed_width() == expected_trailer
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_trailer_error_on_field_01_9_with_size_bigger_than_expected(
+        self, payroll_data
+    ):
+        company_data = payroll_data["Company"]
+        company_data["bank_code"] = "9999"
+        company = Company.parse_obj(payroll_data["Company"])
+
+        with pytest.raises(
+            ValidationError,
+            match=r"(?s).*bank_code.*ensure this value is less than or equal to 999.*",
+        ):
+            CNABTrailer(company=company, record_number=2, line_number=6)
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_trailer_error_on_field_01_9_with_invalid_number(self, payroll_data):
+        company_data = payroll_data["Company"]
+        company_data["bank_code"] = "invalid_bank_code"
+
+        with pytest.raises(
+            ValidationError, match=r"(?s).*bank_code.*value is not a valid integer.*"
+        ):
+            Company.parse_obj(payroll_data["Company"])
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_cnab_trailer_record_number(self, payroll_data):
+        company = Company.parse_obj(payroll_data["Company"])
+
+        record_number = 4
+
+        trailer = CNABTrailer(
+            company=company,
+            record_number=record_number,
+            line_number=4,
+        )
+
+        assert trailer.field_06_9 == types.RecordsNumber.parse_obj(record_number)

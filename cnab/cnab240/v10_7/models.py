@@ -615,7 +615,7 @@ class CNABTrailer(Line):
             "field_01_9": "bank_code",
         }
 
-    def __init__(self, company: Company, line_number):
+    def __init__(self, company: Company, record_number: int, line_number: int):
         initial_data = company.dict()
-        initial_data["field_06_9"] = line_number
+        initial_data["field_06_9"] = record_number
         super().__init__(initial_data, line_number)
