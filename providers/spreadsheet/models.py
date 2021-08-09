@@ -20,7 +20,6 @@ class BaseConfig:
     @classmethod
     def alias_generator(cls, field: str) -> str:
         if field not in cls._mapping:
-            print(field)
             raise Exception()
         return cls._mapping[field]
 
