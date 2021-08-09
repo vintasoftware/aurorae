@@ -3,9 +3,9 @@ from typing import ClassVar
 
 import pytest
 from pydantic.error_wrappers import ValidationError
-from pydantic.types import conint
+from pydantic.types import conint, constr
 
-from cnab.cnab240.v10_7.types import CNABAlphaPositiveInt, CNABPositiveInt
+from cnab.cnab240.v10_7.types import CNABAlphaPositiveInt, CNABPositiveInt, CNABString
 
 
 class TestTypes:
@@ -60,3 +60,18 @@ class TestTypes:
 
         with pytest.raises(ValidationError):
             AlphaPositiveIntField.parse_obj("1.234,90")
+
+    def test_cnab_string_raises_exception_for_special_characters(self):
+        class StringField(CNABString):
+            _max_str_length: ClassVar[int] = 10
+            __root__: constr(max_length=_max_str_length)
+
+        with pytest.raises(ValidationError):
+            StringField.parse_obj("TEST!@")
+
+    def test_cnab_string_is_valid(self):
+        class StringField(CNABString):
+            _max_str_length: ClassVar[int] = 30
+            __root__: constr(max_length=_max_str_length)
+
+        StringField.parse_obj("Test string . Ç 123 ç")

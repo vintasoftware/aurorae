@@ -1,4 +1,5 @@
 # pylint: disable=unsubscriptable-object
+import re
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum, IntEnum
@@ -11,8 +12,23 @@ from pydantic.class_validators import validator
 STR_FILL_VALUE = " "
 INT_FILL_VALUE = "0"
 
+# fmt: off
+VALID_CHARACTERS = (
+    "abcçdefghijklmnopqrstuvxywz"
+    "ABCÇDEFGHIJKLMNOPQRSTUVXYWZ"
+    "0123456789"
+    ". "
+)
+# fmt: on
+
 
 class CNABString(BaseModel):
+    @validator("__root__", pre=True, check_fields=False)
+    def validate_string(cls, value):  # noqa
+        assert all(c in VALID_CHARACTERS for c in value), "Invalid characters"
+
+        return value
+
     def as_fixed_width(self):
         return self.__root__.ljust(self._max_str_length, STR_FILL_VALUE).upper()
 
