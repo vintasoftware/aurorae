@@ -113,7 +113,7 @@ def test_creates_payment_raises_validation_error_on_empty_dict():
 def test_creates_payment():
     payment_data = {
         "employee_name": "Linux Swift",
-        "payment_amount": "120.00",
+        "payment_amount": "12000",
         "payment_date": "03082021",
     }
 
@@ -123,7 +123,7 @@ def test_creates_payment():
 def test_creates_payment_with_optional_fields():
     payment_data = {
         "employee_name": "Linux Swift",
-        "payment_amount": "120.00",
+        "payment_amount": "12000",
         "payment_date": "03082021",
         "rebate_amount": "1",
         "discount_amount": "1",

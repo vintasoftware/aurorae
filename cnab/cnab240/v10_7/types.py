@@ -42,11 +42,6 @@ class CNABPositiveInt(BaseModel):
         return str(self.__root__).rjust(self._max_str_length, INT_FILL_VALUE)
 
 
-class CNABDecimal(BaseModel):
-    def as_fixed_width(self):
-        return str(self.__root__).rjust(self._max_digits, INT_FILL_VALUE)
-
-
 class CNABAlphaPositiveInt(BaseModel):
     @validator("__root__", pre=True, check_fields=False)
     def validate_int(cls, value):  # noqa
@@ -741,16 +736,16 @@ class RecordsNumber(CNABPositiveInt):
 
 
 class ValuesSum(CNABPositiveInt):
-    _max_str_length = 18
-    _min_int = 0
-    _max_int = 999999999999999999
+    _max_str_length: ClassVar[int] = 18
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999999999999999
     __root__: conint(ge=_min_int, le=_max_int)
 
 
 class CurrencyAmountsSum(CNABPositiveInt):
-    _max_str_length = 18
-    _min_int = 0
-    _max_int = 999999999999999999
+    _max_str_length: ClassVar[int] = 18
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999999999999999
     __root__: conint(ge=_min_int, le=_max_int)
 
 
