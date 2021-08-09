@@ -147,5 +147,5 @@ def spreadsheet_data():
 @freeze_time(datetime(2021, 7, 8, 13, 30, 50))
 def legacy_spreadsheet_handler():
     return LegacySpreadsheetHandler(
-        input_filename="./tests/fixtures/test_spreadsheet.xlsx"
+        input_filename="./tests/fixtures/test_legacy_spreadsheet.xlsx"
     )
