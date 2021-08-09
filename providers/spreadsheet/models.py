@@ -38,29 +38,29 @@ class SpreadsheetCompany(BaseModel):
     address_location: str
     address_number: str
     address_complement: str
-    address_city: str
-    address_cep_complement: str
-    address_state: str
     address_cep: str
+    address_cep_complement: str
+    address_city: str
+    address_state: str
 
     class Config(BaseConfig):
         _mapping = {
-            "bank_code": "* Código do Convênio no Banco",
+            "company_name": "* Nome da Empresa",
             "registration_type": "* Tipo de Inscrição da Empresa",
             "registration_number": "* Número de Inscrição da Empresa",
+            "bank_name": "* Nome do Banco",
+            "bank_code": "* Código do Convênio no Banco",
             "bank_agency": "* Agência Mantenedora da Conta ",
             "bank_agency_digit": "* Dígito Verificador da Agência",
             "bank_account_number": "* Número da Conta Corrente",
             "bank_account_digit": "* Dígito Verificador da Conta",
             "bank_account_agency_digit": "* Dígito Verificador da Ag/Conta",
-            "company_name": "* Nome da Empresa",
-            "bank_name": "* Nome do Banco",
             "address_location": "Logradouro (Nome da Rua, Av, Pça, Etc)",
             "address_number": "Número (Número do Local)",
             "address_complement": "Complemento (Casa, Apto, Sala, Etc)",
-            "address_city": "Nome da Cidade",
             "address_cep": "CEP",
             "address_cep_complement": "Complemento do CEP",
+            "address_city": "Nome da Cidade",
             "address_state": "Sigla do Estado",
         }
 
@@ -79,29 +79,29 @@ class SpreadsheetEmployee(BaseModel):
     address_number: str
     address_complement: str
     address_district: str
+    address_cep: str
+    address_cep_complement: str
     address_city: str
     address_state: str
-    address_cep_complement: str
-    address_cep: str
 
     class Config(BaseConfig):
         _mapping = {
-            "bank_code": "Código do Banco do Favorecido",
+            "name": "Nome do Favorecido",
             "registration_type": "* Tipo de Inscrição do Favorecido",
             "registration_number": "* Nº de Inscrição do Favorecido",
+            "bank_code": "Código do Banco do Favorecido",
             "bank_agency": "* Ag. Mantenedora da Cta do Favor.",
             "bank_agency_digit": "* Dígito Verificador da Agência",
             "bank_account_number": "* Número da Conta Corrente",
             "bank_account_digit": "* Dígito Verificador da Conta",
             "bank_account_agency_digit": "* Dígito Verificador da AG/Conta",
-            "name": "Nome do Favorecido",
             "address_location": "Logradouro (Nome da Rua, Av, Pça, Etc)",
             "address_number": "Número (Nº do Local)",
             "address_complement": "Complemento (Casa, Apto, Etc)",
             "address_district": "Bairro",
-            "address_city": "Nome da Cidade",
             "address_cep": "CEP",
             "address_cep_complement": "Complemento do CEP",
+            "address_city": "Nome da Cidade",
             "address_state": "Sigla do Estado",
         }
 
