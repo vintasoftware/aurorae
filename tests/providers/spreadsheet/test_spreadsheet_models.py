@@ -2,11 +2,11 @@ import pytest
 from pydantic.error_wrappers import ValidationError
 
 from providers.spreadsheet.models import (
-    Company,
-    Employee,
-    Payment,
+    SpreadsheetCompany,
+    SpreadsheetEmployee,
+    SpreadsheetPayment,
     RegistrationType,
-    SpreadSheet,
+    Spreadsheet,
 )
 
 
@@ -14,7 +14,7 @@ class TestModels:
     def test_sending_dict_when_string_is_expected_raises_validation_error(self):
         with pytest.raises(ValidationError):
             # Zip code is defined as string in the model
-            Company(
+            SpreadsheetCompany(
                 name="Company Level",
                 registration_type=RegistrationType.cnpj,
                 registration_number="111",
@@ -39,7 +39,7 @@ class TestModels:
     def test_not_sending_required_field_raises_validation_error(self):
         with pytest.raises(ValidationError):
             # Not sending bank related fields
-            Company(
+            SpreadsheetCompany(
                 name="Company Level",
                 registration_type=RegistrationType.cnpj,
                 registration_number="111",
@@ -54,7 +54,7 @@ class TestModels:
 
     def test_sending_invalid_date_format_raises_validation_error(self):
         with pytest.raises(ValidationError):
-            Payment(
+            SpreadsheetPayment(
                 employee_name="Employee Name",
                 identification_number="1",
                 value="100000",
@@ -62,7 +62,7 @@ class TestModels:
             )
 
     def test_default_value_to_field(self):
-        company = Company(
+        company = SpreadsheetCompany(
             name="Company Level",
             registration_number="111",
             bank_name="Company Bank",
@@ -84,7 +84,7 @@ class TestModels:
         assert company.registration_type == RegistrationType.cnpj
 
     def test_multiple_payments_for_one_employee(self):
-        company = Company(
+        company = SpreadsheetCompany(
             name="Company Level",
             registration_type=RegistrationType.cnpj,
             registration_number="111",
@@ -104,7 +104,7 @@ class TestModels:
             zip_code="88888",
         )
 
-        employee = Employee(
+        employee = SpreadsheetEmployee(
             name="Employee Name",
             registration_type=RegistrationType.cpf,
             registration_number="000",
@@ -124,26 +124,26 @@ class TestModels:
             zip_code="77777",
         )
 
-        payment_1 = Payment(
+        payment_1 = SpreadsheetPayment(
             employee_name="Employee Name",
             identification_number="1",
             value="100000",
             date="27072021",
         )
-        payment_2 = Payment(
+        payment_2 = SpreadsheetPayment(
             employee_name="Employee Name",
             identification_number="2",
             value="100000",
             date="27072021",
         )
-        payment_3 = Payment(
+        payment_3 = SpreadsheetPayment(
             employee_name="Employee Name",
             identification_number="3",
             value="100000",
             date="27072021",
         )
 
-        spreadsheet = SpreadSheet(
+        spreadsheet = Spreadsheet(
             company=company,
             employees=[employee],
             payments=[payment_1, payment_2, payment_3],
@@ -154,7 +154,7 @@ class TestModels:
         assert spreadsheet.payments[2].employee_name == spreadsheet.employees[0].name
 
     def test_multiple_payments_for_multiple_employees(self):
-        company = Company(
+        company = SpreadsheetCompany(
             name="Company Level",
             registration_type=RegistrationType.cnpj,
             registration_number="111",
@@ -174,7 +174,7 @@ class TestModels:
             zip_code="88888",
         )
 
-        employee_1 = Employee(
+        employee_1 = SpreadsheetEmployee(
             name="Employee 1",
             registration_type=RegistrationType.cpf,
             registration_number="000",
@@ -193,7 +193,7 @@ class TestModels:
             zip_code_complement="777",
             zip_code="77777",
         )
-        employee_2 = Employee(
+        employee_2 = SpreadsheetEmployee(
             name="Employee 2",
             registration_type=RegistrationType.cpf,
             registration_number="777",
@@ -212,7 +212,7 @@ class TestModels:
             zip_code_complement="000",
             zip_code="00000",
         )
-        employee_3 = Employee(
+        employee_3 = SpreadsheetEmployee(
             name="Employee 3",
             registration_type=RegistrationType.cpf,
             registration_number="888",
@@ -232,26 +232,26 @@ class TestModels:
             zip_code="16161",
         )
 
-        payment_1 = Payment(
+        payment_1 = SpreadsheetPayment(
             employee_name="Employee 1",
             identification_number="1",
             value="100000",
             date="27072021",
         )
-        payment_2 = Payment(
+        payment_2 = SpreadsheetPayment(
             employee_name="Employee 2",
             identification_number="2",
             value="100000",
             date="27072021",
         )
-        payment_3 = Payment(
+        payment_3 = SpreadsheetPayment(
             employee_name="Employee 3",
             identification_number="3",
             value="100000",
             date="27072021",
         )
 
-        spreadsheet = SpreadSheet(
+        spreadsheet = Spreadsheet(
             company=company,
             employees=[employee_1, employee_2, employee_3],
             payments=[payment_1, payment_2, payment_3],
