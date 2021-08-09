@@ -502,14 +502,10 @@ class CNABBatchSegmentB(Line):
             "field_08_3B": "registration_number",
         }
 
-    def __init__(
-        self,
-        payment: Payment,
-        line_number: int,
-    ) -> None:
+    def __init__(self, payment: Payment, record_number: int, line_number: int) -> None:
         employee = payment.employee
         initial_data = employee.dict()
-        initial_data["field_04_3B"] = line_number - 2
+        initial_data["field_04_3B"] = record_number
         initial_data["field_09_3B"] = self.get_information_10(employee)
         initial_data["field_10_3B"] = self.get_information_11(employee)
         initial_data["field_11_3B"] = self.get_information_12(payment)

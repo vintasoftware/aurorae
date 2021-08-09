@@ -298,7 +298,9 @@ class TestCNABModels:
 
         payment.employee = employee
 
-        batch_detail_segment_b_model = CNABBatchSegmentB(payment=payment, line_number=4)
+        batch_detail_segment_b_model = CNABBatchSegmentB(
+            payment=payment, record_number=2, line_number=4
+        )
         expected_line = (
             "0770001300002B05 100099999999999RUA DAS AMELIAS                    001231 ANDAR "
             "       CENTRO         RECIFE         50050000PE110620210000000000010000000000000"
@@ -330,7 +332,9 @@ class TestCNABModels:
 
         payment.employee = employee
 
-        batch_detail_segment_b_model = CNABBatchSegmentB(payment=payment, line_number=4)
+        batch_detail_segment_b_model = CNABBatchSegmentB(
+            payment=payment, record_number=1, line_number=4
+        )
 
         assert batch_detail_segment_b_model.field_01_3B.as_fixed_width() == "001"
 
@@ -344,7 +348,7 @@ class TestCNABModels:
         payment.employee.bank_code = "111111"
 
         with pytest.raises(ValidationError):
-            CNABBatchSegmentB(payment=payment, line_number=4)
+            CNABBatchSegmentB(payment=payment, record_number=1, line_number=4)
 
     @pytest.mark.usefixtures("payroll_data")
     def test_batch_trailer_fixed_width(self, payroll_data):
@@ -360,3 +364,19 @@ class TestCNABModels:
             "                                                                                "
         )
         assert batch_trailer.as_fixed_width() == expected_batch_trailer
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_batch_segment_b_record_number(self, payroll_data):
+        employee = Employee.parse_obj(payroll_data["Employee"])
+        payment = Payment.parse_obj(payroll_data["Payment"])
+        payment.employee = employee
+
+        record_number = 6
+
+        segment = CNABBatchSegmentB(
+            payment=payment, record_number=record_number, line_number=4
+        )
+
+        assert segment.field_04_3B == types.RecordSequentialNumber.parse_obj(
+            record_number
+        )
