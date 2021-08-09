@@ -552,9 +552,11 @@ class CNABBatchTrailer(Line):
         description="Códigos das Ocorrências para Retorno", code="G059", default=""
     )
 
-    def __init__(self, company: Company, sum_payment_values: str, line_number):
+    def __init__(
+        self, company: Company, sum_payment_values: str, record_number: int, line_number
+    ):
         initial_data = company.dict()
-        initial_data["field_05_5"] = line_number - 1
+        initial_data["field_05_5"] = record_number
         initial_data["field_06_5"] = sum_payment_values
         super().__init__(initial_data, line_number)
 

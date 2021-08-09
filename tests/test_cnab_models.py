@@ -355,7 +355,7 @@ class TestCNABModels:
         company = Company.parse_obj(payroll_data["Company"])
 
         batch_trailer = CNABBatchTrailer(
-            company=company, sum_payment_values="1000", line_number=5
+            company=company, sum_payment_values="1000", record_number=4, line_number=5
         )
 
         expected_batch_trailer = (
@@ -380,3 +380,18 @@ class TestCNABModels:
         assert segment.field_04_3B == types.RecordSequentialNumber.parse_obj(
             record_number
         )
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_batch_trailer_record_number(self, payroll_data):
+        company = Company.parse_obj(payroll_data["Company"])
+
+        record_number = 4
+
+        trailer = CNABBatchTrailer(
+            company=company,
+            record_number=record_number,
+            sum_payment_values=100,
+            line_number=4,
+        )
+
+        assert trailer.field_05_5 == types.RecordsNumber.parse_obj(record_number)
