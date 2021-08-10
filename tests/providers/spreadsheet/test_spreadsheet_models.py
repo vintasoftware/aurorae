@@ -1,3 +1,4 @@
+import re
 import pytest
 from pydantic.error_wrappers import ValidationError
 
@@ -12,48 +13,94 @@ from providers.spreadsheet.models import (
 
 class TestModels:
     def test_sending_dict_when_string_is_expected_raises_validation_error(self):
-        with pytest.raises(ValidationError):
-            # Zip code is defined as string in the model
+        with pytest.raises(
+            ValidationError,
+            match=re.escape(
+                "1 validation error for SpreadsheetCompany\nCEP\n  str type expected (type=type_error.str)"
+            ),
+        ):
             SpreadsheetCompany(
-                name="Company Level",
+                company_name="Company Level",
                 registration_type=RegistrationType.cnpj,
                 registration_number="111",
                 bank_name="Company Bank",
-                bank_convention_code="222",
-                bank_agency_number="333",
-                bank_agency_check_digit="4",
+                bank_code="222",
+                bank_agency="333",
+                bank_agency_digit="4",
                 bank_account_number="555",
-                bank_account_check_digit="6",
+                bank_account_digit="6",
                 bank_account_agency_digit="46",
                 address_location="Company Address",
                 address_number="77",
                 address_complement="",
-                city="Company City",
-                address_cep_complement="888",
-                state="PE",
                 address_cep={
                     "number": "88888",
                 },
+                address_cep_complement="888",
+                address_city="Company City",
+                address_state="PE",
             )
 
     def test_not_sending_required_field_raises_validation_error(self):
-        with pytest.raises(ValidationError):
-            # Not sending bank related fields
+        with pytest.raises(
+            ValidationError,
+            match=re.escape(
+                "1 validation error for SpreadsheetCompany\n* Nome do Banco\n  field required (type=value_error.missing)"
+            ),
+        ):
             SpreadsheetCompany(
-                name="Company Level",
+                company_name="Company Level",
                 registration_type=RegistrationType.cnpj,
                 registration_number="111",
+                bank_code="222",
+                bank_agency="333",
+                bank_agency_digit="4",
+                bank_account_number="555",
+                bank_account_digit="6",
+                bank_account_agency_digit="46",
                 address_location="Company Address",
                 address_number="77",
                 address_complement="",
-                city="Company City",
                 address_cep_complement="888",
-                state="PE",
                 address_cep="88888",
+                address_city="Company City",
+                address_state="PE",
+            )
+
+    def test_sending_none_on_required_field_raises_validation_error(self):
+        with pytest.raises(
+            ValidationError,
+            match=re.escape(
+                "1 validation error for SpreadsheetCompany\n* Nome do Banco\n  none is not an allowed value (type=type_error.none.not_allowed)"
+            ),
+        ):
+            SpreadsheetCompany(
+                company_name="Company Level",
+                registration_type=RegistrationType.cnpj,
+                registration_number="111",
+                bank_name=None,
+                bank_code="222",
+                bank_agency="333",
+                bank_agency_digit="4",
+                bank_account_number="555",
+                bank_account_digit="6",
+                bank_account_agency_digit="46",
+                address_location="Company Address",
+                address_number="77",
+                address_complement="",
+                address_cep_complement="888",
+                address_cep="88888",
+                address_city="Company City",
+                address_state="PE",
             )
 
     def test_sending_invalid_date_format_raises_validation_error(self):
-        with pytest.raises(ValidationError):
+        with pytest.raises(
+            ValidationError,
+            match=re.escape(
+                "1 validation error for SpreadsheetPayment\nData do Pagamento -> __root__\n  {value} is not valid (type=value_error)"
+            ),
+        ):
             SpreadsheetPayment(
                 employee_name="Employee Name",
                 identification_number="1",
@@ -61,7 +108,7 @@ class TestModels:
                 payment_date="20210727",
             )
 
-    def test_default_value_to_field(self):
+    def test_registration_type_default_value(self):
         company = SpreadsheetCompany(
             company_name="Company Level",
             registration_number="111",
