@@ -2,9 +2,9 @@
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum, IntEnum
-from typing import ClassVar, Optional
+from typing import ClassVar, Union
 
-from pydantic import BaseModel, PrivateAttr, condecimal, conint, constr, validator
+from pydantic import BaseModel, PrivateAttr, conint, constr, validator
 
 
 STR_FILL_VALUE = " "
@@ -13,7 +13,32 @@ INT_FILL_VALUE = "0"
 
 class CNABString(BaseModel):
     def as_fixed_width(self):
-        return self.__root__.ljust(self._max_str_length, STR_FILL_VALUE).upper()
+        value = self.__root__
+        if isinstance(value, (CNABString, CNABComposedField)):
+            value = value.as_fixed_width()
+        return value.ljust(self._max_str_length, STR_FILL_VALUE).upper()
+
+
+class CNABComposedField(BaseModel):
+    _formatted_value: str = PrivateAttr(default="")
+
+    def get_field_names(self):
+        return self.__fields__.keys()
+
+    def get_fields(self):
+        fields = []
+        for field_name in self.get_field_names():
+            field = getattr(self, field_name)
+            fields.append(field)
+        return fields
+
+    def as_fixed_width(self):
+        for field in self.get_fields():
+            self._formatted_value = f"{self._formatted_value}{field.as_fixed_width()}"
+
+        assert len(self._formatted_value) == self._max_str_length
+
+        return self._formatted_value
 
 
 class CNABComposedField(BaseModel):
@@ -48,7 +73,7 @@ class CNABEnumFillInt(BaseModel):
         return str(self.__root__.value).rjust(self._max_str_length, INT_FILL_VALUE)
 
 
-class CNABEnumAplhaFill(BaseModel):
+class CNABEnumAlphaFill(BaseModel):
     def as_fixed_width(self):
         return str(self.__root__.value).ljust(self._max_str_length, STR_FILL_VALUE)
 
@@ -66,11 +91,6 @@ class CNABPositiveInt(BaseModel):
 
     def as_fixed_width(self):
         return str(self.__root__).rjust(self._max_str_length, INT_FILL_VALUE)
-
-
-class CNABDecimal(BaseModel):
-    def as_fixed_width(self):
-        return str(self.__root__).rjust(self._max_digits, INT_FILL_VALUE)
 
 
 class CNABAlphaPositiveInt(BaseModel):
@@ -528,24 +548,9 @@ class InitiationFormEnum(str, Enum):
     bank_info = "05"
 
 
-class InitiationForm(CNABEnumAplhaFill):
+class InitiationForm(CNABEnumAlphaFill):
     _max_str_length: ClassVar[int] = 3
     __root__: InitiationFormEnum
-
-
-class Information35(CNABString):
-    _max_str_length: ClassVar[int] = 35
-    __root__: constr(max_length=_max_str_length)
-
-
-class Information60(CNABString):
-    _max_str_length: ClassVar[int] = 60
-    __root__: constr(max_length=_max_str_length)
-
-
-class Information99(CNABString):
-    _max_str_length: ClassVar[int] = 99
-    __root__: constr(max_length=_max_str_length)
 
 
 class SIAPE6(CNABPositiveInt):
@@ -707,11 +712,6 @@ class PaymentEffectiveAmount(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class AdditionalInformation(CNABString):
-    _max_str_length: ClassVar[int] = 40
-    __root__: constr(max_length=_max_str_length)
-
-
 class ServiceTypeComplementEnum(str, Enum):
     account_credit = "01"
     payment_of_rent_condominium = "02"
@@ -770,18 +770,18 @@ class RecordsNumber(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class ValuesSum(CNABDecimal):
-    _max_digits: ClassVar[int] = 18
-    _decimal_places: ClassVar[int] = 2
+class ValuesSum(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 18
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999999999999999
+    __root__: conint(ge=_min_int, le=_max_int)
 
-    __root__: condecimal(max_digits=_max_digits, decimal_places=_decimal_places)
 
-
-class CurrencyAmountsSum(CNABDecimal):
-    _max_digits: ClassVar[int] = 18
-    _decimal_places: ClassVar[int] = 5
-
-    __root__: condecimal(max_digits=_max_digits, decimal_places=_decimal_places)
+class CurrencyAmountsSum(CNABPositiveInt):
+    _max_str_length: ClassVar[int] = 18
+    _min_int: ClassVar[int] = 0
+    _max_int: ClassVar[int] = 999999999999999999
+    __root__: conint(ge=_min_int, le=_max_int)
 
 
 class DebitNotificationNumber(CNABPositiveInt):
@@ -795,13 +795,13 @@ class DebitNotificationNumber(CNABPositiveInt):
 class ComposedField103B(CNABComposedField):
     _max_str_length: ClassVar[int] = 60
 
-    address_number: Optional[AddressNumber]
-    address_complement: Optional[AddressDetails]
-    address_district: Optional[AddressDistrict]
-    address_city: Optional[SmallAddressCityName]
-    address_cep: Optional[AddressCEP]
-    address_cep_complement: Optional[AddressCEPComplement]
-    address_state: Optional[AddressState]
+    address_number: AddressNumber
+    address_complement: AddressDetails
+    address_district: AddressDistrict
+    address_city: SmallAddressCityName
+    address_cep: AddressCEP
+    address_cep_complement: AddressCEPComplement
+    address_state: AddressState
 
 
 class ComposedField113B(CNABComposedField):
@@ -815,3 +815,28 @@ class ComposedField113B(CNABComposedField):
     fine_amount: FineAmount
     registration_number: RecipientRegistrationNumberInformation12
     notify_recipient: NotifyRecipient
+
+
+class PIXTXID(CNABString):
+    _max_str_length: ClassVar[int] = 30
+    __root__: constr(max_length=_max_str_length)
+
+
+class PIXKey(CNABString):
+    _max_str_length: ClassVar[int] = 60
+    __root__: constr(max_length=_max_str_length)
+
+
+class Information10(CNABString):
+    _max_str_length: ClassVar[int] = 35
+    __root__: Union[NameAddress, PIXTXID]
+
+
+class Information11(CNABString):
+    _max_str_length: ClassVar[int] = 60
+    __root__: Union[PIXKey, Message, ComposedField103B]
+
+
+class Information12(CNABString):
+    _max_str_length: ClassVar[int] = 99
+    __root__: Union[PIXKey, ComposedField113B]
