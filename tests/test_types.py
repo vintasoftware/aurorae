@@ -67,11 +67,11 @@ class TestTypes:
             __root__: constr(max_length=_max_str_length)
 
         with pytest.raises(ValidationError):
-            StringField.parse_obj("TEST!@")
+            StringField.parse_obj("TESTÇ!@")
 
     def test_cnab_string_is_valid(self):
         class StringField(CNABString):
             _max_str_length: ClassVar[int] = 30
             __root__: constr(max_length=_max_str_length)
 
-        StringField.parse_obj("Test string . Ç 123 ç")
+        StringField.parse_obj("Test string . 123")

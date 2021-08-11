@@ -1,5 +1,4 @@
 # pylint: disable=unsubscriptable-object
-import re
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum, IntEnum
@@ -14,8 +13,8 @@ INT_FILL_VALUE = "0"
 
 # fmt: off
 VALID_CHARACTERS = (
-    "abcçdefghijklmnopqrstuvxywz"
-    "ABCÇDEFGHIJKLMNOPQRSTUVXYWZ"
+    "abcdefghijklmnopqrstuvxywz"
+    "ABCDEFGHIJKLMNOPQRSTUVXYWZ"
     "0123456789"
     ". "
 )
