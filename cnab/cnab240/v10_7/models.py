@@ -1,5 +1,5 @@
 # pylint: disable=unsubscriptable-object
-from typing import Optional, Union
+from typing import Optional
 
 from pydantic import Field as FieldSchema
 from pydantic.main import BaseModel

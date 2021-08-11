@@ -2,10 +2,9 @@
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum, IntEnum
-from typing import ClassVar, Optional, Union
+from typing import ClassVar, Union
 
 from pydantic import BaseModel, PrivateAttr, condecimal, conint, constr, validator
-from pydantic.class_validators import root_validator
 
 
 STR_FILL_VALUE = " "
