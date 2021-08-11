@@ -25,7 +25,7 @@ class Company(BaseModel):
     bank_account_number: str
     bank_account_check_digit: str
     bank_agency_account_check_digit: str
-    address: str
+    address_location: str
     address_number: str
     address_complement: str
     city: str
@@ -44,7 +44,7 @@ class Employee(BaseModel):
     bank_account_number: str
     bank_account_check_digit: str
     bank_agency_account_check_digit: str
-    address: str
+    address_location: str
     address_number: str
     address_complement: str
     neighbourhood: str
