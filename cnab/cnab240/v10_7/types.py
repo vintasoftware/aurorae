@@ -41,28 +41,6 @@ class CNABComposedField(BaseModel):
         return self._formatted_value
 
 
-class CNABComposedField(BaseModel):
-    _formatted_value: str = PrivateAttr(default="")
-
-    def get_field_names(self):
-        return self.__fields__.keys()
-
-    def get_fields(self):
-        fields = []
-        for field_name in self.get_field_names():
-            field = getattr(self, field_name)
-            fields.append(field)
-        return fields
-
-    def as_fixed_width(self):
-        for field in self.get_fields():
-            self._formatted_value = f"{self._formatted_value}{field.as_fixed_width()}"
-
-        assert len(self._formatted_value) == self._max_str_length
-
-        return self._formatted_value
-
-
 class CNABEnum(BaseModel):
     def as_fixed_width(self):
         return str(self.__root__.value)

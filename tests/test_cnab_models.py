@@ -1,3 +1,4 @@
+# pylint: disable=too-many-public-methods
 from datetime import datetime
 
 import pytest

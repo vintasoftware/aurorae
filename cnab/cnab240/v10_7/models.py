@@ -1,5 +1,5 @@
 # pylint: disable=unsubscriptable-object
-from typing import Optional, Union
+from typing import Optional
 
 from pydantic import Field as FieldSchema
 from pydantic.main import BaseModel
@@ -401,16 +401,6 @@ class CNABBatchSegmentA(Line):
         validate_all = True
         validate_assignment = True
 
-    def _map_values(self, initial_data: dict) -> None:
-        data = {}
-        for key, nested_path in self._mapping.items():
-            [entity_key, field_key] = nested_path.split(".")
-
-            entity = initial_data[entity_key]
-            data[key] = entity[field_key]
-
-        return data
-
     def __init__(self, payment: Payment, line_number) -> None:
         employee = payment.employee
         company = payment.company
@@ -433,19 +423,6 @@ class CNABBatchSegmentA(Line):
             data[key] = entity[field_key]
 
         return data
-
-    def __init__(self, payment: Payment, line_number) -> None:
-        employee = payment.employee
-        company = payment.company
-
-        initial_data = {
-            "payment": payment.dict(),
-            "company": company.dict(),
-            "employee": employee.dict(),
-        }
-
-        data = self._map_values(initial_data)
-        super().__init__(data, line_number=line_number)
 
 
 class CNABBatchSegmentB(Line):
