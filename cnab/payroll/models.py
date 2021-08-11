@@ -24,6 +24,10 @@ class Company(BaseModel):
     address_cep_complement: types.AddressCEPComplement
     address_state: types.AddressState
 
+    class Config:
+        validate_all = True
+        validate_assignment = True
+
 
 class Employee(BaseModel):
     bank_code: types.BankCode
@@ -38,14 +42,14 @@ class Employee(BaseModel):
     initiation_form: Optional[types.InitiationForm]
 
     # Information 10
-    address_location: Optional[types.Information35]
+    address_location: Optional[types.NameAddress]
     # OR
-    pix_tx_id: Optional[types.Information35]
+    pix_tx_id: Optional[types.PIXTXID]
 
     # Information 11
-    pix_key: Optional[types.Information99]
+    pix_key: Optional[types.PIXKey]
     # OR
-    message: Optional[types.Information99]
+    message: Optional[types.Message]
     # OR
     address_number: Optional[types.AddressNumber]
     address_complement: Optional[types.AddressDetails]
@@ -54,6 +58,10 @@ class Employee(BaseModel):
     address_cep: Optional[types.AddressCEP]
     address_cep_complement: Optional[types.AddressCEPComplement]
     address_state: Optional[types.AddressState]
+
+    class Config:
+        validate_all = True
+        validate_assignment = True
 
     @classmethod
     def has_all_address_fields(cls, values):  # noqa
@@ -162,6 +170,10 @@ class Payment(BaseModel):
     notify_recipient: Optional[types.NotifyRecipient]
     registration_number: Optional[types.RecipientRegistrationNumberInformation12]
 
+    class Config:
+        validate_all = True
+        validate_assignment = True
+
     @root_validator(pre=True)
     def check_information_12(cls, values):  # noqa
         """
@@ -190,3 +202,7 @@ class Payroll(BaseModel):
     company: Company
     employees: List[Employee]
     payments: List[Payment]
+
+    class Config:
+        validate_all = True
+        validate_assignment = True
