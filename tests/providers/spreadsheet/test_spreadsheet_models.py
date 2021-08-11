@@ -2,11 +2,11 @@ import pytest
 from pydantic.error_wrappers import ValidationError
 
 from providers.spreadsheet.models import (
+    RegistrationType,
+    Spreadsheet,
     SpreadsheetCompany,
     SpreadsheetEmployee,
     SpreadsheetPayment,
-    RegistrationType,
-    Spreadsheet,
 )
 
 
