@@ -1,13 +1,14 @@
 import re
+
 import pytest
 from pydantic.error_wrappers import ValidationError
 
 from providers.spreadsheet.models import (
+    RegistrationType,
+    Spreadsheet,
     SpreadsheetCompany,
     SpreadsheetEmployee,
     SpreadsheetPayment,
-    RegistrationType,
-    Spreadsheet,
 )
 
 
@@ -16,7 +17,8 @@ class TestModels:
         with pytest.raises(
             ValidationError,
             match=re.escape(
-                "1 validation error for SpreadsheetCompany\nCEP\n  str type expected (type=type_error.str)"
+                "1 validation error for SpreadsheetCompany\nCEP\n  "
+                + "str type expected (type=type_error.str)"
             ),
         ):
             SpreadsheetCompany(
@@ -45,7 +47,8 @@ class TestModels:
         with pytest.raises(
             ValidationError,
             match=re.escape(
-                "1 validation error for SpreadsheetCompany\n* Nome do Banco\n  field required (type=value_error.missing)"
+                "1 validation error for SpreadsheetCompany\n* Nome do Banco\n  "
+                + "field required (type=value_error.missing)"
             ),
         ):
             SpreadsheetCompany(
@@ -71,7 +74,8 @@ class TestModels:
         with pytest.raises(
             ValidationError,
             match=re.escape(
-                "1 validation error for SpreadsheetCompany\n* Nome do Banco\n  none is not an allowed value (type=type_error.none.not_allowed)"
+                "1 validation error for SpreadsheetCompany\n* Nome do Banco\n  "
+                + "none is not an allowed value (type=type_error.none.not_allowed)"
             ),
         ):
             SpreadsheetCompany(
@@ -98,7 +102,8 @@ class TestModels:
         with pytest.raises(
             ValidationError,
             match=re.escape(
-                "1 validation error for SpreadsheetPayment\nData do Pagamento -> __root__\n  {value} is not valid (type=value_error)"
+                "1 validation error for SpreadsheetPayment\nData do Pagamento -> __root__\n  "
+                + "{value} is not valid (type=value_error)"
             ),
         ):
             SpreadsheetPayment(
