@@ -6,6 +6,7 @@ from pydantic.main import BaseModel
 
 from cnab.cnab240.base import Line
 from cnab.cnab240.v10_7 import lambdas, types
+from cnab.payroll.models import Company, Employee, Payment
 
 
 class BaseConfig:
@@ -108,6 +109,7 @@ class CNABHeader(Line):
 
     class Config(BaseConfig):
         validate_all = True
+        validate_assignment = True
         _mapping = {
             "field_01_0": "bank_code",
             "field_05_0": "registration_type",
@@ -144,12 +146,12 @@ class CNABBatchHeader(Line):
         code="G028",
     )
     field_05_1: types.ServiceType = FieldSchema(
-        default_factory=lambdas.get_field_G025,
+        default=types.ServiceTypeEnum.salary_payment,
         description="Tipo do Serviço",
         code="G025",
     )
     field_06_1: types.ReleaseMethod = FieldSchema(
-        default_factory=lambdas.get_field_G029,
+        default=types.ReleaseMethodEnum.credit_in_checking_account,
         description="Forma de Lançamento",
         code="G029",
     )
@@ -234,7 +236,7 @@ class CNABBatchHeader(Line):
         code="G036",
     )
     field_26_1: types.PaymentMethod = FieldSchema(
-        default_factory=lambdas.get_field_P014,
+        default=types.PaymentMethodEnum.direct_debit,
         description="Indicativo da Forma de Pagamento do Serviço",
         code="P014",
     )
@@ -250,8 +252,27 @@ class CNABBatchHeader(Line):
     )
 
     class Config:
-        use_enum_values = True
         validate_all = True
+        validate_assignment = True
+        _mapping = {
+            "field_01_1": "bank_code",
+            "field_09_1": "registration_type",
+            "field_10_1": "registration_number",
+            "field_11_1": "bank_code",
+            "field_12_1": "bank_agency",
+            "field_13_1": "bank_agency_digit",
+            "field_14_1": "bank_account_number",
+            "field_15_1": "bank_account_digit",
+            "field_16_1": "bank_account_agency_digit",
+            "field_17_1": "company_name",
+            "field_19_1": "address_location",
+            "field_20_1": "address_number",
+            "field_21_1": "address_complement",
+            "field_22_1": "address_city",
+            "field_23_1": "address_cep",
+            "field_24_1": "address_cep_complement",
+            "field_25_1": "address_state",
+        }
 
 
 class CNABBatchSegmentA(Line):
@@ -336,7 +357,7 @@ class CNABBatchSegmentA(Line):
     field_23_3A: types.PaymentEffectiveAmount = FieldSchema(
         description="Valor Real da Efetivação do Pagto", code="P004", default=0
     )
-    field_24_3A: types.AdditionalInformation = FieldSchema(
+    field_24_3A: types.Message = FieldSchema(
         description="Outras Informações", code="G031", default=""
     )
     field_25_3A: types.ServiceTypeComplement = FieldSchema(
@@ -362,8 +383,46 @@ class CNABBatchSegmentA(Line):
         description="Códigos das Ocorrências para Retorno", code="G059", default=""
     )
 
+    _mapping = {
+        "field_01_3A": "company.bank_code",
+        "field_09_3A": "employee.bank_code",
+        "field_10_3A": "employee.bank_agency",
+        "field_11_3A": "employee.bank_agency_digit",
+        "field_12_3A": "employee.bank_account_number",
+        "field_13_3A": "employee.bank_account_digit",
+        "field_14_3A": "employee.bank_account_agency_digit",
+        "field_15_3A": "employee.name",
+        "field_17_3A": "payment.payment_date",
+        "field_20_3A": "payment.payment_amount",
+        "field_22_3A": "payment.payment_date",
+    }
+
     class Config:
         validate_all = True
+        validate_assignment = True
+
+    def _map_values(self, initial_data: dict) -> None:
+        data = {}
+        for key, nested_path in self._mapping.items():
+            [entity_key, field_key] = nested_path.split(".")
+
+            entity = initial_data[entity_key]
+            data[key] = entity[field_key]
+
+        return data
+
+    def __init__(self, payment: Payment, line_number) -> None:
+        employee = payment.employee
+        company = payment.company
+
+        initial_data = {
+            "payment": payment.dict(),
+            "company": company.dict(),
+            "employee": employee.dict(),
+        }
+
+        data = self._map_values(initial_data)
+        super().__init__(data, line_number=line_number)
 
 
 class CNABBatchSegmentB(Line):
@@ -382,7 +441,6 @@ class CNABBatchSegmentB(Line):
         code="G003",
     )
     field_04_3B: types.RecordSequentialNumber = FieldSchema(
-        default_factory=lambdas.get_field_G038,
         name="Nº Seqüencial do Registro no Lote",
         code="G038",
     )
@@ -392,12 +450,12 @@ class CNABBatchSegmentB(Line):
         code="G039",
     )
     field_06_3B: types.InitiationForm = FieldSchema(
-        default_factory=lambdas.get_field_G100,
+        default=types.InitiationFormEnum.bank_info,
         name="* Forma de Iniciação",
         code="G100",
     )
     field_07_3B: types.RegistrationType = FieldSchema(
-        default_factory=lambdas.get_field_G005,
+        default=types.RegistrationTypeEnum.cpf,
         name="Tipo de Inscrição do Favorecido",
         code="G005",
     )
@@ -405,35 +463,66 @@ class CNABBatchSegmentB(Line):
         name="Nº de Inscrição do Favorecido",
         code="G006",
     )
-    field_09_3B: types.Information35 = FieldSchema(
+    field_09_3B: types.Information10 = FieldSchema(
         default="",
         name="Informação 10",
         code="G101",
     )
-    field_10_3B: types.Information60 = FieldSchema(
+    field_10_3B: types.Information11 = FieldSchema(
         default="",
         name="Informação 11",
         code="G101",
     )
-    field_11_3B: types.Information99 = FieldSchema(
+    field_11_3B: types.Information12 = FieldSchema(
         default="",
         name="Informação 12",
         code="G101",
     )
     field_12_3B: types.SIAPE6 = FieldSchema(
-        default="",
+        default=0,
         name="Uso Exclusivo para o SIAPE",
         code="P012",
     )
     field_13_3B: types.ISPBCode = FieldSchema(
-        default="",
+        default=0,
         name="Código ISPB",
         code="P015",
     )
 
-    class Config:
+    def get_information_10(self, employee: Employee):
+        return types.Information10.parse_obj(employee.address_location)
+
+    def get_information_11(self, employee: Employee):
+        return types.ComposedField103B.parse_obj(employee)
+
+    def get_information_12(self, payment: Payment):
+        return types.ComposedField113B.parse_obj(payment)
+
+    class Config(BaseConfig):
         validate_all = True
-        use_enum_values = True
+        validate_assignment = True
+
+        _mapping = {
+            "field_01_3B": "bank_code",
+            "field_08_3B": "registration_number",
+            "field_04_3B": "record_number",
+            "field_09_3B": "information_10",
+            "field_10_3B": "information_11",
+            "field_11_3B": "information_12",
+        }
+
+    def __init__(
+        self,
+        payment: Payment,
+        line_number: int,
+    ) -> None:
+        employee = payment.employee
+        initial_data = employee.dict()
+        initial_data["record_number"] = line_number - 2
+        initial_data["information_10"] = self.get_information_10(employee)
+        initial_data["information_11"] = self.get_information_11(employee)
+        initial_data["information_12"] = self.get_information_12(payment)
+        super().__init__(initial_data, line_number)
 
 
 class CNABBatchSegmentC(Line):
@@ -476,12 +565,21 @@ class CNABBatchTrailer(Line):
         description="Códigos das Ocorrências para Retorno", code="G059", default=""
     )
 
-    def __init__(self, initial_data, line_number):
-        initial_data["field_05_5"] = line_number - 1
-        super().__init__(initial_data, line_number)
-
-    class Config:
+    class Config(BaseConfig):
         validate_all = True
+        validate_assignment = True
+        _mapping = {
+            "field_01_5": "bank_code",
+            "field_05_5": "record_number",
+            "field_06_5": "values_sum",
+        }
+
+    def __init__(self, company: Company, sum_payment_values: str, line_number):
+
+        initial_data = company.dict()
+        initial_data["record_number"] = line_number - 1
+        initial_data["values_sum"] = sum_payment_values
+        super().__init__(initial_data, line_number)
 
 
 class CNABBatchRecords(BaseModel):
@@ -528,9 +626,12 @@ class CNABTrailer(Line):
         default="", description="Uso Exclusivo FEBRABAN/CNAB", code="G004"
     )
 
-    def __init__(self, initial_data, line_number):
-        initial_data["field_06_9"] = line_number
-        super().__init__(initial_data, line_number)
-
-    class Config:
+    class Config(BaseConfig):
         validate_all = True
+        validate_assignment = True
+        _mapping = {"field_01_9": "bank_code", "field_06_9": "records_number"}
+
+    def __init__(self, company: Company, line_number):
+        initial_data = company.dict()
+        initial_data["records_number"] = line_number
+        super().__init__(initial_data, line_number)
