@@ -1,8 +1,10 @@
+import itertools
 from typing import List, Optional
 
 from pydantic import BaseModel, root_validator
+from pydantic.fields import PrivateAttr
 
-from cnab.cnab240.v10_7 import types
+from cnab.cnab240.v10_7 import models, types
 
 
 class Company(BaseModel):
@@ -163,12 +165,12 @@ class Payment(BaseModel):
     # payment_date
     # payment_amount
     # and the following fields
-    rebate_amount: Optional[types.RebateAmount]
-    discount_amount: Optional[types.DiscountAmount]
-    arrears_amount: Optional[types.ArrearsAmount]
-    fine_amount: Optional[types.FineAmount]
-    notify_recipient: Optional[types.NotifyRecipient]
-    registration_number: Optional[types.RecipientRegistrationNumberInformation12]
+    rebate_amount: types.RebateAmount = 0
+    discount_amount: types.DiscountAmount = 0
+    arrears_amount: types.ArrearsAmount = 0
+    fine_amount: types.FineAmount = 0
+    notify_recipient: types.NotifyRecipient = types.NotifyRecipientEnum.no_notification
+    registration_number: types.RecipientRegistrationNumberInformation12 = ""
 
     class Config:
         validate_all = True
@@ -203,6 +205,87 @@ class Payroll(BaseModel):
     employees: List[Employee]
     payments: List[Payment]
 
+    _line_counter: int = PrivateAttr()
+
     class Config:
         validate_all = True
         validate_assignment = True
+
+    @root_validator
+    def check_payments_employees_exist(cls, values):  # noqa
+        employees_names = map(
+            lambda employee: employee.name, values.get("employees", [])
+        )
+
+        for payment in values.get("payments", []):
+            assert (
+                payment.employee_name in employees_names
+            ), f"Employee not found for name: {payment.employee_name.value}"
+
+        return values
+
+    def _get_employee_by_name(self, employee_name):
+        for employee in self.employees:
+            if employee.name != employee_name:
+                continue
+            return employee
+
+    def _get_payment_amount_sum(self):
+        return sum([payment.payment_amount.value for payment in self.payments])
+
+    def _get_cnab_batch(self):
+        batch_header = models.CNABBatchHeader(
+            initial_data=self.company.dict(), line_number=next(self._line_counter)
+        )
+
+        batch_records = []
+        record_counter = 0
+        for payment in self.payments:
+            payment.company = self.company
+            payment.employee = self._get_employee_by_name(payment.employee_name)
+
+            record_counter += 1
+            segment_a = models.CNABBatchSegmentA(
+                payment=payment,
+                record_number=record_counter,
+                line_number=next(self._line_counter),
+            )
+
+            record_counter += 1
+            segment_b = models.CNABBatchSegmentB(
+                payment=payment,
+                record_number=record_counter,
+                line_number=next(self._line_counter),
+            )
+
+            batch_records.append(
+                models.CNABBatchRecord(segment_a=segment_a, segment_b=segment_b)
+            )
+
+        batch_trailer = models.CNABBatchTrailer(
+            company=self.company,
+            total_batch_lines=record_counter + 2,
+            sum_payment_values=self._get_payment_amount_sum(),
+            line_number=next(self._line_counter),
+        )
+        return models.CNABBatch(
+            header=batch_header, records=batch_records, trailer=batch_trailer
+        )
+
+    def get_cnab_file(self):
+        self._line_counter = itertools.count(1)
+
+        file_header = models.CNABHeader(
+            initial_data=self.company.dict(), line_number=next(self._line_counter)
+        )
+
+        batch = self._get_cnab_batch()
+
+        last_line_number = next(self._line_counter)
+        file_trailer = models.CNABTrailer(
+            company=self.company,
+            total_file_lines=last_line_number,
+            line_number=last_line_number,
+        )
+
+        return models.CNABFile(header=file_header, batch=batch, trailer=file_trailer)

@@ -3,8 +3,8 @@ import re
 import pytest
 from pydantic.error_wrappers import ValidationError
 
+from cnab.cnab240.v10_7.types import RegistrationTypeEnum
 from providers.spreadsheet.models import (
-    RegistrationType,
     Spreadsheet,
     SpreadsheetCompany,
     SpreadsheetEmployee,
@@ -23,7 +23,7 @@ class TestModels:
         ):
             SpreadsheetCompany(
                 company_name="Company Level",
-                registration_type=RegistrationType.cnpj,
+                registration_type=RegistrationTypeEnum.cnpj,
                 registration_number="111",
                 bank_name="Company Bank",
                 bank_code="222",
@@ -53,7 +53,7 @@ class TestModels:
         ):
             SpreadsheetCompany(
                 company_name="Company Level",
-                registration_type=RegistrationType.cnpj,
+                registration_type=RegistrationTypeEnum.cnpj,
                 registration_number="111",
                 bank_code="222",
                 bank_agency="333",
@@ -80,7 +80,7 @@ class TestModels:
         ):
             SpreadsheetCompany(
                 company_name="Company Level",
-                registration_type=RegistrationType.cnpj,
+                registration_type=RegistrationTypeEnum.cnpj,
                 registration_number="111",
                 bank_name=None,
                 bank_code="222",
@@ -133,12 +133,12 @@ class TestModels:
             address_state="PE",
         )
 
-        assert company.registration_type == RegistrationType.cnpj
+        assert company.registration_type == RegistrationTypeEnum.cnpj
 
     def test_multiple_payments_for_one_employee(self):
         company = SpreadsheetCompany(
             company_name="Company Level",
-            registration_type=RegistrationType.cnpj,
+            registration_type=RegistrationTypeEnum.cnpj,
             registration_number="111",
             bank_name="Company Bank",
             bank_code="222",
@@ -158,7 +158,7 @@ class TestModels:
 
         employee = SpreadsheetEmployee(
             name="Employee Name",
-            registration_type=RegistrationType.cpf,
+            registration_type=RegistrationTypeEnum.cpf,
             registration_number="000",
             bank_code="111",
             bank_agency="222",
@@ -208,7 +208,7 @@ class TestModels:
     def test_multiple_payments_for_multiple_employees(self):
         company = SpreadsheetCompany(
             company_name="Company Level",
-            registration_type=RegistrationType.cnpj,
+            registration_type=RegistrationTypeEnum.cnpj,
             registration_number="111",
             bank_name="Company Bank",
             bank_code="222",
@@ -228,7 +228,7 @@ class TestModels:
 
         employee_1 = SpreadsheetEmployee(
             name="Employee 1",
-            registration_type=RegistrationType.cpf,
+            registration_type=RegistrationTypeEnum.cpf,
             registration_number="000",
             bank_code="111",
             bank_agency="222",
@@ -247,7 +247,7 @@ class TestModels:
         )
         employee_2 = SpreadsheetEmployee(
             name="Employee 2",
-            registration_type=RegistrationType.cpf,
+            registration_type=RegistrationTypeEnum.cpf,
             registration_number="777",
             bank_code="666",
             bank_agency="555",
@@ -266,7 +266,7 @@ class TestModels:
         )
         employee_3 = SpreadsheetEmployee(
             name="Employee 3",
-            registration_type=RegistrationType.cpf,
+            registration_type=RegistrationTypeEnum.cpf,
             registration_number="888",
             bank_code="999",
             bank_agency="101",

@@ -10,6 +10,14 @@ from pydantic import BaseModel, PrivateAttr, conint, constr, validator
 STR_FILL_VALUE = " "
 INT_FILL_VALUE = "0"
 
+REGISTRATION_TYPE_MAP = {
+    "ISENTO/NAO INFORMADO": 0,
+    "CPF": 1,
+    "CGC/CNPJ": 2,
+    "PIS/PASEP": 3,
+    "OUTROS": 9,
+}
+
 # fmt: off
 VALID_CHARACTERS = (
     "abcdefghijklmnopqrstuvxywz"
@@ -18,20 +26,6 @@ VALID_CHARACTERS = (
     ". "
 )
 # fmt: on
-
-
-class CNABString(BaseModel):
-    @validator("__root__", pre=True, check_fields=False)
-    def validate_string(cls, value):  # noqa
-        assert all(c in VALID_CHARACTERS for c in value), "Invalid characters"
-
-        return value
-
-    def as_fixed_width(self):
-        value = self.__root__
-        if isinstance(value, (CNABString, CNABComposedField)):
-            value = value.as_fixed_width()
-        return value.ljust(self._max_str_length, STR_FILL_VALUE).upper()
 
 
 class CNABComposedField(BaseModel):
@@ -56,9 +50,32 @@ class CNABComposedField(BaseModel):
         return self._formatted_value
 
 
-class CNABEnum(BaseModel):
+class CNABString(BaseModel):
+    @property
+    def value(self):
+        value = self.__root__
+        if isinstance(value, (CNABString, CNABComposedField)):
+            value = value.as_fixed_width()
+        return value
+
+    @validator("__root__", pre=True, check_fields=False)
+    def validate_string(cls, value):  # noqa
+        if not isinstance(value, (CNABString, CNABComposedField)):
+            assert all(c in VALID_CHARACTERS for c in value), "Invalid characters"
+
+        return value
+
     def as_fixed_width(self):
-        return str(self.__root__.value)
+        return self.value.ljust(self._max_str_length, STR_FILL_VALUE).upper()
+
+
+class CNABEnum(BaseModel):
+    @property
+    def value(self):
+        return self.__root__.value
+
+    def as_fixed_width(self):
+        return str(self.value)
 
 
 class CNABEnumFillInt(BaseModel):
@@ -71,8 +88,12 @@ class CNABEnumAlphaFill(BaseModel):
         return str(self.__root__.value).ljust(self._max_str_length, STR_FILL_VALUE)
 
 
-class CNABPositiveInt(BaseModel):
-    @validator("__root__", pre=True, check_fields=False)
+class PositiveInt(BaseModel):
+    @property
+    def value(self):
+        return self.__root__
+
+    @validator("__root__", pre=True, check_fields=False, allow_reuse=True)
     def validate_int(cls, value):  # noqa
         """Prevent coersion from float/decimal to int, allow coersion from string"""
         if isinstance(value, (Decimal, float)):
@@ -82,21 +103,13 @@ class CNABPositiveInt(BaseModel):
 
         return value
 
+
+class CNABPositiveInt(PositiveInt):
     def as_fixed_width(self):
         return str(self.__root__).rjust(self._max_str_length, INT_FILL_VALUE)
 
 
-class CNABAlphaPositiveInt(BaseModel):
-    @validator("__root__", pre=True, check_fields=False)
-    def validate_int(cls, value):  # noqa
-        """Prevent coersion from float/decimal to int, allow coersion from string"""
-        if isinstance(value, (Decimal, float)):
-            raise ValueError(
-                "value cannot be a float or Decimal, should be an integer instead"
-            )
-
-        return value
-
+class CNABAlphaPositiveInt(PositiveInt):
     def as_fixed_width(self):
         return str(self.__root__).ljust(self._max_str_length, STR_FILL_VALUE)
 
@@ -107,7 +120,7 @@ class CNABDate(BaseModel):
 
     __root__: constr(min_length=_min_str_length, max_length=_max_str_length)
 
-    @validator("__root__")
+    @validator("__root__", allow_reuse=True)
     def validate_date(cls, value):  # noqa
         try:
             datetime.strptime(value, "%d%m%Y")
@@ -126,7 +139,7 @@ class CNABTime(BaseModel):
 
     __root__: constr(min_length=_min_str_length, max_length=_max_str_length)
 
-    @validator("__root__")
+    @validator("__root__", allow_reuse=True)
     def validate_time(cls, value):  # noqa
         try:
             datetime.strptime(value, "%H%M%S")
@@ -178,7 +191,15 @@ class EntryType(CNABEnum):
     __root__: EntryTypeEnum
 
 
-class RegistrationTypeEnum(IntEnum):
+class RegistrationTypeEnum(Enum):
+    exempt = "ISENTO/NAO INFORMADO"
+    cpf = "CPF"
+    cnpj = "CGC/CNPJ"
+    pis = "PIS/PASEP"
+    others = "OUTROS"
+
+
+class CNABRegistrationTypeEnum(IntEnum):
     exempt = 0
     cpf = 1
     cnpj = 2
@@ -188,6 +209,16 @@ class RegistrationTypeEnum(IntEnum):
 
 class RegistrationType(CNABEnum):
     __root__: RegistrationTypeEnum
+
+
+class CNABRegistrationType(CNABEnum):
+    __root__: CNABRegistrationTypeEnum
+
+    @validator("__root__", pre=True)
+    def validate_registration_type(cls, root_value):  # noqa
+        if isinstance(root_value, RegistrationTypeEnum):
+            return REGISTRATION_TYPE_MAP[root_value.value]
+        return root_value
 
 
 class RegistrationNumber(CNABPositiveInt):

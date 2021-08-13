@@ -60,3 +60,9 @@ class TestSpreadsheetHandler:
         }
 
         assert json.loads(handler.spreadsheet.json()) == expected_json
+
+    def test_generates_cnab_file(self):
+        input_filename = "./tests/fixtures/test_spreadsheet.xlsx"
+        handler = SpreadsheetHandler(input_filename=input_filename)
+        cnab_file = handler.get_cnab_file()
+        assert len(cnab_file.batch.records) == 1

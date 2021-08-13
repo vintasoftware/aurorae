@@ -48,7 +48,7 @@ class TestCNABModels:
     def test_payroll_to_cnab_header(self):
         company_data = {
             "bank_code": "77",
-            "registration_type": "9",
+            "registration_type": "OUTROS",
             "registration_number": "99999999000999",
             "bank_agency": "1",
             "bank_agency_digit": "9",
@@ -192,7 +192,7 @@ class TestCNABModels:
     def test_batch_header_with_wrong_field_01_1(self):
         batch_header_data = {
             "field_01_1": "1111",
-            "field_09_1": "1",
+            "field_09_1": "2",
             "field_10_1": "99999999000999",
             "field_11_1": "77",
             "field_12_1": "1",
@@ -210,14 +210,17 @@ class TestCNABModels:
             "field_25_1": "PE",
         }
 
-        with pytest.raises(ValidationError):
+        with pytest.raises(
+            ValidationError,
+            match=r"(?s).*bank_code.*ensure this value is less than or equal to 999.*",
+        ):
             CNABBatchHeader(batch_header_data, line_number=1)
 
     def test_batch_header_with_wrong_field_05_1_enum_value(self):
         batch_header_data = {
-            "field_01_1": "1111",
+            "field_01_1": "111",
             "field_05_1": "91",
-            "field_09_1": "1",
+            "field_09_1": "2",
             "field_10_1": "99999999000999",
             "field_11_1": "77",
             "field_12_1": "1",
@@ -241,13 +244,13 @@ class TestCNABModels:
     @pytest.mark.usefixtures("payroll_data")
     def test_batch_segment_a_as_fixed_width(self, payroll_data):
         company = Company.parse_obj(payroll_data["company"])
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        employee = Employee.parse_obj(payroll_data["employees"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
 
         payment.employee = employee
         payment.company = company
 
-        segment_a = CNABBatchSegmentA(payment=payment, line_number=1)
+        segment_a = CNABBatchSegmentA(payment=payment, record_number=1, line_number=1)
 
         expected_segment_a = (
             "0770001300001A00001807700001900000999999900MARIA FULANA DA SILVA                "
@@ -258,13 +261,13 @@ class TestCNABModels:
 
     @pytest.mark.usefixtures("payroll_data")
     def test_batch_segment_b_as_fixed_width(self, payroll_data):
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        employee = Employee.parse_obj(payroll_data["employees"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
 
         payment.employee = employee
 
         batch_detail_segment_b_model = CNABBatchSegmentB(
-            payment=payment, line_number=4, record_number=2
+            payment=payment, record_number=2, line_number=4
         )
         expected_line = (
             "0770001300002B05 100099999999999RUA DAS AMELIAS                    001231 ANDAR "
@@ -286,12 +289,12 @@ class TestCNABModels:
 
     @pytest.mark.usefixtures("payroll_data")
     def test_batch_segment_b_as_fixed_width_with_custom_field_01_3B(self, payroll_data):
-        employee_data = payroll_data["employee"][0]
+        employee_data = payroll_data["employees"][0]
         employee_data["bank_code"] = "1"
         employee_data["registration_number"] = "99966699900"
 
         employee = Employee.parse_obj(employee_data)
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
 
         payment.employee = employee
 
@@ -303,8 +306,8 @@ class TestCNABModels:
 
     @pytest.mark.usefixtures("payroll_data")
     def test_batch_segment_b_with_wrong_field_01_3B(self, payroll_data):
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        employee = Employee.parse_obj(payroll_data["employees"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
 
         payment.employee = employee
 
@@ -316,8 +319,8 @@ class TestCNABModels:
 
     @pytest.mark.usefixtures("payroll_data")
     def test_batch_segment_b_record_number(self, payroll_data):
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        employee = Employee.parse_obj(payroll_data["employees"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
         payment.employee = employee
 
         record_number = 6
@@ -335,7 +338,10 @@ class TestCNABModels:
         company = Company.parse_obj(payroll_data["company"])
 
         batch_trailer = CNABBatchTrailer(
-            company=company, sum_payment_values="1000", line_number=5, record_number=4
+            company=company,
+            sum_payment_values="1000",
+            total_batch_lines=4,
+            line_number=5,
         )
 
         expected_batch_trailer = (
@@ -349,21 +355,21 @@ class TestCNABModels:
     def test_batch_trailer_record_number(self, payroll_data):
         company = Company.parse_obj(payroll_data["company"])
 
-        record_number = 4
+        total_batch_lines = 4
 
         trailer = CNABBatchTrailer(
             company=company,
-            record_number=record_number,
             sum_payment_values=100,
+            total_batch_lines=total_batch_lines,
             line_number=4,
         )
 
-        assert trailer.field_05_5 == types.RecordsNumber.parse_obj(record_number)
+        assert trailer.field_05_5 == types.RecordsNumber.parse_obj(total_batch_lines)
 
     @pytest.mark.usefixtures("payroll_data")
     def test_trailer_fixed_width(self, payroll_data):
         company = Company.parse_obj(payroll_data["company"])
-        trailer = CNABTrailer(company=company, record_number=6, line_number=6)
+        trailer = CNABTrailer(company=company, total_file_lines=6, line_number=6)
 
         expected_trailer = expected_trailer = (
             "07799999         000001000006000000                                             "
@@ -384,7 +390,7 @@ class TestCNABModels:
             ValidationError,
             match=r"(?s).*bank_code.*ensure this value is less than or equal to 999.*",
         ):
-            CNABTrailer(company=company, record_number=2, line_number=6)
+            CNABTrailer(company=company, total_file_lines=2, line_number=6)
 
     @pytest.mark.usefixtures("payroll_data")
     def test_trailer_error_on_field_01_9_with_invalid_number(self, payroll_data):
@@ -400,12 +406,12 @@ class TestCNABModels:
     def test_trailer_record_number(self, payroll_data):
         company = Company.parse_obj(payroll_data["company"])
 
-        record_number = 4
+        total_file_lines = 4
 
         trailer = CNABTrailer(
             company=company,
-            record_number=record_number,
+            total_file_lines=total_file_lines,
             line_number=4,
         )
 
-        assert trailer.field_06_9 == types.RecordsNumber.parse_obj(record_number)
+        assert trailer.field_06_9 == types.RecordsNumber.parse_obj(total_file_lines)
