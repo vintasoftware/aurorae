@@ -10,8 +10,23 @@ from pydantic import BaseModel, PrivateAttr, conint, constr, validator
 STR_FILL_VALUE = " "
 INT_FILL_VALUE = "0"
 
+# fmt: off
+VALID_CHARACTERS = (
+    "abcdefghijklmnopqrstuvxywz"
+    "ABCDEFGHIJKLMNOPQRSTUVXYWZ"
+    "0123456789"
+    ". "
+)
+# fmt: on
+
 
 class CNABString(BaseModel):
+    @validator("__root__", pre=True, check_fields=False)
+    def validate_string(cls, value):  # noqa
+        assert all(c in VALID_CHARACTERS for c in value), "Invalid characters"
+
+        return value
+
     def as_fixed_width(self):
         value = self.__root__
         if isinstance(value, (CNABString, CNABComposedField)):
