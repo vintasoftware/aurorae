@@ -47,7 +47,7 @@ class TestCNABModels:
     def test_payroll_to_cnab_header(self):
         company_data = {
             "bank_code": "77",
-            "registration_type": "9",
+            "registration_type": "OUTROS",
             "registration_number": "99999999000999",
             "bank_agency": "1",
             "bank_agency_digit": "9",
@@ -191,7 +191,7 @@ class TestCNABModels:
     def test_batch_header_with_wrong_field_01_1(self):
         batch_header_data = {
             "field_01_1": "1111",
-            "field_09_1": "1",
+            "field_09_1": "CGC/CNPJ",
             "field_10_1": "99999999000999",
             "field_11_1": "77",
             "field_12_1": "1",
@@ -216,7 +216,7 @@ class TestCNABModels:
         batch_header_data = {
             "field_01_1": "1111",
             "field_05_1": "91",
-            "field_09_1": "1",
+            "field_09_1": "CGC/CNPJ",
             "field_10_1": "99999999000999",
             "field_11_1": "77",
             "field_12_1": "1",
@@ -240,8 +240,8 @@ class TestCNABModels:
     @pytest.mark.usefixtures("payroll_data")
     def test_segment_a_fixed_width(self, payroll_data):
         company = Company.parse_obj(payroll_data["company"])
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        employee = Employee.parse_obj(payroll_data["employees"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
 
         payment.employee = employee
         payment.company = company
@@ -293,8 +293,8 @@ class TestCNABModels:
 
     @pytest.mark.usefixtures("payroll_data")
     def test_batch_detail_segment_b_as_fixed_width(self, payroll_data):
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        employee = Employee.parse_obj(payroll_data["employees"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
 
         payment.employee = employee
 
@@ -321,12 +321,12 @@ class TestCNABModels:
     def test_batch_detail_segment_b_as_fixed_width_with_custom_field_01_3B(
         self, payroll_data
     ):
-        employee_data = payroll_data["employee"][0]
+        employee_data = payroll_data["employees"][0]
         employee_data["bank_code"] = "1"
         employee_data["registration_number"] = "99966699900"
 
         employee = Employee.parse_obj(employee_data)
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
 
         payment.employee = employee
 
@@ -336,8 +336,8 @@ class TestCNABModels:
 
     @pytest.mark.usefixtures("payroll_data")
     def test_batch_detail_segment_b_with_wrong_field_01_3B(self, payroll_data):
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
+        employee = Employee.parse_obj(payroll_data["employees"][0])
+        payment = Payment.parse_obj(payroll_data["payments"][0])
 
         payment.employee = employee
 

@@ -1,12 +1,17 @@
 # pylint: disable=unsubscriptable-object
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import Field as FieldSchema
 from pydantic.main import BaseModel
 
 from cnab.cnab240.base import Line
 from cnab.cnab240.v10_7 import lambdas, types
-from cnab.payroll.models import Company, Employee, Payment
+
+
+if TYPE_CHECKING:
+    from cnab.payroll.models import Company, Employee, Payment
 
 
 class BaseConfig:
@@ -36,7 +41,7 @@ class CNABHeader(Line):
     field_04_0: types.FEBRABAN9 = FieldSchema(
         default="", description="Uso Exclusivo FEBRABAN / CNAB", code="G004"
     )
-    field_05_0: types.RegistrationType = FieldSchema(
+    field_05_0: types.CNABRegistrationType = FieldSchema(
         description="Tipo de Inscrição da Empresa", code="G005"
     )
     field_06_0: types.RegistrationNumber = FieldSchema(
@@ -165,7 +170,7 @@ class CNABBatchHeader(Line):
         description="Uso Exclusivo da FEBRABAN/CNAB",
         code="G004",
     )
-    field_09_1: types.RegistrationType = FieldSchema(
+    field_09_1: types.CNABRegistrationType = FieldSchema(
         description="Tipo de Inscrição da Empresa",
         code="G005",
     )
@@ -251,7 +256,7 @@ class CNABBatchHeader(Line):
         code="G059",
     )
 
-    class Config:
+    class Config(BaseConfig):
         validate_all = True
         validate_assignment = True
         _mapping = {
@@ -454,8 +459,7 @@ class CNABBatchSegmentB(Line):
         name="* Forma de Iniciação",
         code="G100",
     )
-    field_07_3B: types.RegistrationType = FieldSchema(
-        default=types.RegistrationTypeEnum.cpf,
+    field_07_3B: types.CNABRegistrationType = FieldSchema(
         name="Tipo de Inscrição do Favorecido",
         code="G005",
     )
@@ -504,6 +508,7 @@ class CNABBatchSegmentB(Line):
 
         _mapping = {
             "field_01_3B": "bank_code",
+            "field_07_3B": "registration_type",
             "field_08_3B": "registration_number",
             "field_04_3B": "record_number",
             "field_09_3B": "information_10",
@@ -582,15 +587,15 @@ class CNABBatchTrailer(Line):
         super().__init__(initial_data, line_number)
 
 
-class CNABBatchRecords(BaseModel):
+class CNABBatchRecord(BaseModel):
     segment_a: CNABBatchSegmentA
     segment_b: CNABBatchSegmentB
     segment_c: Optional[CNABBatchSegmentC]
 
 
-class Batch(BaseModel):
+class CNABBatch(BaseModel):
     header: CNABBatchHeader
-    records: CNABBatchRecords
+    records: List[CNABBatchRecord]
     trailer: CNABBatchTrailer
 
 
@@ -635,3 +640,9 @@ class CNABTrailer(Line):
         initial_data = company.dict()
         initial_data["records_number"] = line_number
         super().__init__(initial_data, line_number)
+
+
+class CNABFile(BaseModel):
+    header: CNABHeader
+    batch: CNABBatch
+    trailer: CNABTrailer

@@ -156,7 +156,7 @@ def payroll_data():
     return {
         "company": {
             "bank_code": "77",
-            "registration_type": "1",
+            "registration_type": "CGC/CNPJ",
             "registration_number": "99999999000999",
             "bank_agency": "77",
             "bank_agency_digit": "1",
@@ -173,11 +173,11 @@ def payroll_data():
             "address_cep_complement": 000,
             "address_state": "PE",
         },
-        "employee": [
+        "employees": [
             {
                 "name": "Maria Fulana da Silva",
                 "registration_number": "99999999999",
-                "registration_type": "1",
+                "registration_type": "CPF",
                 "bank_code": "77",
                 "bank_agency": "0001",
                 "bank_agency_digit": "9",
@@ -194,7 +194,7 @@ def payroll_data():
                 "address_cep_complement": "000",
             }
         ],
-        "payment": [
+        "payments": [
             {
                 "employee_name": "Maria Fulana da Silva",
                 "payment_amount": "1000",

@@ -1,17 +1,8 @@
-from enum import Enum
 from typing import List
 
 from pydantic import BaseModel
 
-from cnab.cnab240.v10_7.types import CNABDate
-
-
-class RegistrationType(Enum):
-    exempt = "Exempt/Not Informed"
-    cpf = "CPF"
-    cnpj = "CGC/CNPJ"
-    pis = "PIS/PASEP"
-    others = "Others"
+from cnab.cnab240.v10_7.types import CNABDate, RegistrationType, RegistrationTypeEnum
 
 
 class BaseConfig:
@@ -26,7 +17,7 @@ class BaseConfig:
 
 class SpreadsheetCompany(BaseModel):
     company_name: str
-    registration_type = RegistrationType.cnpj
+    registration_type: RegistrationType = RegistrationTypeEnum.cnpj
     registration_number: str
     bank_name: str
     bank_code: str
@@ -67,7 +58,7 @@ class SpreadsheetCompany(BaseModel):
 
 class SpreadsheetEmployee(BaseModel):
     name: str
-    registration_type = RegistrationType.cpf
+    registration_type: RegistrationType = RegistrationTypeEnum.cpf
     registration_number: str
     bank_code: str
     bank_agency: str

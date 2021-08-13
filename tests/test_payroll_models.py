@@ -14,7 +14,7 @@ def test_creates_company_raises_validation_error_on_empty_dict():
 def test_creates_company():
     company_data = {
         "bank_code": "77",
-        "registration_type": 2,
+        "registration_type": "CGC/CNPJ",
         "registration_number": "99999999999999",
         "bank_agency": "0235",
         "bank_agency_digit": "0",
@@ -43,7 +43,7 @@ def test_creates_employee_raises_validation_error_on_empty_dict():
 def test_creates_employee_raises_required_fields_validations():
     employee_data = {
         "bank_code": "77",
-        "registration_type": 1,
+        "registration_type": "CPF",
         "registration_number": "66600066600",
         "bank_agency": "1",
         "bank_agency_digit": "9",
@@ -77,7 +77,7 @@ def test_creates_employee_raises_required_fields_validations():
 def test_creates_employee():
     employee_data = {
         "bank_code": "77",
-        "registration_type": 1,
+        "registration_type": "CPF",
         "registration_number": "66600066600",
         "bank_agency": "1",
         "bank_agency_digit": "9",
@@ -132,3 +132,17 @@ def test_creates_payment_with_optional_fields():
         "registration_number": "99900099900",
     }
     models.Payment(**payment_data)
+
+
+@pytest.mark.usefixtures("payroll_data")
+def test_creates_payroll_with_missing_employee_information(payroll_data):
+    employees = [models.Employee(**payroll_data["employees"][0])]
+
+    payment_data = payroll_data["payments"][0]
+    payment_data["employee_name"] = "Invalid employee name"
+
+    payments = [models.Payment(**payment_data)]
+    company = models.Company(**payroll_data["company"])
+
+    with pytest.raises(ValidationError, match=r".*Employee not found*"):
+        models.Payroll(employees=employees, payments=payments, company=company)
