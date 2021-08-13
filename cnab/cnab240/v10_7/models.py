@@ -1,6 +1,7 @@
 # pylint: disable=unsubscriptable-object
 from __future__ import annotations
 
+import os
 from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import Field as FieldSchema
@@ -595,11 +596,44 @@ class CNABBatchRecord(BaseModel):
     segment_b: CNABBatchSegmentB
     segment_c: Optional[CNABBatchSegmentC]
 
+    def as_fixed_width(self):
+        fixed_width_str = (
+            f"{self.segment_a.as_fixed_width()}\n"
+            f"{self.segment_b.as_fixed_width()}\n"
+        )
+        return fixed_width_str
+
+    def as_html(self):
+        html_result = f"{self.segment_a.as_html()}\n" f"{self.segment_b.as_html()}\n"
+        return html_result
+
 
 class CNABBatch(BaseModel):
     header: CNABBatchHeader
     records: List[CNABBatchRecord]
     trailer: CNABBatchTrailer
+
+    def as_fixed_width(self):
+        fixed_width_str = ""
+        fixed_width_str += f"{self.header.as_fixed_width()}\n"
+
+        for record in self.records:
+            fixed_width_str += f"{record.as_fixed_width()}"
+
+        fixed_width_str += f"{self.trailer.as_fixed_width()}"
+
+        return fixed_width_str
+
+    def as_html(self):
+        html_result = ""
+        html_result += f"{self.header.as_html()}"
+
+        for record in self.records:
+            html_result += f"{record.as_html()}"
+
+        html_result += f"{self.trailer.as_html()}"
+
+        return html_result
 
 
 class CNABTrailer(Line):
@@ -649,3 +683,37 @@ class CNABFile(BaseModel):
     header: CNABHeader
     batch: CNABBatch
     trailer: CNABTrailer
+
+    def as_fixed_width(self):
+        fixed_width_str = (
+            f"{self.header.as_fixed_width()}\n"
+            f"{self.batch.as_fixed_width()}\n"
+            f"{self.trailer.as_fixed_width()}"
+        )
+        return fixed_width_str
+
+    def as_html(self):
+        html_result = (
+            f"{self.header.as_html()}"
+            f"{self.batch.as_html()}"
+            f"{self.trailer.as_html()}"
+        )
+        return html_result
+
+    def generate_file(self, output_filename):
+        file_path = f"{output_filename}"
+
+        with open(os.path.expanduser(file_path), "w") as f:
+            file_content = self.as_fixed_width()
+            f.write(file_content)
+
+    def generate_html_file(self, output_filename):
+        file_path = f"{output_filename.with_suffix('.html')}"
+
+        with open(os.path.expanduser(file_path), "w") as f:
+            html_content = self.as_html()
+            f.write("<html><head>")
+            f.write("<link href='../staticfiles/styles.css' rel='stylesheet'>")
+            f.write("</head><body>")
+            f.write(html_content)
+            f.write("</body></html>")

@@ -1,4 +1,7 @@
 import json
+from datetime import datetime
+
+from freezegun.api import freeze_time
 
 from providers.spreadsheet.handler import SpreadsheetHandler
 
@@ -66,3 +69,15 @@ class TestSpreadsheetHandler:
         handler = SpreadsheetHandler(input_filename=input_filename)
         cnab_file = handler.get_cnab_file()
         assert len(cnab_file.batch.records) == 1
+
+    @freeze_time(datetime(2021, 7, 8, 13, 30, 50))
+    def test_generates_cnab_file_fixed_width(self):
+        input_filename = "./tests/fixtures/test_spreadsheet.xlsx"
+        handler = SpreadsheetHandler(input_filename=input_filename)
+        cnab_file = handler.get_cnab_file()
+        generated_fixed_width_content = cnab_file.as_fixed_width()
+
+        with open("./tests/fixtures/test_cnab.txt") as expected_file:
+            expected_file_content = expected_file.read()
+
+        assert generated_fixed_width_content == expected_file_content

@@ -170,7 +170,7 @@ class Payment(BaseModel):
     arrears_amount: types.ArrearsAmount = 0
     fine_amount: types.FineAmount = 0
     notify_recipient: types.NotifyRecipient = types.NotifyRecipientEnum.no_notification
-    registration_number: types.RecipientRegistrationNumberInformation12 = ""
+    registration_number: types.InformationRegistrationType = "1"
 
     class Config:
         validate_all = True
@@ -241,15 +241,17 @@ class Payroll(BaseModel):
         batch_records = []
         record_counter = 0
         for payment in self.payments:
-            record_counter += 1
             payment.company = self.company
             payment.employee = self._get_employee_by_name(payment.employee_name)
 
+            record_counter += 1
             segment_a = models.CNABBatchSegmentA(
                 payment=payment,
                 record_number=record_counter,
                 line_number=next(self._line_counter),
             )
+
+            record_counter += 1
             segment_b = models.CNABBatchSegmentB(
                 payment=payment,
                 record_number=record_counter,
