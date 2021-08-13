@@ -1,3 +1,4 @@
+# pylint: disable=too-many-public-methods
 from datetime import datetime
 
 import pytest
@@ -238,7 +239,7 @@ class TestCNABModels:
             CNABBatchHeader(batch_header_data, line_number=1)
 
     @pytest.mark.usefixtures("payroll_data")
-    def test_segment_a_fixed_width(self, payroll_data):
+    def test_batch_segment_a_as_fixed_width(self, payroll_data):
         company = Company.parse_obj(payroll_data["company"])
         employee = Employee.parse_obj(payroll_data["employee"][0])
         payment = Payment.parse_obj(payroll_data["payment"][0])
@@ -256,9 +257,113 @@ class TestCNABModels:
         assert segment_a.as_fixed_width() == expected_segment_a
 
     @pytest.mark.usefixtures("payroll_data")
+    def test_batch_segment_b_as_fixed_width(self, payroll_data):
+        employee = Employee.parse_obj(payroll_data["employee"][0])
+        payment = Payment.parse_obj(payroll_data["payment"][0])
+
+        payment.employee = employee
+
+        batch_detail_segment_b_model = CNABBatchSegmentB(
+            payment=payment, line_number=4, record_number=2
+        )
+        expected_line = (
+            "0770001300002B05 100099999999999RUA DAS AMELIAS                    001231 ANDAR "
+            "       CENTRO         RECIFE         50050000PE110620210000000000010000000000000"
+            "000000000000000000000000000000000000000000000000001              000000000000000"
+        )
+
+        assert batch_detail_segment_b_model.as_fixed_width() == expected_line
+        assert batch_detail_segment_b_model.field_02_3B == types.SequentialServiceBatch(
+            __root__=1
+        )  # noqa
+        assert batch_detail_segment_b_model.field_03_3B == types.EntryType(
+            __root__=3
+        )  # noqa
+        assert (
+            batch_detail_segment_b_model.field_05_3B
+            == types.DetailRecordSegmentType(__root__="B")
+        )  # noqa
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_batch_segment_b_as_fixed_width_with_custom_field_01_3B(self, payroll_data):
+        employee_data = payroll_data["employee"][0]
+        employee_data["bank_code"] = "1"
+        employee_data["registration_number"] = "99966699900"
+
+        employee = Employee.parse_obj(employee_data)
+        payment = Payment.parse_obj(payroll_data["payment"][0])
+
+        payment.employee = employee
+
+        batch_detail_segment_b_model = CNABBatchSegmentB(
+            payment=payment, line_number=4, record_number=2
+        )
+
+        assert batch_detail_segment_b_model.field_01_3B.as_fixed_width() == "001"
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_batch_segment_b_with_wrong_field_01_3B(self, payroll_data):
+        employee = Employee.parse_obj(payroll_data["employee"][0])
+        payment = Payment.parse_obj(payroll_data["payment"][0])
+
+        payment.employee = employee
+
+        with pytest.raises(
+            ValidationError,
+            match=r"(?s).*bank_code.*ensure this value is less than or equal to 999.*",
+        ):
+            payment.employee.bank_code = "111111"
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_batch_segment_b_record_number(self, payroll_data):
+        employee = Employee.parse_obj(payroll_data["employee"][0])
+        payment = Payment.parse_obj(payroll_data["payment"][0])
+        payment.employee = employee
+
+        record_number = 6
+
+        segment = CNABBatchSegmentB(
+            payment=payment, record_number=record_number, line_number=4
+        )
+
+        assert segment.field_04_3B == types.RecordSequentialNumber.parse_obj(
+            record_number
+        )
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_batch_trailer_fixed_width(self, payroll_data):
+        company = Company.parse_obj(payroll_data["company"])
+
+        batch_trailer = CNABBatchTrailer(
+            company=company, sum_payment_values="1000", line_number=5, record_number=4
+        )
+
+        expected_batch_trailer = (
+            "07700015         000004000000000000001000000000000000000000000000               "
+            "                                                                                "
+            "                                                                                "
+        )
+        assert batch_trailer.as_fixed_width() == expected_batch_trailer
+
+    @pytest.mark.usefixtures("payroll_data")
+    def test_batch_trailer_record_number(self, payroll_data):
+        company = Company.parse_obj(payroll_data["company"])
+
+        record_number = 4
+
+        trailer = CNABBatchTrailer(
+            company=company,
+            record_number=record_number,
+            sum_payment_values=100,
+            line_number=4,
+        )
+
+        assert trailer.field_05_5 == types.RecordsNumber.parse_obj(record_number)
+
+    @pytest.mark.usefixtures("payroll_data")
     def test_trailer_fixed_width(self, payroll_data):
         company = Company.parse_obj(payroll_data["company"])
-        trailer = CNABTrailer(company=company, line_number=6)
+        trailer = CNABTrailer(company=company, record_number=6, line_number=6)
 
         expected_trailer = expected_trailer = (
             "07799999         000001000006000000                                             "
@@ -279,7 +384,7 @@ class TestCNABModels:
             ValidationError,
             match=r"(?s).*bank_code.*ensure this value is less than or equal to 999.*",
         ):
-            CNABTrailer(company=company, line_number=6)
+            CNABTrailer(company=company, record_number=2, line_number=6)
 
     @pytest.mark.usefixtures("payroll_data")
     def test_trailer_error_on_field_01_9_with_invalid_number(self, payroll_data):
@@ -289,75 +394,18 @@ class TestCNABModels:
         with pytest.raises(
             ValidationError, match=r"(?s).*bank_code.*value is not a valid integer.*"
         ):
-            Company.parse_obj(payroll_data["company"])
+            Company.parse_obj(company_data)
 
     @pytest.mark.usefixtures("payroll_data")
-    def test_batch_detail_segment_b_as_fixed_width(self, payroll_data):
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
-
-        payment.employee = employee
-
-        batch_detail_segment_b_model = CNABBatchSegmentB(payment=payment, line_number=4)
-        expected_line = (
-            "0770001300002B05 100099999999999RUA DAS AMELIAS                    001231 ANDAR "
-            "       CENTRO         RECIFE         50050000PE110620210000000000010000000000000"
-            "000000000000000000000000000000000000000000000000001              000000000000000"
-        )
-
-        assert batch_detail_segment_b_model.as_fixed_width() == expected_line
-        assert batch_detail_segment_b_model.field_02_3B == types.SequentialServiceBatch(
-            __root__=1
-        )  # noqa
-        assert batch_detail_segment_b_model.field_03_3B == types.EntryType(
-            __root__=3
-        )  # noqa
-        assert (
-            batch_detail_segment_b_model.field_05_3B
-            == types.DetailRecordSegmentType(__root__="B")
-        )  # noqa
-
-    @pytest.mark.usefixtures("payroll_data")
-    def test_batch_detail_segment_b_as_fixed_width_with_custom_field_01_3B(
-        self, payroll_data
-    ):
-        employee_data = payroll_data["employee"][0]
-        employee_data["bank_code"] = "1"
-        employee_data["registration_number"] = "99966699900"
-
-        employee = Employee.parse_obj(employee_data)
-        payment = Payment.parse_obj(payroll_data["payment"][0])
-
-        payment.employee = employee
-
-        batch_detail_segment_b_model = CNABBatchSegmentB(payment=payment, line_number=4)
-
-        assert batch_detail_segment_b_model.field_01_3B.as_fixed_width() == "001"
-
-    @pytest.mark.usefixtures("payroll_data")
-    def test_batch_detail_segment_b_with_wrong_field_01_3B(self, payroll_data):
-        employee = Employee.parse_obj(payroll_data["employee"][0])
-        payment = Payment.parse_obj(payroll_data["payment"][0])
-
-        payment.employee = employee
-
-        with pytest.raises(
-            ValidationError,
-            match=r"(?s).*bank_code.*ensure this value is less than or equal to 999.*",
-        ):
-            payment.employee.bank_code = "111111"
-
-    @pytest.mark.usefixtures("payroll_data")
-    def test_batch_trailer_fixed_width(self, payroll_data):
+    def test_trailer_record_number(self, payroll_data):
         company = Company.parse_obj(payroll_data["company"])
 
-        batch_trailer = CNABBatchTrailer(
-            company=company, sum_payment_values="1000", line_number=5
+        record_number = 4
+
+        trailer = CNABTrailer(
+            company=company,
+            record_number=record_number,
+            line_number=4,
         )
 
-        expected_batch_trailer = (
-            "07700015         000004000000000000001000000000000000000000000000               "
-            "                                                                                "
-            "                                                                                "
-        )
-        assert batch_trailer.as_fixed_width() == expected_batch_trailer
+        assert trailer.field_06_9 == types.RecordsNumber.parse_obj(record_number)

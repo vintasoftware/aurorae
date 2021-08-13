@@ -401,16 +401,6 @@ class CNABBatchSegmentA(Line):
         validate_all = True
         validate_assignment = True
 
-    def _map_values(self, initial_data: dict) -> None:
-        data = {}
-        for key, nested_path in self._mapping.items():
-            [entity_key, field_key] = nested_path.split(".")
-
-            entity = initial_data[entity_key]
-            data[key] = entity[field_key]
-
-        return data
-
     def __init__(self, payment: Payment, line_number) -> None:
         employee = payment.employee
         company = payment.company
@@ -423,6 +413,16 @@ class CNABBatchSegmentA(Line):
 
         data = self._map_values(initial_data)
         super().__init__(data, line_number=line_number)
+
+    def _map_values(self, initial_data: dict) -> None:
+        data = {}
+        for key, nested_path in self._mapping.items():
+            [entity_key, field_key] = nested_path.split(".")
+
+            entity = initial_data[entity_key]
+            data[key] = entity[field_key]
+
+        return data
 
 
 class CNABBatchSegmentB(Line):
@@ -511,14 +511,10 @@ class CNABBatchSegmentB(Line):
             "field_11_3B": "information_12",
         }
 
-    def __init__(
-        self,
-        payment: Payment,
-        line_number: int,
-    ) -> None:
+    def __init__(self, payment: Payment, record_number: int, line_number: int) -> None:
         employee = payment.employee
         initial_data = employee.dict()
-        initial_data["record_number"] = line_number - 2
+        initial_data["record_number"] = record_number
         initial_data["information_10"] = self.get_information_10(employee)
         initial_data["information_11"] = self.get_information_11(employee)
         initial_data["information_12"] = self.get_information_12(payment)
@@ -574,10 +570,12 @@ class CNABBatchTrailer(Line):
             "field_06_5": "values_sum",
         }
 
-    def __init__(self, company: Company, sum_payment_values: str, line_number):
+    def __init__(
+        self, company: Company, sum_payment_values: str, record_number: int, line_number
+    ):
 
         initial_data = company.dict()
-        initial_data["record_number"] = line_number - 1
+        initial_data["record_number"] = record_number
         initial_data["values_sum"] = sum_payment_values
         super().__init__(initial_data, line_number)
 
@@ -631,7 +629,7 @@ class CNABTrailer(Line):
         validate_assignment = True
         _mapping = {"field_01_9": "bank_code", "field_06_9": "records_number"}
 
-    def __init__(self, company: Company, line_number):
+    def __init__(self, company: Company, record_number: int, line_number: int):
         initial_data = company.dict()
-        initial_data["records_number"] = line_number
+        initial_data["records_number"] = record_number
         super().__init__(initial_data, line_number)
