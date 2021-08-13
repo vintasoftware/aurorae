@@ -18,17 +18,14 @@ REGISTRATION_TYPE_MAP = {
     "OUTROS": 9,
 }
 
-
-class CNABString(BaseModel):
-    @property
-    def value(self):
-        value = self.__root__
-        if isinstance(value, (CNABString, CNABComposedField)):
-            value = value.as_fixed_width()
-        return value
-
-    def as_fixed_width(self):
-        return self.value.ljust(self._max_str_length, STR_FILL_VALUE).upper()
+# fmt: off
+VALID_CHARACTERS = (
+    "abcdefghijklmnopqrstuvxywz"
+    "ABCDEFGHIJKLMNOPQRSTUVXYWZ"
+    "0123456789"
+    ". "
+)
+# fmt: on
 
 
 class CNABComposedField(BaseModel):
@@ -51,6 +48,25 @@ class CNABComposedField(BaseModel):
         assert len(self._formatted_value) == self._max_str_length
 
         return self._formatted_value
+
+
+class CNABString(BaseModel):
+    @property
+    def value(self):
+        value = self.__root__
+        if isinstance(value, (CNABString, CNABComposedField)):
+            value = value.as_fixed_width()
+        return value
+
+    @validator("__root__", pre=True, check_fields=False)
+    def validate_string(cls, value):  # noqa
+        if not isinstance(value, (CNABString, CNABComposedField)):
+            assert all(c in VALID_CHARACTERS for c in value), "Invalid characters"
+
+        return value
+
+    def as_fixed_width(self):
+        return self.value.ljust(self._max_str_length, STR_FILL_VALUE).upper()
 
 
 class CNABEnum(BaseModel):

@@ -239,15 +239,21 @@ class Payroll(BaseModel):
         )
 
         batch_records = []
+        record_counter = 0
         for payment in self.payments:
+            record_counter += 1
             payment.company = self.company
             payment.employee = self._get_employee_by_name(payment.employee_name)
 
             segment_a = models.CNABBatchSegmentA(
-                payment=payment, line_number=next(self._line_counter)
+                payment=payment,
+                record_number=record_counter,
+                line_number=next(self._line_counter),
             )
             segment_b = models.CNABBatchSegmentB(
-                payment=payment, line_number=next(self._line_counter)
+                payment=payment,
+                record_number=record_counter,
+                line_number=next(self._line_counter),
             )
 
             batch_records.append(
@@ -256,6 +262,7 @@ class Payroll(BaseModel):
 
         batch_trailer = models.CNABBatchTrailer(
             company=self.company,
+            total_batch_lines=record_counter + 2,
             sum_payment_values=self._get_payment_amount_sum(),
             line_number=next(self._line_counter),
         )
@@ -272,8 +279,11 @@ class Payroll(BaseModel):
 
         batch = self._get_cnab_batch()
 
+        last_line_number = next(self._line_counter)
         file_trailer = models.CNABTrailer(
-            company=self.company, line_number=next(self._line_counter)
+            company=self.company,
+            total_file_lines=last_line_number,
+            line_number=last_line_number,
         )
 
         return models.CNABFile(header=file_header, batch=batch, trailer=file_trailer)

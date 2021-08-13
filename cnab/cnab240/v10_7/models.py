@@ -295,7 +295,6 @@ class CNABBatchSegmentA(Line):
     field_04_3A: types.RecordSequentialNumber = FieldSchema(
         description="Nº Seqüencial do Registro no Lote",
         code="G038",
-        default_factory=lambdas.get_field_G038,
     )
     field_05_3A: types.DetailRecordSegmentType = FieldSchema(
         description="Código de Segmento do Reg. Detalhe",
@@ -388,7 +387,7 @@ class CNABBatchSegmentA(Line):
         description="Códigos das Ocorrências para Retorno", code="G059", default=""
     )
 
-    _mapping = {
+    _nested_mapping = {
         "field_01_3A": "company.bank_code",
         "field_09_3A": "employee.bank_code",
         "field_10_3A": "employee.bank_agency",
@@ -402,21 +401,12 @@ class CNABBatchSegmentA(Line):
         "field_22_3A": "payment.payment_date",
     }
 
-    class Config:
+    class Config(BaseConfig):
         validate_all = True
         validate_assignment = True
+        _mapping = {"field_04_3A": "record_number"}
 
-    def _map_values(self, initial_data: dict) -> None:
-        data = {}
-        for key, nested_path in self._mapping.items():
-            [entity_key, field_key] = nested_path.split(".")
-
-            entity = initial_data[entity_key]
-            data[key] = entity[field_key]
-
-        return data
-
-    def __init__(self, payment: Payment, line_number) -> None:
+    def __init__(self, payment: Payment, record_number: int, line_number: int) -> None:
         employee = payment.employee
         company = payment.company
 
@@ -426,8 +416,19 @@ class CNABBatchSegmentA(Line):
             "employee": employee.dict(),
         }
 
-        data = self._map_values(initial_data)
+        data = self._map_nested_values(initial_data)
+        data["record_number"] = record_number
         super().__init__(data, line_number=line_number)
+
+    def _map_nested_values(self, initial_data: dict) -> None:
+        data = {}
+        for key, nested_path in self._nested_mapping.items():
+            [entity_key, field_key] = nested_path.split(".")
+
+            entity = initial_data[entity_key]
+            data[key] = entity[field_key]
+
+        return data
 
 
 class CNABBatchSegmentB(Line):
@@ -494,7 +495,7 @@ class CNABBatchSegmentB(Line):
     )
 
     def get_information_10(self, employee: Employee):
-        return types.Information10.parse_obj(employee.address_location)
+        return types.Information10.parse_obj(employee.address_location.value)
 
     def get_information_11(self, employee: Employee):
         return types.ComposedField103B.parse_obj(employee)
@@ -508,22 +509,18 @@ class CNABBatchSegmentB(Line):
 
         _mapping = {
             "field_01_3B": "bank_code",
+            "field_04_3B": "record_number",
             "field_07_3B": "registration_type",
             "field_08_3B": "registration_number",
-            "field_04_3B": "record_number",
             "field_09_3B": "information_10",
             "field_10_3B": "information_11",
             "field_11_3B": "information_12",
         }
 
-    def __init__(
-        self,
-        payment: Payment,
-        line_number: int,
-    ) -> None:
+    def __init__(self, payment: Payment, record_number: int, line_number: int) -> None:
         employee = payment.employee
         initial_data = employee.dict()
-        initial_data["record_number"] = line_number - 2
+        initial_data["record_number"] = record_number
         initial_data["information_10"] = self.get_information_10(employee)
         initial_data["information_11"] = self.get_information_11(employee)
         initial_data["information_12"] = self.get_information_12(payment)
@@ -575,15 +572,21 @@ class CNABBatchTrailer(Line):
         validate_assignment = True
         _mapping = {
             "field_01_5": "bank_code",
-            "field_05_5": "record_number",
-            "field_06_5": "values_sum",
+            "field_05_5": "total_batch_lines",
+            "field_06_5": "payment_amount_sum",
         }
 
-    def __init__(self, company: Company, sum_payment_values: str, line_number):
+    def __init__(
+        self,
+        company: Company,
+        sum_payment_values: str,
+        total_batch_lines: int,
+        line_number,
+    ):
 
         initial_data = company.dict()
-        initial_data["record_number"] = line_number - 1
-        initial_data["values_sum"] = sum_payment_values
+        initial_data["total_batch_lines"] = total_batch_lines
+        initial_data["payment_amount_sum"] = sum_payment_values
         super().__init__(initial_data, line_number)
 
 
@@ -634,11 +637,11 @@ class CNABTrailer(Line):
     class Config(BaseConfig):
         validate_all = True
         validate_assignment = True
-        _mapping = {"field_01_9": "bank_code", "field_06_9": "records_number"}
+        _mapping = {"field_01_9": "bank_code", "field_06_9": "total_file_lines"}
 
-    def __init__(self, company: Company, line_number):
+    def __init__(self, company: Company, total_file_lines: int, line_number: int):
         initial_data = company.dict()
-        initial_data["records_number"] = line_number
+        initial_data["total_file_lines"] = total_file_lines
         super().__init__(initial_data, line_number)
 
 
