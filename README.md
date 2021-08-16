@@ -1,27 +1,45 @@
-# vinta-pagamentos
+# aurora
 
-A Python implementation of the CNAB240 file to perform bulk payments.
+[![CI](https://github.com/vintasoftware/aurora/actions/workflows/ci.yml/badge.svg)](https://github.com/vintasoftware/aurora/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/vintasoftware/django-react-boilerplate.svg)](LICENSE.txt)
 
-**Disclaimer**: This project is a work in progress. 
+**aurora** is a tool to generate fixed-width CNAB240 files to perform bulk payments
 
+### aurora _does..._
+- Generates CNAB240 files for bulk payments
+- Allows easy extension of different types of input files
+
+### aurora _does not..._
+- Address charge
+- Address payments by PIX
+
+But, pull requests are welcomed.
+
+## How It Works
+**aurora** uses Python type hinting for data validation and settings management of fixed-width CNAB 240 files. We receive a `pydantic` model as input with all the input data, parse to intermediary representation used by the CNAB240 generator. Check the [project's ADRs](docs/adr/README.md) to better understand the architecture.
 
 ## Requirements
 
 - Python (>3)
 - openpyxl (3.0.7)
 
-## Working in development mode
+## Usage
+To run aurora with test data:
+```bash
+poetry run generate sample/legacy_spreadsheet_sample.xlsx
+```
 
-To ease the development mode of the library we are using code as a package: 
-- Clone the repo
-- Inside the root folder of the project run `mkdir generated_files`
-- [Install Poetry](https://python-poetry.org/docs/#installation) 
-- Inside a virtualenv and on the root folder of the project run `poetry install`. This will install all dependencies and install the library locally in editable mode. 
+## Security
+We take Aurora's security and our users' trust very seriously, therefore we do not save any information (from payments or not) sent by users. If you believe you have found a security issue, please responsibly disclose by contacting: [flavio@vinta.com.br](flavio@vinta.com.br)
 
-## Running with test data
-- Run `poetry run generate sample/legacy_spreadsheet_sample.xlsx`
+## Releases
 
-## Pre-commit hooks
-- Run `poetry run pre-commit install` to enable the hook into your git repo. The hook will run automatically for each commit.
-- Run `git commit -m "Your message" -n` to skip the hook if you need.
+See [CHANGELOG.md](/CHANGELOG.md).
 
+## Credits
+
+This project is maintained by [open-source contributors](/AUTHORS.rst) and [Vinta Software](https://www.vintasoftware.com/).
+
+## Commercial Support
+
+[Vinta Software](https://www.vintasoftware.com/) is always looking for exciting work, so if you need any commercial support, feel free to get in touch: contact@vinta.com.br
