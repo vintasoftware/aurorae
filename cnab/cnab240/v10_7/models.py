@@ -604,7 +604,7 @@ class CNABBatchRecord(BaseModel):
         return fixed_width_str
 
     def as_html(self):
-        html_result = f"{self.segment_a.as_html()}\n" f"{self.segment_b.as_html()}\n"
+        html_result = f"{self.segment_a.as_html()}{self.segment_b.as_html()}"
         return html_result
 
 
@@ -615,22 +615,20 @@ class CNABBatch(BaseModel):
 
     def as_fixed_width(self):
         fixed_width_str = ""
-        fixed_width_str += f"{self.header.as_fixed_width()}\n"
 
+        fixed_width_str += f"{self.header.as_fixed_width()}\n"
         for record in self.records:
             fixed_width_str += f"{record.as_fixed_width()}"
-
-        fixed_width_str += f"{self.trailer.as_fixed_width()}"
+        fixed_width_str += f"{self.trailer.as_fixed_width()}\n"
 
         return fixed_width_str
 
     def as_html(self):
         html_result = ""
-        html_result += f"{self.header.as_html()}"
 
+        html_result += f"{self.header.as_html()}"
         for record in self.records:
             html_result += f"{record.as_html()}"
-
         html_result += f"{self.trailer.as_html()}"
 
         return html_result
@@ -681,23 +679,27 @@ class CNABTrailer(Line):
 
 class CNABFile(BaseModel):
     header: CNABHeader
-    batch: CNABBatch
+    batches: List[CNABBatch]
     trailer: CNABTrailer
 
     def as_fixed_width(self):
-        fixed_width_str = (
-            f"{self.header.as_fixed_width()}\n"
-            f"{self.batch.as_fixed_width()}\n"
-            f"{self.trailer.as_fixed_width()}"
-        )
+        fixed_width_str = ""
+
+        fixed_width_str += f"{self.header.as_fixed_width()}\n"
+        for batch in self.batches:
+            fixed_width_str += f"{batch.as_fixed_width()}"
+        fixed_width_str += f"{self.trailer.as_fixed_width()}"
+
         return fixed_width_str
 
     def as_html(self):
-        html_result = (
-            f"{self.header.as_html()}"
-            f"{self.batch.as_html()}"
-            f"{self.trailer.as_html()}"
-        )
+        html_result = ""
+
+        html_result += f"{self.header.as_html()}"
+        for batch in self.batches:
+            html_result += f"{batch.as_html()}"
+        html_result += f"{self.trailer.as_html()}"
+
         return html_result
 
     def generate_file(self, output_filename):

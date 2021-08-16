@@ -68,7 +68,7 @@ class TestSpreadsheetHandler:
         input_filename = "./tests/fixtures/test_spreadsheet.xlsx"
         handler = SpreadsheetHandler(input_filename=input_filename)
         cnab_file = handler.get_cnab_file()
-        assert len(cnab_file.batch.records) == 1
+        assert len(cnab_file.batches[0].records) == 1
 
     @freeze_time(datetime(2021, 7, 8, 13, 30, 50))
     def test_generates_cnab_file_fixed_width(self):
