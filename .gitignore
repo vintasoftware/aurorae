@@ -296,3 +296,5 @@ generated_files/*
 sample/.~lock*
 
 *.tmp
+
+mypy.ini
