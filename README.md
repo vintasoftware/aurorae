@@ -1,6 +1,6 @@
 # aurora
 
-[![CI](https://github.com/vintasoftware/aurora/actions/workflows/actions.yaml/badge.svg)](https://github.com/vintasoftware/aurora/actions/workflows/ci.yml)
+[![CI](https://github.com/vintasoftware/aurora/actions/workflows/actions.yaml/badge.svg)](https://github.com/vintasoftware/aurora/actions/workflows/actions.yaml)
 [![License: MIT](https://img.shields.io/github/license/vintasoftware/django-react-boilerplate.svg)](LICENSE.txt)
 
 **aurora** is a tool to generate fixed-width CNAB240 files to perform bulk payments
