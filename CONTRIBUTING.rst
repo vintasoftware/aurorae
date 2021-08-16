@@ -52,7 +52,7 @@ Now, here's how to set up `aurora` for local development.
 
     $ git clone git@github.com:your_name_here/aurora.git
 
-3. Create a output folder for the generated files::
+3. Create an output folder for the generated files::
 
     $ mkdir generated_files
 
