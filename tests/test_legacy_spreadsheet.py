@@ -199,7 +199,7 @@ class TestLegacySpreadsheet:
     def test_generate_cnab_files(self, legacy_spreadsheet_handler):
         cnab = legacy_spreadsheet_handler.get_cnab_file()
 
-        with open("./tests/fixtures/test_cnab.txt", "r") as f:
+        with open("./tests/fixtures/test_legacy_cnab.txt", "r") as f:
             expected_cnab_file = f.read()
 
         with mock.patch("builtins.open", mock.mock_open()) as mock_file:
