@@ -1,13 +1,11 @@
 # pylint: disable=unsubscriptable-object
 import itertools
-from typing import TYPE_CHECKING, List, Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, root_validator
 from pydantic.fields import PrivateAttr
 
-
-if TYPE_CHECKING:
-    from cnab.cnab240.v10_7 import models, types
+from cnab.cnab240.v10_7 import models, types
 
 
 class Company(BaseModel):
