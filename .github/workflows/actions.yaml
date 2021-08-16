@@ -37,7 +37,7 @@ jobs:
         run: poetry run bandit -r . -x ./.venv
 
       - name: Run Tests
-        run: poetry run pytest --cov=. tests/
+        run: poetry run pytest --cov-report xml --cov=. tests/
 
       - name: Upload coverage.xml
         uses: actions/upload-artifact@v2
