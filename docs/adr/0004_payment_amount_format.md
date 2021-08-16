@@ -22,7 +22,7 @@ eg:
 - R$ 1.000,00  -> 100000
 
 
-The type to represent this field is mapped on `types.PaymentAmount`. Any other format will raise an error.
+The type to represent this field is mapped on `types.PaymentAmount`, this is type inherits from a general format used by other fields. Any other format will raise an error.
 
 We based this decision on a public API of a brazilian bank called Nubank. Attributes used to display information to the users are formatted with the correct currency format, but other payment/credit/debit amounts are saved as integers.
 
