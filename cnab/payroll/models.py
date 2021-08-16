@@ -171,7 +171,9 @@ class Payment(BaseModel):
     arrears_amount: types.ArrearsAmount = 0
     fine_amount: types.FineAmount = 0
     notify_recipient: types.NotifyRecipient = types.NotifyRecipientEnum.no_notification
-    registration_number: types.RecipientRegistrationNumberInformation12 = ""
+    registration_number: types.InformationRegistrationType = str(
+        types.CNABRegistrationTypeEnum.cpf.value
+    )
 
     class Config:
         validate_all = True
@@ -275,12 +277,13 @@ class Payroll(BaseModel):
 
     def get_cnab_file(self):
         self._line_counter = itertools.count(1)
+        batches = []
 
         file_header = models.CNABHeader(
             initial_data=self.company.dict(), line_number=next(self._line_counter)
         )
 
-        batch = self._get_cnab_batch()
+        batches.append(self._get_cnab_batch())
 
         last_line_number = next(self._line_counter)
         file_trailer = models.CNABTrailer(
@@ -289,4 +292,6 @@ class Payroll(BaseModel):
             line_number=last_line_number,
         )
 
-        return models.CNABFile(header=file_header, batch=batch, trailer=file_trailer)
+        return models.CNABFile(
+            header=file_header, batches=batches, trailer=file_trailer
+        )

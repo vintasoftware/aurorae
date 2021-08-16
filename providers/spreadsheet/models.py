@@ -1,4 +1,5 @@
-from typing import List
+# pylint: disable=unsubscriptable-object
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -99,7 +100,7 @@ class SpreadsheetEmployee(BaseModel):
 
 class SpreadsheetPayment(BaseModel):
     employee_name: str
-    identification_number: str
+    identification_number: Optional[str]
     payment_amount: str
     payment_date: CNABDate
 

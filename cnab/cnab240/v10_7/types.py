@@ -4,7 +4,7 @@ from decimal import Decimal
 from enum import Enum, IntEnum
 from typing import ClassVar, Union
 
-from pydantic import BaseModel, PrivateAttr, conint, constr, validator
+from pydantic import BaseModel, conint, constr, validator
 
 
 STR_FILL_VALUE = " "
@@ -29,8 +29,6 @@ VALID_CHARACTERS = (
 
 
 class CNABComposedField(BaseModel):
-    _formatted_value: str = PrivateAttr(default="")
-
     def get_field_names(self):
         return self.__fields__.keys()
 
@@ -42,12 +40,13 @@ class CNABComposedField(BaseModel):
         return fields
 
     def as_fixed_width(self):
+        formatted_value = ""
         for field in self.get_fields():
-            self._formatted_value = f"{self._formatted_value}{field.as_fixed_width()}"
+            formatted_value = f"{formatted_value}{field.as_fixed_width()}"
 
-        assert len(self._formatted_value) == self._max_str_length
+        assert len(formatted_value) == self._max_str_length
 
-        return self._formatted_value
+        return formatted_value
 
 
 class CNABString(BaseModel):
@@ -58,7 +57,7 @@ class CNABString(BaseModel):
             value = value.as_fixed_width()
         return value
 
-    @validator("__root__", pre=True, check_fields=False)
+    @validator("__root__", pre=True, check_fields=False, allow_reuse=True)
     def validate_string(cls, value):  # noqa
         if not isinstance(value, (CNABString, CNABComposedField)):
             assert all(c in VALID_CHARACTERS for c in value), "Invalid characters"
@@ -214,7 +213,7 @@ class RegistrationType(CNABEnum):
 class CNABRegistrationType(CNABEnum):
     __root__: CNABRegistrationTypeEnum
 
-    @validator("__root__", pre=True)
+    @validator("__root__", pre=True, allow_reuse=True)
     def validate_registration_type(cls, root_value):  # noqa
         if isinstance(root_value, RegistrationTypeEnum):
             return REGISTRATION_TYPE_MAP[root_value.value]
@@ -408,7 +407,7 @@ class FineAmount(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class RecipientRegistrationNumberInformation12(CNABString):
+class InformationRegistrationType(CNABString):
     _max_str_length: ClassVar[int] = 15
     __root__: constr(max_length=_max_str_length)
 
@@ -837,7 +836,7 @@ class ComposedField113B(CNABComposedField):
     discount_amount: DiscountAmount
     arrears_amount: ArrearsAmount
     fine_amount: FineAmount
-    registration_number: RecipientRegistrationNumberInformation12
+    registration_number: InformationRegistrationType
     notify_recipient: NotifyRecipient
 
 
