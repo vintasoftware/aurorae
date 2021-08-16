@@ -10,13 +10,15 @@
 - Allows easy extension of different types of input files
 
 ### aurora _does not..._
-- Address charge
-- Address payments by PIX
+- Address charge or as brazilian banks call "cobrança"
+- Address payments by PIX, we only support payments through bank information
 
 But, pull requests are welcomed.
 
 ## How It Works
-**aurora** uses Python type hinting for data validation and settings management of fixed-width CNAB 240 files. We receive a `pydantic` model as input with all the input data, parse to intermediary representation used by the CNAB240 generator. Check the [project's ADRs](docs/adr/README.md) to better understand the architecture.
+**aurora** uses Python type hinting for data validation and generation of fixed-width CNAB 240 files. The library receives as inputs an spreadsheet that must be a match of the Pydantic model [Spreadsheet](providers/spreadsheet/models.py), a general handler parses the initial data to an intermediary representation used by the CNAB240 module to generate files. Different types of inputs are supported by library through the creation of new providers, check the [spreadsheet provider](providers/spreadsheet) for an example.
+
+A historic and architecture details can be found on the [project's ADRs](docs/adr/README.md) to better understand the architecture.
 
 ## Requirements
 
