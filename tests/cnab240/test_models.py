@@ -192,7 +192,7 @@ class TestCNABModels:
     def test_batch_header_with_wrong_field_01_1(self):
         batch_header_data = {
             "field_01_1": "1111",
-            "field_09_1": "CGC/CNPJ",
+            "field_09_1": "2",
             "field_10_1": "99999999000999",
             "field_11_1": "77",
             "field_12_1": "1",
@@ -210,14 +210,17 @@ class TestCNABModels:
             "field_25_1": "PE",
         }
 
-        with pytest.raises(ValidationError):
+        with pytest.raises(
+            ValidationError,
+            match=r"(?s).*bank_code.*ensure this value is less than or equal to 999.*",
+        ):
             CNABBatchHeader(batch_header_data, line_number=1)
 
     def test_batch_header_with_wrong_field_05_1_enum_value(self):
         batch_header_data = {
-            "field_01_1": "1111",
+            "field_01_1": "111",
             "field_05_1": "91",
-            "field_09_1": "CGC/CNPJ",
+            "field_09_1": "2",
             "field_10_1": "99999999000999",
             "field_11_1": "77",
             "field_12_1": "1",
