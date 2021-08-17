@@ -1,7 +1,8 @@
+# pylint: disable=unsubscriptable-object
 import itertools
 from typing import List, Optional
 
-from pydantic import BaseModel, root_validator
+from pydantic import BaseModel, root_validator, validator
 from pydantic.fields import PrivateAttr
 
 from cnab.cnab240.v10_7 import models, types
@@ -12,10 +13,10 @@ class Company(BaseModel):
     registration_type: types.RegistrationType
     registration_number: types.RegistrationNumber
     bank_agency: types.BankAgencyNumber
-    bank_agency_digit: types.BankAgencyDigitCheck
+    bank_agency_digit: Optional[types.BankDigitCheck] = None
     bank_account_number: types.BankAccountNumber
-    bank_account_digit: types.BankAccountDigitCheck
-    bank_account_agency_digit: types.BankAgencyAccountDigitCheck
+    bank_account_digit: Optional[types.BankDigitCheck] = None
+    bank_account_agency_digit: Optional[types.BankDigitCheck] = None
     company_name: types.CompanyName
     bank_name: types.BankName
     address_location: types.NameAddress
@@ -30,16 +31,23 @@ class Company(BaseModel):
         validate_all = True
         validate_assignment = True
 
+    @validator("bank_agency_digit", "bank_account_digit", "bank_account_agency_digit")
+    def prevent_none(cls, v):  # noqa
+        if v is None:
+            return ""
+
+        return v
+
 
 class Employee(BaseModel):
     bank_code: types.BankCode
     registration_type: types.RegistrationType
     registration_number: types.RegistrationNumber
     bank_agency: types.BankAgencyNumber
-    bank_agency_digit: types.BankAgencyDigitCheck
+    bank_agency_digit: Optional[types.BankDigitCheck] = None
     bank_account_number: types.BankAccountNumber
-    bank_account_digit: types.BankAccountDigitCheck
-    bank_account_agency_digit: types.BankAgencyAccountDigitCheck
+    bank_account_digit: Optional[types.BankDigitCheck] = None
+    bank_account_agency_digit: Optional[types.BankDigitCheck] = None
     name: types.RecipientName
     initiation_form: Optional[types.InitiationForm]
 
@@ -64,6 +72,13 @@ class Employee(BaseModel):
     class Config:
         validate_all = True
         validate_assignment = True
+
+    @validator("bank_agency_digit", "bank_account_digit", "bank_account_agency_digit")
+    def prevent_none(cls, v):  # noqa
+        if v is None:
+            return ""
+
+        return v
 
     @classmethod
     def has_all_address_fields(cls, values):  # noqa

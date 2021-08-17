@@ -54,16 +54,16 @@ class CNABHeader(Line):
     field_08_0: types.BankAgencyNumber = FieldSchema(
         description="Agência Mantenedora da Conta", code="G008"
     )
-    field_09_0: types.BankAgencyDigitCheck = FieldSchema(
+    field_09_0: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da Agência", code="G009"
     )
     field_10_0: types.BankAccountNumber = FieldSchema(
         description="Número da Conta Corrente", code="G010"
     )
-    field_11_0: types.BankAccountDigitCheck = FieldSchema(
+    field_11_0: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da Conta", code="G011"
     )
-    field_12_0: types.BankAgencyAccountDigitCheck = FieldSchema(
+    field_12_0: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da Ag/Conta", code="G012"
     )
     field_13_0: types.CompanyName = FieldSchema(
@@ -187,7 +187,7 @@ class CNABBatchHeader(Line):
         description="Agência Mantenedora da Conta",
         code="G008",
     )
-    field_13_1: types.BankAgencyDigitCheck = FieldSchema(
+    field_13_1: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da Agência",
         code="G009",
     )
@@ -195,11 +195,11 @@ class CNABBatchHeader(Line):
         description="Número da Conta Corrente",
         code="G010",
     )
-    field_15_1: types.BankAccountDigitCheck = FieldSchema(
+    field_15_1: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da Conta",
         code="G011",
     )
-    field_16_1: types.BankAgencyAccountDigitCheck = FieldSchema(
+    field_16_1: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da Ag/Conta",
         code="G012",
     )
@@ -323,16 +323,16 @@ class CNABBatchSegmentA(Line):
     field_10_3A: types.BankAgencyNumber = FieldSchema(
         description="Ag. Mantenedora da Cta do Favor.", code="G008"
     )
-    field_11_3A: types.BankAgencyDigitCheck = FieldSchema(
+    field_11_3A: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da Agência", code="G009"
     )
     field_12_3A: types.BankAccountNumber = FieldSchema(
         description="Número da Conta Corrente", code="G010"
     )
-    field_13_3A: types.BankAccountDigitCheck = FieldSchema(
+    field_13_3A: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da Conta", code="G011"
     )
-    field_14_3A: types.BankAgencyAccountDigitCheck = FieldSchema(
+    field_14_3A: types.BankDigitCheck = FieldSchema(
         description="Dígito Verificador da AG/Conta", code="G012"
     )
     field_15_3A: types.PersonName = FieldSchema(

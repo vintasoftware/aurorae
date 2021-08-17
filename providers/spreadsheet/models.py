@@ -23,10 +23,10 @@ class SpreadsheetCompany(BaseModel):
     bank_name: str
     bank_code: str
     bank_agency: str
-    bank_agency_digit: str
+    bank_agency_digit: Optional[str] = ""
     bank_account_number: str
-    bank_account_digit: str
-    bank_account_agency_digit: str
+    bank_account_digit: Optional[str] = ""
+    bank_account_agency_digit: Optional[str] = ""
     address_location: str
     address_number: str
     address_complement: str
@@ -63,10 +63,10 @@ class SpreadsheetEmployee(BaseModel):
     registration_number: str
     bank_code: str
     bank_agency: str
-    bank_agency_digit: str
+    bank_agency_digit: Optional[str] = ""
     bank_account_number: str
-    bank_account_digit: str
-    bank_account_agency_digit: str
+    bank_account_digit: Optional[str] = ""
+    bank_account_agency_digit: Optional[str] = ""
     address_location: str
     address_number: str
     address_complement: str
