@@ -11,10 +11,10 @@ class TestLegacySpreadsheet:
     def setup_method(self, __):
         lambdas.COUNT = 0
 
-    @pytest.mark.usefixtures("spreadsheet_data")
-    def test_parse_data_from_with_header(self, spreadsheet_data):
+    @pytest.mark.usefixtures("legacy_spreadsheet_data")
+    def test_parse_data_from_with_header(self, legacy_spreadsheet_data):
         spreadsheet_map = {"header": MODELS_SPREADSHEET_MAP["header"]}
-        parsed_data = parse_data_from(spreadsheet_data, spreadsheet_map)
+        parsed_data = parse_data_from(legacy_spreadsheet_data, spreadsheet_map)
 
         assert parsed_data == {
             "header": [
@@ -35,12 +35,12 @@ class TestLegacySpreadsheet:
             ]
         }
 
-    @pytest.mark.usefixtures("spreadsheet_data")
-    def test_parse_data_from_lote_detalhe_segmento_a(self, spreadsheet_data):
+    @pytest.mark.usefixtures("legacy_spreadsheet_data")
+    def test_parse_data_from_lote_detalhe_segmento_a(self, legacy_spreadsheet_data):
         spreadsheet_map = {
             "lote_detalhe_segmento_a": MODELS_SPREADSHEET_MAP["lote_detalhe_segmento_a"]
         }
-        parsed_data = parse_data_from(spreadsheet_data, spreadsheet_map)
+        parsed_data = parse_data_from(legacy_spreadsheet_data, spreadsheet_map)
 
         assert parsed_data == {
             "lote_detalhe_segmento_a": [
@@ -73,12 +73,12 @@ class TestLegacySpreadsheet:
             ]
         }
 
-    @pytest.mark.usefixtures("spreadsheet_data")
-    def test_parse_data_from_lote_detalhe_segmento_b(self, spreadsheet_data):
+    @pytest.mark.usefixtures("legacy_spreadsheet_data")
+    def test_parse_data_from_lote_detalhe_segmento_b(self, legacy_spreadsheet_data):
         spreadsheet_map = {
             "lote_detalhe_segmento_b": MODELS_SPREADSHEET_MAP["lote_detalhe_segmento_b"]
         }
-        parsed_data = parse_data_from(spreadsheet_data, spreadsheet_map)
+        parsed_data = parse_data_from(legacy_spreadsheet_data, spreadsheet_map)
 
         assert parsed_data == {
             "lote_detalhe_segmento_b": [
