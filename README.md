@@ -24,6 +24,7 @@ A historic and architecture details can be found on the [project's ADRs](docs/ad
 
 - Python (>3)
 - openpyxl (3.0.7)
+- pydantic (^1.8.2)
 
 ## Usage
 To run aurora with test data:
