@@ -7,7 +7,7 @@ from providers.spreadsheet.models import Spreadsheet
 app = FastAPI()
 
 
-@app.post("/parse_from_spreadsheet_data")
+@app.post("/parse_from_spreadsheet")
 async def parse_from_spreadsheet_data(spreadsheet_data: Spreadsheet):
     spreadsheet = Spreadsheet.parse_obj(spreadsheet_data)
     payroll = Payroll.parse_obj(spreadsheet.dict())
