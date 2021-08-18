@@ -16,26 +16,13 @@ def get_field_G018():
     return "1"
 
 
-def get_field_G002_for_bacth_payment():
-    """
-    Lote de Serviço
-    Número seqüencial para identificar univocamente um lote de serviço. Criado e controlado
-    pelo responsável pela geração magnética dos dados contidos no arquivo.
-
-    Preencher com '0001' para o primeiro lote do arquivo. Para os demais: número do lote
-    anterior acrescido de 1. O número não poderá ser repetido dentro do arquivo.
-    """
-    return "0001"
-
-
 def get_field_G002_sequential():
     """
-    Lote de Serviço
-    Número seqüencial para identificar univocamente um lote de serviço. Criado e controlado
-    pelo responsável pela geração magnética dos dados contidos no arquivo.
+    Sequential number to uniquely identify a service batch. Created and controlled
+    by the person responsible for the magnetic generation of the data contained in the file.
 
-    Preencher com '0001' para o primeiro lote do arquivo. Para os demais: número do lote
-    anterior acrescido de 1. O número não poderá ser repetido dentro do arquivo.
+    Fill in with '0001' for the first batch of the file. For others: batch number
+    previous plus 1. The number cannot be repeated within the file.
     """
     return 1
 

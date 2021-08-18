@@ -288,7 +288,7 @@ class CNABBatchSegmentA(Line):
     field_02_3A: types.SequentialServiceBatch = FieldSchema(
         description="Lote de Serviço",
         code="G002",
-        default_factory=lambdas.get_field_G002_for_bacth_payment,
+        default_factory=lambdas.get_field_G002_sequential,
     )
     field_03_3A: types.EntryType = FieldSchema(
         description="Tipo de Registro", code="G003", default=types.EntryTypeEnum.details
@@ -539,7 +539,7 @@ class CNABBatchTrailer(Line):
     field_02_5: types.SequentialServiceBatch = FieldSchema(
         description="Lote de Serviço",
         code="G002",
-        default_factory=lambdas.get_field_G002_for_bacth_payment,
+        default_factory=lambdas.get_field_G002_sequential,
     )
     field_03_5: types.EntryType = FieldSchema(
         description="Tipo de Registro",

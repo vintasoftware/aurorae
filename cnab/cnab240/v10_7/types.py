@@ -291,9 +291,9 @@ class RecipientName(CNABString):
     __root__: constr(max_length=_max_str_length)
 
 
-class RemmitanceReturnCodeEnum(str, Enum):
-    shipping = "1"
-    returning = "2"
+class RemmitanceReturnCodeEnum(IntEnum):
+    shipping = 1
+    returning = 2
 
 
 class RemmitanceReturnCode(CNABEnum):
