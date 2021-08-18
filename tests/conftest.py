@@ -7,7 +7,7 @@ from providers.legacy_spreadsheet.handler import LegacySpreadsheetHandler
 
 
 @pytest.fixture
-def spreadsheet_data():
+def legacy_spreadsheet_data():
     return {
         "Empresa": [
             {
@@ -206,5 +206,96 @@ def payroll_data():
                 "notify_recipient": "0",
                 "registration_number": "1",
             }
+        ],
+    }
+
+
+@pytest.fixture
+def spreadsheet_data():
+    return {
+        "Empresa": {
+            "* Nome da Empresa": "Random Company",
+            "* Tipo de Inscrição da Empresa": "CGC/CNPJ",
+            "* Número de Inscrição da Empresa": "11111111111111",
+            "* Nome do Banco": "Banco",
+            "* Código do Convênio no Banco": "77",
+            "* Agência Mantenedora da Conta ": "1",
+            "* Dígito Verificador da Agência": "0",
+            "* Número da Conta Corrente": "888888",
+            "* Dígito Verificador da Conta": "1",
+            "* Dígito Verificador da Ag/Conta": "1",
+            "Logradouro (Nome da Rua, Av, Pça, Etc)": "Endereco da Rua",
+            "Número (Número do Local)": "0001",
+            "Complemento (Casa, Apto, Sala, Etc)": "detalhes",
+            "Nome da Cidade": "Recife",
+            "CEP": "00000",
+            "Complemento do CEP": "000",
+            "Sigla do Estado": "PE",
+        },
+        "Funcionários": [
+            {
+                "Nome do Favorecido": "Maria Fulana da Silva",
+                "* Tipo de Inscrição do Favorecido": "CPF",
+                "* Nº de Inscrição do Favorecido": "99999999999",
+                "Código do Banco do Favorecido": "77",
+                "* Ag. Mantenedora da Cta do Favor.": "0001",
+                "* Dígito Verificador da Agência": "9",
+                "* Número da Conta Corrente": "9999991",
+                "* Dígito Verificador da Conta": "0",
+                "* Dígito Verificador da AG/Conta": "0",
+                "Logradouro (Nome da Rua, Av, Pça, Etc)": "Rua das Amelias",
+                "Número (Nº do Local)": "123",
+                "Complemento (Casa, Apto, Etc)": "1 andar",
+                "Bairro": "Centro",
+                "Nome da Cidade": "Recife",
+                "CEP": "50050",
+                "Complemento do CEP": "000",
+                "Sigla do Estado": "PE",
+            },
+            {
+                "Nome do Favorecido": "Outro da Fulana da Silva",
+                "* Tipo de Inscrição do Favorecido": "CPF",
+                "* Nº de Inscrição do Favorecido": "99999999992",
+                "Código do Banco do Favorecido": "77",
+                "* Ag. Mantenedora da Cta do Favor.": "0001",
+                "* Dígito Verificador da Agência": "9",
+                "* Número da Conta Corrente": "9999992",
+                "* Dígito Verificador da Conta": "0",
+                "* Dígito Verificador da AG/Conta": "0",
+                "Logradouro (Nome da Rua, Av, Pça, Etc)": "Rua das Amelias",
+                "Número (Nº do Local)": "123",
+                "Complemento (Casa, Apto, Etc)": "2 andar",
+                "Bairro": "Centro",
+                "Nome da Cidade": "Recife",
+                "CEP": "50050",
+                "Complemento do CEP": "000",
+                "Sigla do Estado": "PE",
+            },
+            {
+                "Nome do Favorecido": "Sicrano da Silva",
+                "* Tipo de Inscrição do Favorecido": "CPF",
+                "* Nº de Inscrição do Favorecido": "99999999993",
+                "Código do Banco do Favorecido": "77",
+                "* Ag. Mantenedora da Cta do Favor.": "0001",
+                "* Dígito Verificador da Agência": "9",
+                "* Número da Conta Corrente": "9999993",
+                "* Dígito Verificador da Conta": "0",
+                "* Dígito Verificador da AG/Conta": "0",
+                "Logradouro (Nome da Rua, Av, Pça, Etc)": "Rua das Amelias",
+                "Número (Nº do Local)": "123",
+                "Complemento (Casa, Apto, Etc)": "3 andar",
+                "Bairro": "Centro",
+                "Nome da Cidade": "Recife",
+                "CEP": "50050",
+                "Complemento do CEP": "000",
+                "Sigla do Estado": "PE",
+            },
+        ],
+        "Pagamentos": [
+            {
+                "Funcionário": "Outro da Fulana da Silva",
+                "Valor do Pagamento": "1000",
+                "Data do Pagamento": "11062021",
+            },
         ],
     }
