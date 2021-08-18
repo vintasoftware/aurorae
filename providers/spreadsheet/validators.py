@@ -2,11 +2,7 @@ import os
 
 from openpyxl import load_workbook
 
-from providers.legacy_spreadsheet.exceptions import (
-    EmptyFile,
-    InvalidFileSize,
-    InvalidFileType,
-)
+from providers.exceptions import EmptyFile, InvalidFileSize, InvalidFileType
 
 
 def is_spreadsheet_type_xlsx(filename):
