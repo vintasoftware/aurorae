@@ -29,7 +29,7 @@ A historic and architecture details can be found on the [project's ADRs](docs/ad
 ## Usage
 To run aurora with test data:
 ```bash
-poetry run generate sample/legacy_spreadsheet_sample.xlsx
+generate sample/spreadsheet_sample.xlsx
 ```
 
 ## Security
