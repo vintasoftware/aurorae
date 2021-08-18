@@ -31,6 +31,7 @@ pylint:
     - no-self-use
     - no-member
     - too-many-lines
+    - cyclic-import
   options:
     max-line-length: 100
 

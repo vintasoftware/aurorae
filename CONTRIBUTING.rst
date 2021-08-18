@@ -14,9 +14,9 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://github.com/vintasoftware/vinta-pagamentos/issues
+Report bugs at https://github.com/vintasoftware/aurora/issues
 
-Before reporting a bug, please double-check the requirements: https://github.com/vintasoftware/vinta-pagamentos/blob/main/README.md#requirements
+Before reporting a bug, please double-check the requirements: https://github.com/vintasoftware/aurora/blob/main/README.md#requirements
 
 If you think you really found a bug, please create a GitHub issue and use the "Bug report" template.
 
@@ -33,7 +33,7 @@ Look through the GitHub issues for features. Anything tagged with "enhancement" 
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-vinta-pagamentos could always use more documentation, whether as part of the official docs, in docstrings, or even on the web in blog posts, articles, and such.
+aurora could always use more documentation, whether as part of the official docs, in docstrings, or even on the web in blog posts, articles, and such.
 
 Submit Feedback
 ~~~~~~~~~~~~~~~
@@ -43,38 +43,49 @@ If you have a suggestion, concern, or want to propose a feature, please create a
 Get Started!
 ------------
 
-Ready to contribute? Please read our Code of Conduct: https://github.com/vintasoftware/vinta-pagamentos/blob/main/CODE_OF_CONDUCT.md
+Ready to contribute? Please read our Code of Conduct: https://github.com/vintasoftware/aurora/blob/main/CODE_OF_CONDUCT.md
 
-Now, here's how to set up `vinta-pagamentos` for local development.
+Now, here's how to set up `aurora` for local development.
 
-1. Fork the `vinta-pagamentos` repo on GitHub.
+1. Fork the `aurora` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/vinta-pagamentos.git
+    $ git clone git@github.com:your_name_here/aurora.git
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+3. Create an output folder for the generated files::
 
-    $ mkvirtualenv vinta-pagamentos
-    $ cd vinta-pagamentos/
+    $ mkdir generated_files
+
+4. Install Poetry: https://python-poetry.org/docs/#installation
+
+5. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+
+    $ mkvirtualenv aurora
+    $ cd aurora/
     $ poetry install
 
-4. Create a branch for local development::
+6. Create a branch for local development::
 
     $ git checkout -b name-of-your-bugfix-or-feature
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass the tests::
+7. When you're done making changes, check that your changes pass the tests::
 
     $ poetry run pytest
 
-6. Commit your changes and push your branch to GitHub::
+
+8. Install pre-commit
+
+    $ poetry run pre-commit install
+
+9. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a Pull Request through the GitHub website.
+10. Submit a Pull Request through the GitHub website.
 
 Pull Request Guidelines
 -----------------------
