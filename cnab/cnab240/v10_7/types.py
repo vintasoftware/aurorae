@@ -244,14 +244,6 @@ class BankAgencyNumber(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class BankAgencyDigitCheck(CNABAlphaPositiveInt):
-    _max_str_length: ClassVar[int] = 1
-    _min_int: ClassVar[int] = 0
-    _max_int: ClassVar[int] = 9
-
-    __root__: conint(ge=_min_int, le=_max_int)
-
-
 class BankAccountNumber(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 12
     _min_int: ClassVar[int] = 1
@@ -260,20 +252,26 @@ class BankAccountNumber(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class BankAccountDigitCheck(CNABAlphaPositiveInt):
+class BankDigitCheck(CNABAlphaPositiveInt):
     _max_str_length: ClassVar[int] = 1
     _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 9
+    __root__: constr(max_length=_max_str_length)
 
-    __root__: conint(ge=_min_int, le=_max_int)
+    @validator("__root__")
+    def valid_int(cls, v):  # noqa
+        try:
+            v_as_int = int(v)
+        except ValueError:
+            return ""
 
+        if v_as_int > cls._max_int:
+            raise ValueError(f"{v_as_int} is greater than the max value {cls._max_int}")
 
-class BankAgencyAccountDigitCheck(CNABAlphaPositiveInt):
-    _max_str_length: ClassVar[int] = 1
-    _min_int: ClassVar[int] = 0
-    _max_int: ClassVar[int] = 9
+        if v_as_int < cls._min_int:
+            raise ValueError(f"{v_as_int} is smaller than the min value {cls._min_int}")
 
-    __root__: conint(ge=_min_int, le=_max_int)
+        return v
 
 
 class CompanyName(CNABString):
