@@ -291,12 +291,13 @@ class RecipientName(CNABString):
     __root__: constr(max_length=_max_str_length)
 
 
-class RemmitanceReturnCode(CNABPositiveInt):
-    _max_str_length: ClassVar[int] = 1
-    _min_int: ClassVar[int] = 1
-    _max_int: ClassVar[int] = 9
+class RemmitanceReturnCodeEnum(str, Enum):
+    shipping = "1"
+    returning = "2"
 
-    __root__: conint(ge=_min_int, le=_max_int)
+
+class RemmitanceReturnCode(CNABEnum):
+    __root__: RemmitanceReturnCodeEnum
 
 
 class FileSequentialNumber(CNABPositiveInt):
@@ -307,12 +308,14 @@ class FileSequentialNumber(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class FileRecordDensity(CNABPositiveInt):
-    _max_str_length: ClassVar[int] = 5
-    _min_int: ClassVar[int] = 1
-    _max_int: ClassVar[int] = 99999
+class FileRecordDensityEnum(str, Enum):
+    d1600 = "1600"
+    d6250 = "6250"
 
-    __root__: conint(ge=_min_int, le=_max_int)
+
+class FileRecordDensity(CNABEnumFillInt):
+    _max_str_length: ClassVar[int] = 5
+    __root__: FileRecordDensityEnum
 
 
 class BankReservedField(CNABString):

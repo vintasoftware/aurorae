@@ -1,10 +1,12 @@
 from cnab.payroll.models import Payroll
+from providers.spreadsheet import validators
 from providers.spreadsheet.models import Spreadsheet
 from providers.spreadsheet.utils import get_spreadsheet_data
 
 
 class SpreadsheetHandler:
     def __init__(self, input_filename):
+        validators.validate_spreadsheet(input_filename)
         self.spreadsheet = self.get_spreadsheet(input_filename)
         self.payroll = self.get_payroll()
 

@@ -1,7 +1,7 @@
 import pytest
 
-from providers.legacy_spreadsheet.exceptions import EmptyFile, InvalidFileType
-from providers.legacy_spreadsheet.validators import (
+from providers.exceptions import EmptyFile, InvalidFileType
+from providers.spreadsheet.validators import (
     is_spreadsheet_empty,
     is_spreadsheet_too_big,
     is_spreadsheet_type_xlsx,

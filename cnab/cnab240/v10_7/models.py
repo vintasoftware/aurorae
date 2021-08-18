@@ -75,7 +75,7 @@ class CNABHeader(Line):
     )
     field_16_0: types.RemmitanceReturnCode = FieldSchema(
         description="Código Remessa / Retorno",
-        default_factory=lambdas.get_field_G015,
+        default=types.RemmitanceReturnCodeEnum.shipping,
         code="G015",
     )
     field_17_0: types.CNABDate = FieldSchema(
@@ -96,12 +96,12 @@ class CNABHeader(Line):
     field_20_0: types.FileLayoutVersionNumber = FieldSchema(
         description="Número da Versão do Layout do Arquivo",
         code="G019",
-        default_factory=lambdas.get_field_G019,
+        default=types.FileLayoutVersionNumberEnum.v10_3,
     )
     field_21_0: types.FileRecordDensity = FieldSchema(
         description="Densidade de Gravação do Arquivo",
         code="G020",
-        default_factory=lambdas.get_field_G020,
+        default=types.FileRecordDensityEnum.d1600,
     )
     field_22_0: types.BankReservedField = FieldSchema(
         default="", description="Para Uso Reservado do Banco", code="G021"
@@ -288,7 +288,7 @@ class CNABBatchSegmentA(Line):
     field_02_3A: types.SequentialServiceBatch = FieldSchema(
         description="Lote de Serviço",
         code="G002",
-        default_factory=lambdas.get_field_G002,
+        default_factory=lambdas.get_field_G002_for_bacth_payment,
     )
     field_03_3A: types.EntryType = FieldSchema(
         description="Tipo de Registro", code="G003", default=types.EntryTypeEnum.details
@@ -539,7 +539,7 @@ class CNABBatchTrailer(Line):
     field_02_5: types.SequentialServiceBatch = FieldSchema(
         description="Lote de Serviço",
         code="G002",
-        default_factory=lambdas.get_field_G002,
+        default_factory=lambdas.get_field_G002_for_bacth_payment,
     )
     field_03_5: types.EntryType = FieldSchema(
         description="Tipo de Registro",

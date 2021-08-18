@@ -1,9 +1,4 @@
-from datetime import datetime
-
 import pytest
-from freezegun.api import freeze_time
-
-from providers.legacy_spreadsheet.handler import LegacySpreadsheetHandler
 
 
 @pytest.fixture
@@ -141,14 +136,6 @@ def spreadsheet_data():
             },
         ],
     }
-
-
-@pytest.fixture()
-@freeze_time(datetime(2021, 7, 8, 13, 30, 50))
-def legacy_spreadsheet_handler():
-    return LegacySpreadsheetHandler(
-        input_filename="./tests/fixtures/test_legacy_spreadsheet.xlsx"
-    )
 
 
 @pytest.fixture
