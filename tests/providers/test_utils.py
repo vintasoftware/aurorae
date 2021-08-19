@@ -11,11 +11,13 @@ from aurorae.providers.utils import parse_args
 class TestUtils:
     def test_parse_args_with_input_and_output_filenames(self):
         argv = (
-            "sample/spreadsheet_sample.xlsx "
+            "aurorae/sample/spreadsheet_sample.xlsx "
             "--output_filename=generated_files/filetest.txt".split()
         )
         args = parse_args(argv)
-        assert args.input_filename == PosixPath("sample/spreadsheet_sample.xlsx")
+        assert args.input_filename == PosixPath(
+            "aurorae/sample/spreadsheet_sample.xlsx"
+        )
         assert args.output_filename == PosixPath("generated_files/filetest.txt")
 
     def test_parse_args_invalid_input_filename(self):
@@ -29,7 +31,7 @@ class TestUtils:
             assert str(excinfo.value) == r"^The provided input file does not exist$"
 
     def test_parse_args_default_output_filename(self):
-        argv = "sample/spreadsheet_sample.xlsx".split()
+        argv = "aurorae/sample/spreadsheet_sample.xlsx".split()
         args = parse_args(argv)
         assert args.output_filename == PosixPath(
             "generated_files/cnab240-2021-07-29T13:30:50.txt"
@@ -37,7 +39,7 @@ class TestUtils:
 
     def test_only_accepts_txt_as_file_extension(self):
         argv = (
-            "sample/spreadsheet_sample.xlsx "
+            "aurorae/sample/spreadsheet_sample.xlsx "
             "--output_filename=generated_files/filetest".split()
         )
 

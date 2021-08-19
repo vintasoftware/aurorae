@@ -29,7 +29,7 @@ A historic and architecture details can be found on the [project's ADRs](https:/
 ## Usage
 To run aurorae with test data:
 ```bash
-generate_cnab sample/spreadsheet_sample.xlsx
+generate_cnab_sample
 ```
 
 ## Security
