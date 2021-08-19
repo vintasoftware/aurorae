@@ -25,6 +25,9 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
 ]
 
+include = ["sample/spreadsheet_sample.xlsx"]
+
+
 [tool.poetry.dependencies]
 python = "^3.7"
 attrs = "^21.2.0"
@@ -68,7 +71,7 @@ mypy = "^0.910"
 freezegun = "^1.1.0"
 
 [tool.poetry.scripts]
-generate = "aurorae.cnab240.writer:generate_cnab_files"
+generate_cnab = "aurorae.cnab240.writer:generate_cnab_files"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
