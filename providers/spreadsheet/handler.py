@@ -1,4 +1,4 @@
-from cnab.payroll.models import Payroll
+from aurorae.payroll.models import Payroll
 from providers.spreadsheet import validators
 from providers.spreadsheet.models import Spreadsheet
 from providers.spreadsheet.utils import get_spreadsheet_data

@@ -5,7 +5,7 @@ import pytest
 from pydantic.error_wrappers import ValidationError
 from pydantic.types import conint, constr
 
-from cnab.cnab240.v10_7.types import CNABAlphaPositiveInt, CNABPositiveInt, CNABString
+from aurorae.cnab240.v10_7.types import CNABAlphaPositiveInt, CNABPositiveInt, CNABString
 
 
 class TestTypes:

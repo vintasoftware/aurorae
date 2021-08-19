@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from cnab.payroll import models
+from aurorae.payroll import models
 
 
 def test_creates_company_raises_validation_error_on_empty_dict():
