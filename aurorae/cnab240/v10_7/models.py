@@ -7,12 +7,12 @@ from typing import TYPE_CHECKING, List, Optional
 from pydantic import Field as FieldSchema
 from pydantic.main import BaseModel
 
-from cnab.cnab240.base import Line
-from cnab.cnab240.v10_7 import lambdas, types
+from aurorae.cnab240.base import Line
+from aurorae.cnab240.v10_7 import lambdas, types
 
 
 if TYPE_CHECKING:
-    from cnab.payroll.models import Company, Employee, Payment
+    from aurorae.payroll.models import Company, Employee, Payment
 
 
 class BaseConfig:

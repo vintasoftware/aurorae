@@ -5,7 +5,7 @@ from typing import List, Optional
 from pydantic import BaseModel, root_validator, validator
 from pydantic.fields import PrivateAttr
 
-from cnab.cnab240.v10_7 import models, types
+from aurorae.cnab240.v10_7 import models, types
 
 
 class Company(BaseModel):
