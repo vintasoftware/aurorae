@@ -13,9 +13,10 @@ license = "MIT"
 readme = "README.md"
 keywords = ["cnab240", "payments", "openbanking"]
 classifiers = [
-    "Development Status :: 2 -  Pre-Alpha",
+    "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
-    "Topic :: Bank Payments :: Build Tools",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Topic :: Office/Business :: Financial :: Spreadsheet",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
@@ -23,6 +24,9 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
 ]
+
+include = ["sample/spreadsheet_sample.xlsx"]
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -67,7 +71,7 @@ mypy = "^0.910"
 freezegun = "^1.1.0"
 
 [tool.poetry.scripts]
-generate = "aurorae.cnab240.writer:generate_cnab_files"
+generate_cnab = "aurorae.cnab240.writer:generate_cnab_files"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
