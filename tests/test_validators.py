@@ -1,7 +1,7 @@
 import pytest
 
-from providers.exceptions import EmptyFile, InvalidFileType
-from providers.spreadsheet.validators import (
+from aurorae.providers.exceptions import EmptyFile, InvalidFileType
+from aurorae.providers.spreadsheet.validators import (
     is_spreadsheet_empty,
     is_spreadsheet_too_big,
     is_spreadsheet_type_xlsx,

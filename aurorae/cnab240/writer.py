@@ -1,5 +1,5 @@
-from providers.spreadsheet.handler import SpreadsheetHandler
-from providers.utils import parse_args
+from aurorae.providers.spreadsheet.handler import SpreadsheetHandler
+from aurorae.providers.utils import parse_args
 
 
 def generate_cnab_files():

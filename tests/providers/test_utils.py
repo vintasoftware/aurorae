@@ -4,7 +4,7 @@ from pathlib import PosixPath
 import pytest
 from freezegun.api import freeze_time
 
-from providers.utils import parse_args
+from aurorae.providers.utils import parse_args
 
 
 @freeze_time(datetime(2021, 7, 29, 13, 30, 50))
