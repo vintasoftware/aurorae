@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Install coveralls
+        run: pip install coveralls==3.0.0
+
       - name: Run prospector
         run: poetry run prospector --messages-only
 
@@ -45,3 +48,8 @@ jobs:
           name: pytest-gh-actions-coverage
           path: coverage.xml
           if-no-files-found: error
+
+      - name: Coveralls
+        run: coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
