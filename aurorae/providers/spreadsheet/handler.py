@@ -1,7 +1,7 @@
 from aurorae.payroll.models import Payroll
-from providers.spreadsheet import validators
-from providers.spreadsheet.models import Spreadsheet
-from providers.spreadsheet.utils import get_spreadsheet_data
+from aurorae.providers.spreadsheet import validators
+from aurorae.providers.spreadsheet.models import Spreadsheet
+from aurorae.providers.spreadsheet.utils import get_spreadsheet_data
 
 
 class SpreadsheetHandler:

@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Response
 
 from aurorae.payroll.models import Payroll
-from providers.spreadsheet.models import Spreadsheet
+from aurorae.providers.spreadsheet.models import Spreadsheet
 
 
 app = FastAPI()
