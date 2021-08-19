@@ -13,9 +13,10 @@ license = "MIT"
 readme = "README.md"
 keywords = ["cnab240", "payments", "openbanking"]
 classifiers = [
-    "Development Status :: 2 -  Pre-Alpha",
+    "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
-    "Topic :: Bank Payments :: Build Tools",
+    "Topic :: Office/Business :: Financial :: Accounting",
+    "Topic :: Office/Business :: Financial :: Spreadsheet",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
