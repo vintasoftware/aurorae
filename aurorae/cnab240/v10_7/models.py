@@ -213,7 +213,7 @@ class CNABBatchHeader(Line):
         default="",
         code="G031",
     )
-    field_19_1: types.NameAddress = FieldSchema(
+    field_19_1: types.AddressName = FieldSchema(
         description="Nome da Rua, Av, Pça, Etc",
         default="",
         code="G032",
@@ -496,14 +496,14 @@ class CNABBatchSegmentB(Line):
         code="P015",
     )
 
-    def get_information_10(self, employee: Employee):
+    def _get_information_10(self, employee: Employee):
         return types.Information10.parse_obj(employee.address_location.value)
 
-    def get_information_11(self, employee: Employee):
-        return types.ComposedField103B.parse_obj(employee)
+    def _get_information_11(self, employee: Employee):
+        return types.ComposedAddressInformation.parse_obj(employee)
 
-    def get_information_12(self, payment: Payment):
-        return types.ComposedField113B.parse_obj(payment)
+    def _get_information_12(self, payment: Payment):
+        return types.ComposedPaymentInformation.parse_obj(payment)
 
     class Config(BaseConfig):
         validate_all = True
@@ -523,9 +523,9 @@ class CNABBatchSegmentB(Line):
         employee = payment.employee
         initial_data = employee.dict()
         initial_data["record_number"] = record_number
-        initial_data["information_10"] = self.get_information_10(employee)
-        initial_data["information_11"] = self.get_information_11(employee)
-        initial_data["information_12"] = self.get_information_12(payment)
+        initial_data["information_10"] = self._get_information_10(employee)
+        initial_data["information_11"] = self._get_information_11(employee)
+        initial_data["information_12"] = self._get_information_12(payment)
         super().__init__(initial_data, line_number)
 
 
@@ -556,7 +556,7 @@ class CNABBatchTrailer(Line):
     field_06_5: types.ValuesSum = FieldSchema(
         description="Somatória dos Valores", code="P007"
     )
-    field_07_5: types.CurrencyAmountsSum = FieldSchema(
+    field_07_5: types.CurrencyAmountSum = FieldSchema(
         description="Somatória de Quantidade de Moedas", code="G058", default=0
     )
     field_08_5: types.DebitNotificationNumber = FieldSchema(
