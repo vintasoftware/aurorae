@@ -3,7 +3,7 @@ from datetime import datetime
 
 from freezegun.api import freeze_time
 
-from providers.spreadsheet.handler import SpreadsheetHandler
+from aurorae.providers.spreadsheet.handler import SpreadsheetHandler
 
 
 class TestSpreadsheetHandler:

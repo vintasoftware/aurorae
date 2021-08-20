@@ -17,9 +17,9 @@
 But, pull requests are welcomed.
 
 ## How It Works
-**aurorae** uses Python type hinting for data validation and generation of fixed-width CNAB 240 files. The library receives as inputs an spreadsheet that must be a match of the Pydantic model [Spreadsheet](providers/spreadsheet/models.py), a general handler parses the initial data to an intermediary representation used by the CNAB240 module to generate files. Different types of inputs are supported by library through the creation of new providers, check the [spreadsheet provider](providers/spreadsheet) for an example.
+**aurorae** uses Python type hinting for data validation and generation of fixed-width CNAB 240 files. The library receives as inputs an spreadsheet that must be a match of the Pydantic model [Spreadsheet](https://github.com/vintasoftware/aurorae/blob/main/aurorae/providers/spreadsheet/models.py), a general handler parses the initial data to an intermediary representation used by the CNAB240 module to generate files. Different types of inputs are supported by library through the creation of new providers, check the [spreadsheet provider](https://github.com/vintasoftware/aurorae/tree/main/aurorae/providers/spreadsheet) for an example.
 
-A historic and architecture details can be found on the [project's ADRs](docs/adr/README.md) to better understand the architecture.
+A historic and architecture details can be found on the [project's ADRs](https://github.com/vintasoftware/aurorae/blob/main/docs/adr/README.md) to better understand the architecture.
 
 ## Requirements
 
@@ -30,7 +30,7 @@ A historic and architecture details can be found on the [project's ADRs](docs/ad
 ## Usage
 To run aurorae with test data:
 ```bash
-generate sample/spreadsheet_sample.xlsx
+generate_cnab_sample
 ```
 
 ## Security
@@ -38,11 +38,11 @@ We take aurorae's security and our users' trust very seriously, therefore we do 
 
 ## Releases
 
-See [CHANGELOG.md](/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/vintasoftware/aurorae/blob/main/CHANGELOG.md).
 
 ## Credits
 
-This project is maintained by [open-source contributors](/AUTHORS.rst) and [Vinta Software](https://www.vintasoftware.com/).
+This project is maintained by [open-source contributors](https://github.com/vintasoftware/aurorae/blob/main/AUTHORS.rst) and [Vinta Software](https://www.vintasoftware.com/).
 
 ## Commercial Support
 

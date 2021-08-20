@@ -2,7 +2,7 @@ import os
 
 from openpyxl import load_workbook
 
-from providers.exceptions import EmptyFile, InvalidFileSize, InvalidFileType
+from aurorae.providers.exceptions import EmptyFile, InvalidFileSize, InvalidFileType
 
 
 def is_spreadsheet_type_xlsx(filename):

@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, List, Optional
 from pydantic import Field as FieldSchema
 from pydantic.main import BaseModel
 
+import aurorae
 from aurorae.cnab240.base import Line
 from aurorae.cnab240.v10_7 import lambdas, types
 
@@ -712,10 +713,13 @@ class CNABFile(BaseModel):
     def generate_html_file(self, output_filename):
         file_path = f"{output_filename.with_suffix('.html')}"
 
+        root_path = os.path.dirname(aurorae.__file__)
+        stylesheet_filename = os.path.join(root_path, "staticfiles/styles.css")
+
         with open(os.path.expanduser(file_path), "w") as f:
             html_content = self.as_html()
             f.write("<html><head>")
-            f.write("<link href='../staticfiles/styles.css' rel='stylesheet'>")
+            f.write(f"<link href='{stylesheet_filename}' rel='stylesheet'>")
             f.write("</head><body>")
             f.write(html_content)
             f.write("</body></html>")
