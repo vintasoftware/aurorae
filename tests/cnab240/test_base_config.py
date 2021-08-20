@@ -1,8 +1,8 @@
 import pytest
 from pydantic import ValidationError
 
-from cnab.cnab240.base import Line
-from cnab.cnab240.v10_7.models import BaseConfig
+from aurorae.cnab240.base import Line
+from aurorae.cnab240.v10_7.models import BaseConfig
 
 
 class TestBaseConfig:

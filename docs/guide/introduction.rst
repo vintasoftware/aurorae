@@ -34,7 +34,9 @@ CNAB versions
 -------------
 
 The versions of the file are identified through a code with the
-following composition: VV.R - VV: Version number - R: Release number
+following composition: VV.R
+* VV: Version number
+* R: Release number
 
 Aurorae only supports the version 10.7 of CNAB240.
 

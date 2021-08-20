@@ -14,9 +14,9 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://github.com/vintasoftware/aurora/issues
+Report bugs at https://github.com/vintasoftware/aurorae/issues
 
-Before reporting a bug, please double-check the requirements: https://github.com/vintasoftware/aurora/blob/main/README.md#requirements
+Before reporting a bug, please double-check the requirements: https://github.com/vintasoftware/aurorae/blob/main/README.md#requirements
 
 If you think you really found a bug, please create a GitHub issue and use the "Bug report" template.
 
@@ -33,7 +33,7 @@ Look through the GitHub issues for features. Anything tagged with "enhancement" 
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-aurora could always use more documentation, whether as part of the official docs, in docstrings, or even on the web in blog posts, articles, and such.
+aurorae could always use more documentation, whether as part of the official docs, in docstrings, or even on the web in blog posts, articles, and such.
 
 Submit Feedback
 ~~~~~~~~~~~~~~~
@@ -43,14 +43,14 @@ If you have a suggestion, concern, or want to propose a feature, please create a
 Get Started!
 ------------
 
-Ready to contribute? Please read our Code of Conduct: https://github.com/vintasoftware/aurora/blob/main/CODE_OF_CONDUCT.md
+Ready to contribute? Please read our Code of Conduct: https://github.com/vintasoftware/aurorae/blob/main/CODE_OF_CONDUCT.md
 
-Now, here's how to set up `aurora` for local development.
+Now, here's how to set up `aurorae` for local development.
 
-1. Fork the `aurora` repo on GitHub.
+1. Fork the `aurorae` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/aurora.git
+    $ git clone git@github.com:your_name_here/aurorae.git
 
 3. Create an output folder for the generated files::
 
@@ -60,8 +60,8 @@ Now, here's how to set up `aurora` for local development.
 
 5. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
 
-    $ mkvirtualenv aurora
-    $ cd aurora/
+    $ mkvirtualenv aurorae
+    $ cd aurorae/
     $ poetry install
 
 6. Create a branch for local development::

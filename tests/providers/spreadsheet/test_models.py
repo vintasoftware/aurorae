@@ -3,8 +3,8 @@ import re
 import pytest
 from pydantic.error_wrappers import ValidationError
 
-from cnab.cnab240.v10_7.types import RegistrationType, RegistrationTypeEnum
-from providers.spreadsheet.models import (
+from aurorae.cnab240.v10_7.types import RegistrationType, RegistrationTypeEnum
+from aurorae.providers.spreadsheet.models import (
     Spreadsheet,
     SpreadsheetCompany,
     SpreadsheetEmployee,

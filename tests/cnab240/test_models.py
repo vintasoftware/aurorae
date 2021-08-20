@@ -5,8 +5,8 @@ import pytest
 from freezegun.api import freeze_time
 from pydantic import ValidationError
 
-from cnab.cnab240.v10_7 import lambdas, types
-from cnab.cnab240.v10_7.models import (
+from aurorae.cnab240.v10_7 import lambdas, types
+from aurorae.cnab240.v10_7.models import (
     CNABBatchHeader,
     CNABBatchSegmentA,
     CNABBatchSegmentB,
@@ -14,7 +14,7 @@ from cnab.cnab240.v10_7.models import (
     CNABHeader,
     CNABTrailer,
 )
-from cnab.payroll.models import Company, Employee, Payment
+from aurorae.payroll.models import Company, Employee, Payment
 
 
 @freeze_time(datetime(2021, 7, 8, 13, 30, 50))

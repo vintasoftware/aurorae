@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from providers.api.main import app
+from aurorae.providers.api.main import app
 
 
 client = TestClient(app)
