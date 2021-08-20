@@ -28,7 +28,7 @@ The standard covers the following types of services:
 * Loan with Payroll Consignment (Empréstimo com Consignação em Folha de Pagamento)
 * Buy (Compror)
 
-Aurorae only supports the bold items.
+Aurorae only supports Payment via account credit.
 
 CNAB versions
 -------------
