@@ -42,7 +42,7 @@ The information of the spreadsheet includes:
         - details of the payment
 
 
-A sample file can [be found here].
+A sample file can be found `here <https://github.com/vintasoftware/aurorae/tree/f308c17d12a78249332fc4f778214d061eee6f45/aurorae/sample>`_.
 
 Generating the file
 -------------------
@@ -64,7 +64,7 @@ A debug file is also generated when using the command line. The file consists on
   :width: 800
   :alt: Debug file sample
 
-A sample debug file can be found on `here <https://github.com/vintasoftware/aurorae/tree/main/aurorae/sample>`_.
+A sample debug file can be found `here <https://github.com/vintasoftware/aurorae/tree/main/aurorae/sample>`_.
 
 Adding new data formats
 -----------------------
