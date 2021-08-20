@@ -52,40 +52,36 @@ Now, here's how to set up `aurorae` for local development.
 
     $ git clone git@github.com:your_name_here/aurorae.git
 
-3. Create an output folder for the generated files::
+3. Install Poetry: https://python-poetry.org/docs/#installation
 
-    $ mkdir generated_files
-
-4. Install Poetry: https://python-poetry.org/docs/#installation
-
-5. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+4. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
 
     $ mkvirtualenv aurorae
     $ cd aurorae/
     $ poetry install
 
-6. Create a branch for local development::
+5. Create a branch for local development::
 
     $ git checkout -b name-of-your-bugfix-or-feature
 
    Now you can make your changes locally.
 
-7. When you're done making changes, check that your changes pass the tests::
+6. When you're done making changes, check that your changes pass the tests::
 
     $ poetry run pytest
 
 
-8. Install pre-commit
+7. Install pre-commit
 
     $ poetry run pre-commit install
 
-9. Commit your changes and push your branch to GitHub::
+8. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
 
-10. Submit a Pull Request through the GitHub website.
+9.  Submit a Pull Request through the GitHub website.
 
 Pull Request Guidelines
 -----------------------

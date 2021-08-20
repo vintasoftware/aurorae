@@ -12,18 +12,17 @@ class TestUtils:
     def test_parse_args_with_input_and_output_filenames(self):
         argv = (
             "aurorae/sample/spreadsheet_sample.xlsx "
-            "--output_filename=generated_files/filetest.txt".split()
+            "--output_filename=filetest.txt".split()
         )
         args = parse_args(argv)
         assert args.input_filename == PosixPath(
             "aurorae/sample/spreadsheet_sample.xlsx"
         )
-        assert args.output_filename == PosixPath("generated_files/filetest.txt")
+        assert args.output_filename == PosixPath("filetest.txt")
 
     def test_parse_args_invalid_input_filename(self):
         argv = (
-            "sample/invalid_spreadsheet.xlsx "
-            "--output_filename=generated_files/filetest.txt".split()
+            "sample/invalid_spreadsheet.xlsx " "--output_filename=filetest.txt".split()
         )
 
         with pytest.raises(SystemExit) as excinfo:
@@ -33,14 +32,12 @@ class TestUtils:
     def test_parse_args_default_output_filename(self):
         argv = "aurorae/sample/spreadsheet_sample.xlsx".split()
         args = parse_args(argv)
-        assert args.output_filename == PosixPath(
-            "generated_files/cnab240-2021-07-29T13:30:50.txt"
-        )
+        assert args.output_filename == PosixPath("cnab240-2021-07-29T13:30:50.txt")
 
     def test_only_accepts_txt_as_file_extension(self):
         argv = (
             "aurorae/sample/spreadsheet_sample.xlsx "
-            "--output_filename=generated_files/filetest".split()
+            "--output_filename=filetest".split()
         )
 
         with pytest.raises(SystemExit) as excinfo:

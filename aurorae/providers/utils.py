@@ -13,7 +13,7 @@ def parse_args(arguments=None):
         "--output_filename",
         dest="output_filename",
         type=Path,
-        default=f"generated_files/cnab240-{created_at}.txt",
+        default=f"cnab240-{created_at}.txt",
         help="output filename",
     )
     args = parser.parse_args(arguments)
