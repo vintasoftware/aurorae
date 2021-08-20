@@ -35,6 +35,7 @@ CNAB versions
 
 The versions of the file are identified through a code with the
 following composition: VV.R
+
 * VV: Version number
 * R: Release number
 
@@ -44,7 +45,7 @@ File Structure
 --------------
 
 The exchange file is composed of a file header record, one or more
-Service/Product batches and a file trailer record.
+service/product batches and a file trailer record.
 
 ::
 
@@ -60,9 +61,10 @@ Service/Product batches and a file trailer record.
 A single file can contain multiple batches of different Services. Each
 of the items described above represent one line of the file with the
 size of 240 bytes. Individuals fields for each line are aligned
-according to the type of the field: - Numeric Fields (Num) = Always on
-the right and padded with zeros on the left. - Alphanumeric Fields
-(Alpha) = Always on the left and filled with blanks on the right.
+according to the type of the field:
+
+* Numeric Fields (Num) = Always on the right and padded with zeros on the left.
+* Alphanumeric Fields (Alpha) = Always on the left and filled with blanks on the right.
 
 Payment via account credit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

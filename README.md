@@ -1,5 +1,7 @@
 # aurorae
 
+[![PyPi version](https://img.shields.io/pypi/v/aurorae.svg)](https://pypi.python.org/pypi/aurorae)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/aurorae)](https://pypi.org/project/aurorae/)
 [![CI](https://github.com/vintasoftware/aurorae/actions/workflows/actions.yaml/badge.svg)](https://github.com/vintasoftware/aurorae/actions/workflows/actions.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/vintasoftware/aurorae/badge.svg?branch=main)](https://coveralls.io/github/vintasoftware/aurorae?branch=main)
 [![Documentation Status](https://readthedocs.org/projects/aurorae/badge/?version=latest)](https://aurorae.readthedocs.io/en/latest/?badge=latest)
@@ -28,11 +30,26 @@ The historic and architecture details can be found on the [project's ADRs](https
 - openpyxl (3.0.7)
 - pydantic (>1.8.2)
 
+## Installation
+
+```
+pip install aurorae
+```
+
 ## Usage
 To run aurorae with test data:
 ```bash
 generate_cnab_sample
 ```
+
+To run aurorae with your own data use:
+
+```bash
+generate_cnab_sample ~/source_spreadsheet.xlsx
+```
+
+## Documentation
+https://aurorae.readthedocs.io
 
 ## Security
 We take aurorae's security and our users' trust seriously, therefore we do not save any information (from payments or not) sent by users. If you believe you have found a security issue, please responsibly disclose by contacting: [flavio@vinta.com.br](flavio@vinta.com.br)
