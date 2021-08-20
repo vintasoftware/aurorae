@@ -2,19 +2,18 @@
 Usage
 ======
 
-This guide will teach you how to generate CNAB240 files for bulk payments and how to extend the library for different formats.
+This guide will teach you how to generate CNAB240 files for bulk payments and extend the library for different formats.
 
 
 Before starting
 ---------------
 Aurora uses Python type hinting for data validation and generation of fixed-width CNAB 240 files.
-The library receives as inputs an spreadsheet that must be a match of the Pydantic model [Spreadsheet],
-a general handler parses the initial data to an intermediary representation used by the CNAB240 module to generate files.
-Different types of inputs are supported by library through the creation of new providers, check the [spreadsheet provider](providers/spreadsheet) for an example.
+First, the library receives a spreadsheet that must match the Pydantic model [Spreadsheet]. A general handler parses the initial data to an intermediary representation used by the CNAB240 module to generate files.
+The library supports different types of inputs through the creation of new providers; check the [spreadsheet provider](providers/spreadsheet) for an example.
 
 
-The library is organized to hide the complex logic of the file generation and expose a simple model for data handling. As consequence we have three areas:
-* Spreadsheet models: each provider has his own class, which maps perfectly the source data
+The library is organized to hide the complex logic of the file generation and expose a simple model for data handling. As a consequence, we have three areas:
+* Spreadsheet models: each provider has their class, which maps perfectly the source data
 * Payroll models: represents the default format used to generate the CNAB files
 * CNAB models: responsible for transforming the payroll into a CNAB file, contains all the complexity of the file.
 
@@ -22,8 +21,8 @@ The library is organized to hide the complex logic of the file generation and ex
 Data format
 -----------
 
-The supported format is a spreadsheet with three sheets: Company, Employees, and Payments, each sheet has specific fields that match exactly the ones defined on [Spreadsheet].
-The information of the spradsheet includes:
+The supported format is an xlsx spreadsheet with three sheets: Company, Employees, and Payments; each sheet has specific fields that match precisely the ones defined on [Spreadsheet].
+The information of the spreadsheet includes:
 
 .. code-block::
 
@@ -58,24 +57,24 @@ The mandatory parameter is the input file, you can also pass an output file name
 
 Validating the file
 -------------------
-A debug file is also generated when using the command line. The file consists on a html file with the fields highlighted and the details specified:
+A debug file is also generated when using the command line. The file consists on an HTML file with the fields highlighted and the details specified:
 
 .. image:: https://user-images.githubusercontent.com/397989/113344903-166a0380-9308-11eb-987a-a73f7d472f02.png
   :width: 800
   :alt: Debug file sample
 
-An sample debug file can be found on [File].
+A sample debug file can be found on [File].
 
 Adding new data formats
 -----------------------
 
 This library was designed to support multiple data formats (for details `check our ADR <https://github.com/vintasoftware/aurorae/blob/ab0851bc5dd9d960d1464cee7b836857e90a72b6/docs/adr/0002_cnab_architecture_pydantic.md>`_).
-If you are trying to support new formats you need to:
+If you are trying to support new formats, you need to:
 
 1. Create a new `provider`
 2. Replicate your new format as pydantic models (like the ones on [Spreadsheet])
-3. Create the `_mapping` on your pydantic models to our common `Payroll` model (like the ones on [Spreadsheet])
-4. Replicate the handler behavior using your newly created claass
+3. Create the `_mapping` on your pydantic models to our standard `Payroll` model (like the ones on [Spreadsheet])
+4. Replicate the handler behavior using your newly created class
 
 Feel free to open a Pull Request with this new format.
 
