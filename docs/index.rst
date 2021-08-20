@@ -13,7 +13,6 @@ Welcome to aurorae's documentation!
    guide/install
    guide/introduction
    guide/usage
-   guide/cli
 
 .. toctree::
    :maxdepth: 1
