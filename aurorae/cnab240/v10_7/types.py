@@ -529,7 +529,7 @@ class Message(CNABString):
     __root__: constr(max_length=_max_str_length)
 
 
-class NameAddress(CNABString):
+class AddressName(CNABString):
     _max_str_length = 30
     __root__: constr(max_length=_max_str_length)
 
@@ -801,7 +801,7 @@ class ValuesSum(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class CurrencyAmountsSum(CNABPositiveInt):
+class CurrencyAmountSum(CNABPositiveInt):
     _max_str_length: ClassVar[int] = 18
     _min_int: ClassVar[int] = 0
     _max_int: ClassVar[int] = 999999999999999999
@@ -816,7 +816,7 @@ class DebitNotificationNumber(CNABPositiveInt):
     __root__: conint(ge=_min_int, le=_max_int)
 
 
-class ComposedField103B(CNABComposedField):
+class ComposedAddressInformation(CNABComposedField):
     _max_str_length: ClassVar[int] = 60
 
     address_number: AddressNumber
@@ -828,7 +828,7 @@ class ComposedField103B(CNABComposedField):
     address_state: AddressState
 
 
-class ComposedField113B(CNABComposedField):
+class ComposedPaymentInformation(CNABComposedField):
     _max_str_length: ClassVar[int] = 99
 
     payment_date: CNABDate
@@ -837,7 +837,7 @@ class ComposedField113B(CNABComposedField):
     discount_amount: DiscountAmount
     arrears_amount: ArrearsAmount
     fine_amount: FineAmount
-    registration_number: InformationRegistrationType
+    registration_type: InformationRegistrationType
     notify_recipient: NotifyRecipient
 
 
@@ -853,14 +853,14 @@ class PIXKey(CNABString):
 
 class Information10(CNABString):
     _max_str_length: ClassVar[int] = 35
-    __root__: Union[NameAddress, PIXTXID]
+    __root__: Union[AddressName, PIXTXID]
 
 
 class Information11(CNABString):
     _max_str_length: ClassVar[int] = 60
-    __root__: Union[PIXKey, Message, ComposedField103B]
+    __root__: Union[PIXKey, Message, ComposedAddressInformation]
 
 
 class Information12(CNABString):
     _max_str_length: ClassVar[int] = 99
-    __root__: Union[PIXKey, ComposedField113B]
+    __root__: Union[PIXKey, ComposedPaymentInformation]

@@ -19,7 +19,7 @@ class Company(BaseModel):
     bank_account_agency_digit: Optional[types.BankDigitCheck] = None
     company_name: types.CompanyName
     bank_name: types.BankName
-    address_location: types.NameAddress
+    address_location: types.AddressName
     address_number: types.AddressNumber
     address_complement: types.AddressDetails
     address_city: types.AddressCityName
@@ -52,7 +52,7 @@ class Employee(BaseModel):
     initiation_form: Optional[types.InitiationForm]
 
     # Information 10
-    address_location: Optional[types.NameAddress]
+    address_location: Optional[types.AddressName]
     # OR
     pix_tx_id: Optional[types.PIXTXID]
 
@@ -185,7 +185,7 @@ class Payment(BaseModel):
     arrears_amount: types.ArrearsAmount = 0
     fine_amount: types.FineAmount = 0
     notify_recipient: types.NotifyRecipient = types.NotifyRecipientEnum.no_notification
-    registration_number: types.InformationRegistrationType = str(
+    registration_type: types.InformationRegistrationType = str(
         types.CNABRegistrationTypeEnum.cpf.value
     )
 
@@ -207,11 +207,11 @@ class Payment(BaseModel):
                 or "arrears_amount" in values
                 or "fine_amount" in values
                 or "notify_recipient" in values
-                or "registration_number" in values
+                or "registration_type" in values
             ), (
                 "You must include all fields: payment_date, payment_amount, rebate_amount, "
                 "discount_amount, arrears_amount, fine_amount, notify_recipient, "
-                "registration_number"
+                "registration_type"
             )
 
         return values
