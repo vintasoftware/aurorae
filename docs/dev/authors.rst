@@ -4,7 +4,7 @@ Authors
 Development Lead
 ----------------
 
-aurorae is maintained by [Vinta Software](https://www.vintasoftware.com/). Lead maintainers:
+aurorae is maintained by `Vinta Software <https://www.vintasoftware.com/>`_. Lead maintainers:
 
 * Mariane Pastor (Vinta Software) <mariane.pastor@vinta.com.br>
 * Rebeca Sarai (Vinta Software) <rebeca@vinta.com.br>
