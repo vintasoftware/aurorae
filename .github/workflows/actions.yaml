@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Install coveralls
+        run: pip install coveralls==3.0.0
+
       - name: Run prospector
         run: poetry run prospector --messages-only
 
@@ -37,7 +40,7 @@ jobs:
         run: poetry run bandit -r . -x ./.venv
 
       - name: Run Tests
-        run: poetry run pytest --cov-report xml --cov=. tests/
+        run: poetry run pytest --cov-report xml --cov=aurorae --cov=tests tests/
 
       - name: Upload coverage.xml
         uses: actions/upload-artifact@v2
@@ -45,3 +48,8 @@ jobs:
           name: pytest-gh-actions-coverage
           path: coverage.xml
           if-no-files-found: error
+
+      - name: Coveralls
+        run: coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
