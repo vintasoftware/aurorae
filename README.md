@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/vintasoftware/aurorae/actions/workflows/actions.yaml/badge.svg)](https://github.com/vintasoftware/aurorae/actions/workflows/actions.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/vintasoftware/aurorae/badge.svg?branch=main)](https://coveralls.io/github/vintasoftware/aurorae?branch=main)
+[![Documentation Status](https://readthedocs.org/projects/aurorae/badge/?version=latest)](https://aurorae.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/github/license/vintasoftware/django-react-boilerplate.svg)](LICENSE.txt)
 
 **aurorae** is a tool to generate fixed-width CNAB240 files to perform bulk payments.
