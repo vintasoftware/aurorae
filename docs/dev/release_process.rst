@@ -1,5 +1,5 @@
 Release Process
-===============
+=================
 
 For maintainers only:
 
