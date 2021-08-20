@@ -60,11 +60,11 @@ Validating the file
 -------------------
 A debug file is also generated when using the command line. The file consists on an HTML file with the fields highlighted and the details specified:
 
-.. image::
+.. image:: https://raw.githubusercontent.com/vintasoftware/aurorae/e0dd0465e88b0b303c7af0749c151c22388d5b36/docs/assets/debug_file.png
   :width: 800
   :alt: Debug file sample
 
-A sample debug file can be found on `here <https://github.com/vintasoftware/aurorae/tree/f308c17d12a78249332fc4f778214d061eee6f45/aurorae/sample>`_.
+A sample debug file can be found on `here <https://github.com/vintasoftware/aurorae/tree/main/aurorae/sample>`_.
 
 Adding new data formats
 -----------------------
