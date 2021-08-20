@@ -14,6 +14,7 @@ The library supports different types of inputs through the creation of new provi
 
 
 The library is organized to hide the complex logic of the file generation and expose a simple model for data handling. As a consequence, we have three areas:
+
 * Spreadsheet models: each provider has their class, which maps perfectly the source data
 * Payroll models: represents the default format used to generate the CNAB files
 * CNAB models: responsible for transforming the payroll into a CNAB file, contains all the complexity of the file.
