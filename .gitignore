@@ -285,7 +285,7 @@ Thumbs.db #thumbnail cache on Windows
 # VS Code
 .vscode/
 
-cnab.egg-info/
+aurorae.egg-info/
 .pytest_cache/
 testing_cnab240*
 
