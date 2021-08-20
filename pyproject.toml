@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aurorae"
-version = "0.0.1"
+version = "0.0.2"
 description = "A Python implementation of the CNAB240 file to perform bulk payments."
 authors = [
     "Mariane Pastor (Vinta Software) <mariane.pastor@vinta.com.br>",
