@@ -36,6 +36,12 @@ To run aurorae with test data:
 generate_cnab_sample
 ```
 
+To run aurorae with your own data use:
+
+```bash
+generate_cnab_sample ~/source_spreadsheet.xlsx
+```
+
 ## Documentation
 https://aurorae.readthedocs.io
 
