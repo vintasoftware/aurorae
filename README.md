@@ -30,6 +30,12 @@ The historic and architecture details can be found on the [project's ADRs](https
 - openpyxl (3.0.7)
 - pydantic (>1.8.2)
 
+## Installation
+
+```
+pip install aurorae
+```
+
 ## Usage
 To run aurorae with test data:
 ```bash
