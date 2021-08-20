@@ -837,7 +837,7 @@ class ComposedPaymentInformation(CNABComposedField):
     discount_amount: DiscountAmount
     arrears_amount: ArrearsAmount
     fine_amount: FineAmount
-    registration_number: InformationRegistrationType
+    registration_type: InformationRegistrationType
     notify_recipient: NotifyRecipient
 
 
