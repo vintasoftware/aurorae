@@ -52,7 +52,7 @@ generate_cnab ~/source_spreadsheet.xlsx
 https://aurorae.readthedocs.io
 
 ## Security
-We take aurorae's security and our users' trust seriously, therefore we do not save any information (from payments or not) sent by users. If you believe you have found a security issue, please responsibly disclose by contacting: [flavio@vinta.com.br](flavio@vinta.com.br)
+We take aurorae's security and our users' trust seriously, therefore we do not save any information (from payments or not) sent by users. If you believe you have found a security issue, please responsibly disclose by contacting: flavio at vinta.com.br
 
 ## Releases
 
